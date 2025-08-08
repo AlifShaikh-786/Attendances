@@ -1,3 +1,11 @@
+================Git Commands ==================
+git status
+git add .
+git status
+git commit -m " "
+git push 
+
+
 ==================================Frontend=================================
 
 1-- npm create vite@latest Frontend
