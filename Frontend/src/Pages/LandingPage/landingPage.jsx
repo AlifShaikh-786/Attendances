@@ -90,12 +90,9 @@ import Footer from "../../components/Footer/footer";
 
 const LandingPage = () => {
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Animated Gradient Background */}
-      <div
-        className="absolute inset-0 -z-20 bg-gradient-to-tr from-pink-400 via-purple-500 to-blue-500
-          bg-[length:400%_400%] animate-gradientShift"
-      />
+    <div className="relative min-h-screen overflow-hidden bg-[#5B21B6]">
+      {/* Fixed background color */}
+      {/* Removed animated gradient background */}
 
       {/* Floating colorful circles */}
       <div className="absolute -z-10 top-10 left-10 w-40 h-40 bg-pink-300 rounded-full opacity-50 animate-floatSlow" />
@@ -209,21 +206,10 @@ const LandingPage = () => {
       {/* Footer */}
       <div className="pb-24">
         <Footer />
-        
       </div>
 
       {/* Tailwind Animation Styles */}
       <style>{`
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-gradientShift {
-          animation: gradientShift 15s ease infinite;
-          background-size: 400% 400%;
-        }
-
         @keyframes floatSlow {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-15px); }
