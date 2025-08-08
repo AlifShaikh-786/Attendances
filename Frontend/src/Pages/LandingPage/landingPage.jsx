@@ -173,11 +173,11 @@ const LandingPage = () => {
         </div>
 
         {/* Right Image */}
-        <div className="md:w-1/2 w-full mt-10 md:mt-0 flex justify-center z-10">
+        <div className="md:w-1/2 w-full mt-10 md:mt-0 flex justify-center z-10 mt-20">
           <img
             src="/Assets/DYPIMED.jpg"
             alt="DYPIMED illustration"
-            className="w-full max-w-[600px] md:max-w-[700px] lg:max-w-[800px] h-auto object-cover drop-shadow-2xl transition-transform duration-300 hover:scale-105 rounded-tl-[80px] rounded-br-[80px]"
+            className="w-full max-w-[600px] md:max-w-[700px] lg:max-w-[800px] h-auto object-cover drop-shadow-2xl transition-transform duration-300 hover:scale-105 rounded-tl-[80px] rounded-br-[80px] mt-20"
             style={{
               clipPath: "ellipse(75% 100% at 50% 50%)",
             }}
