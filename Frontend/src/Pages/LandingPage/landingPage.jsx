@@ -209,6 +209,7 @@ const LandingPage = () => {
       {/* Footer */}
       <div className="pb-24">
         <Footer />
+        
       </div>
 
       {/* Tailwind Animation Styles */}
