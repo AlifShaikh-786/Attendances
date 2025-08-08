@@ -5,11 +5,6 @@ const Footer = () => {
     <footer className="w-full fixed bottom-0 left-0 z-40 bg-transparent backdrop-blur-sm shadow-sm py-4 flex justify-center">
       <div className="flex flex-col items-center gap-2">
         <div className="flex gap-2 items-center cursor-pointer select-none">
-          <img
-            src="/Assets/DYPIMED-Logo.png"
-            alt="DYPIMED Logo"
-            className="w-10 h-10 animate-bounce transition-transform duration-300 group-hover:scale-110"
-          />
           <h3
             className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-600 to-blue-600
                      font-extrabold text-2xl md:text-3xl select-none

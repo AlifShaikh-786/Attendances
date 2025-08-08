@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-// import { motion } from "framer-motion";
-import GoogleLoginComp from "../../components/GoogleLogin/googleLoginComp";
+import GoogleLogin from "../../components/GoogleLogin/googleLogin";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Navbar from "../../components/Navbar/navbar";
+import Footer from "../../components/Footer/footer";
 
 const SignUp = (props) => {
   const navigate = useNavigate();
@@ -32,20 +34,14 @@ const SignUp = (props) => {
         registerField
       );
 
-      console.log(response);
+      toast.success(response.data?.message || "Registration successful!");
 
-      const msg = response.data?.message || "Registration successful!";
-      toast.success(msg);
-
-      // If response is successful
-      //toast.success("Registration successful!");
       setRegisterField({
         email: "",
         password: "",
         f_name: "",
       });
 
-      // Navigate after a short delay (optional)
       setTimeout(() => navigate("/login"), 1000);
     } catch (err) {
       console.error("Registration Error:", err);
@@ -58,97 +54,116 @@ const SignUp = (props) => {
   };
 
   return (
-    <div className="relative w-full min-h-screen flex items-center justify-center bg-gray-50 px-4 overflow-hidden">
-      {/* Sign Up Box */}
-      <div className="relative z-10 w-full max-w-md bg-white shadow-2xl rounded-xl p-8 md:p-10">
-        {/* Title */}
-        <h2 className="text-3xl md:text-4xl font-semibold text-center text-gray-800 mb-6">
-          Make the most of your professional life
-        </h2>
+    <div className="relative min-h-screen flex items-center justify-center bg-gray-900 text-gray-100 px-4">
+      {/* Background image with overlay */}
+      <img
+        src="../../../public/Assets/AttendenceBG.jpg"
+        alt="College Attendance Background"
+        className="absolute inset-0 w-full h-full object-cover brightness-50"
+      />
+      <Navbar />
 
-        {/* Form */}
-        <form className="space-y-4">
+      {/* SignUp card */}
+      <div className="relative z-30 bg-gray-800 bg-opacity-90 backdrop-blur-md rounded-xl shadow-2xl max-w-md w-full p-10">
+        <h1 className="text-4xl font-bold mb-8 text-center text-blue-400">
+          Create Your Account
+        </h1>
+
+        <form
+          className="space-y-6"
+          onSubmit={handleRegister}
+          autoComplete="off"
+        >
           <div>
             <label
               htmlFor="fullName"
-              className="block text-sm text-gray-600 mb-1"
+              className="block mb-2 text-sm font-medium text-gray-300"
             >
-              Full Name
+              Full Name*
             </label>
             <input
               id="fullName"
               type="text"
               value={registerField.f_name}
               onChange={(e) => handleInputField(e, "f_name")}
-              placeholder="Enter your full name"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              placeholder="Enter full name"
+              className="w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-100"
+              required
+              autoComplete="name"
             />
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm text-gray-600 mb-1">
-              Email
+            <label
+              htmlFor="email"
+              className="block mb-2 text-sm font-medium text-gray-300"
+            >
+              Email Address*
             </label>
             <input
               id="email"
               type="email"
               value={registerField.email}
               onChange={(e) => handleInputField(e, "email")}
-              placeholder="Enter your email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              placeholder="Enter college email"
+              className="w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-100"
+              required
+              autoComplete="email"
             />
           </div>
 
           <div>
             <label
               htmlFor="password"
-              className="block text-sm text-gray-600 mb-1"
+              className="block mb-2 text-sm font-medium text-gray-300"
             >
-              Password
+              Password*
             </label>
             <input
               id="password"
               type="password"
               value={registerField.password}
               onChange={(e) => handleInputField(e, "password")}
-              placeholder="Enter your password"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              placeholder="Enter password"
+              className="w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-3 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-100"
+              required
+              autoComplete="new-password"
             />
           </div>
 
-          {/* Register Button */}
           <button
             type="submit"
-            onClick={handleRegister}
-            className="w-full bg-blue-700 hover:bg-blue-800 text-white py-2.5 rounded-lg text-sm font-medium transition duration-200"
+            className="w-full py-3 rounded-md bg-gradient-to-r from-blue-600 to-purple-700 hover:from-purple-700 hover:to-blue-600 text-white font-semibold transition duration-300 shadow-lg"
           >
             Register
           </button>
         </form>
 
-        {/* Divider */}
-        <div className="flex items-center gap-3 my-6">
-          <hr className="flex-grow border-gray-300" />
-          <span className="text-gray-500 text-sm">or</span>
-          <hr className="flex-grow border-gray-300" />
+        <div className="flex items-center gap-3 my-6 text-gray-400">
+          <hr className="flex-grow border-gray-600" />
+          <span className="text-sm">or</span>
+          <hr className="flex-grow border-gray-600" />
         </div>
 
-        {/* Google Login */}
-        <div className="mb-4">
-          <GoogleLoginComp changeLoginValue={props.changeLoginValue} />
+        <div className="mb-6">
+          <GoogleLogin changeLoginValue={props.changeLoginValue} />
         </div>
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Already on LinedIn?
+        <p className="mt-3 text-center text-gray-400">
+          Already have an account?{" "}
           <Link
             to="/login"
-            className="text-blue-700 hover:underline ml-1 font-medium"
+            className="text-blue-400 hover:text-blue-600 font-semibold"
           >
-            Sign in
+            Sign In
           </Link>
         </p>
       </div>
+
+      <div className="pb-1 mt-20">
+        <Footer />
+      </div>
+
       <ToastContainer />
     </div>
   );

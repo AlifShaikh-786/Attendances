@@ -33,7 +33,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import StudentAttendance from "./Pages/StudentAttendance";
 import LandingPage from "./Pages/LandingPage/landingPage";
-
+import SignUp from "./Pages/SignUp/signUp";
+import Login from "./Pages/Login/login";
 const ErrorPage = () => (
   <div style={{ padding: "2rem", textAlign: "center" }}>
     <h1>404 - Not Found</h1>
@@ -47,7 +48,8 @@ function App() {
       <Routes>
         {/* Landing page will be shown first */}
         <Route path="/" element={<LandingPage />} />
-
+        <Route path="/signUp" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
         {/* Student attendance page */}
         <Route path="/attendance" element={<StudentAttendance />} />
 
