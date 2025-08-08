@@ -31,10 +31,12 @@
 
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import StudentAttendance from "./Pages/StudentAttendance";
+import StudentAttendance from "./Pages/ManualAttendance/StudentAttendance";
 import LandingPage from "./Pages/LandingPage/landingPage";
 import SignUp from "./Pages/SignUp/signUp";
 import Login from "./Pages/Login/login";
+import Dashboard from "./components/Dashboard/dashboard";
+import DashboardStudentAdd from "./Pages/DashboardStudentAdd/dashboardStudentAdd";
 const ErrorPage = () => (
   <div style={{ padding: "2rem", textAlign: "center" }}>
     <h1>404 - Not Found</h1>
@@ -50,6 +52,8 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/signUp" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/addStudent" element={<DashboardStudentAdd />} />
         {/* Student attendance page */}
         <Route path="/attendance" element={<StudentAttendance />} />
 
