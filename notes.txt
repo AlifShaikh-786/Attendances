@@ -1,0 +1,31 @@
+==================================Frontend=================================
+
+1-- npm create vite@latest Frontend
+2-- npm install -D tailwindcss@^3 postcss autoprefixer
+3-- npx tailwindcss init -p   
+4-- npm install react-router-dom
+
+
+
+
+
+
+
+=================================Backend==================================
+1--  npm init -y
+2--  npm i dotenv express body-parser dotenv cors mongoose
+3--  npm i --save-dev nodemon
+
+
+in package ,json =(
+      "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+
+    "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+)
