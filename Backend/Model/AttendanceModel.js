@@ -6,17 +6,17 @@ const AttendanceSchema = mongoose.Schema({
     required: true,
   },
 
-  Semester: {
+  semester: {
     type: String,
     required: true,
   },
 
-  Div: {
+  div: {
     type: String,
     required: true,
   },
-  Images: {
-    type: String,
+  image: {
+    type: [String],
     required: true,
   },
   date: {
@@ -25,7 +25,7 @@ const AttendanceSchema = mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["Present", "Absent", "Leave"],
+    // enum: ["Present", "Absent", "Leave"],
     required: true,
   },
   Time: {
@@ -36,11 +36,11 @@ const AttendanceSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  StdName: {
+  stdName: {
     type: String,
     required: true,
   },
-  RollNo: {
+  rollNo: {
     type: String,
     required: true,
   },

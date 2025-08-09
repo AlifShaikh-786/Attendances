@@ -1,10 +1,17 @@
 import express from "express";
-import { StdDisplay, StdRagistration } from "../Controller/StudentRagisterController.js";
+import {
+  registerStudent,
+  StdDisplay,
+  StdRagistration,
+} from "../Controller/StudentRagisterController.js";
+import { upload } from "../authintication/multerConfig.js";
 
 const router = express.Router();
 
-// ✅ YOUR CURRENT ROUTE:
 router.post("/StdRagistrations", StdRagistration);
-router.post("/StdDisplays",StdDisplay)
+router.post("/StdDisplays", StdDisplay);
+
+// ✅ Correct multer usage: `upload.single('image')`
+router.post("/register", upload.single("image"), registerStudent);
 
 export default router;

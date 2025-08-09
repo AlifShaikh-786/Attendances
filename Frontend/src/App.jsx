@@ -1,42 +1,11 @@
-// import { useState } from "react";
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-// // import "./App.css";
-// import StudentAttendance from "./Pages/StudentAttendance";
-// import LandingPage from "./Pages/LandingPage/landingPage";
+// import "./App.css";
+import StudentAttendance from "./Pages/StudentAttendance";
+import Register from "./Pages/Student/Register";
+import StdAttendance from "./Pages/studentAttendance/stdAttendance";
 
-// const ErrorPage = () => (
-//   <div style={{ padding: "2rem", textAlign: "center" }}>
-//     <h1>404 - Not Found</h1>
-//     <p>The page you're looking for does not exist.</p>
-//   </div>
-// );
-
-// const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <StudentAttendance />,
-//     errorElement: <ErrorPage />,
-//   },
-// ]);
-// function App() {
-//   return (
-//     <Routes>
-//       <Route path="/" element={<LandingPage />}></Route>
-//     </Routes>
-//   );
-// }
-
-// export default App;
-
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import StudentAttendance from "./Pages/ManualAttendance/StudentAttendance";
-import LandingPage from "./Pages/LandingPage/landingPage";
-import SignUp from "./Pages/SignUp/signUp";
-import Login from "./Pages/Login/login";
-import Dashboard from "./components/Dashboard/dashboard";
-import DashboardStudentAdd from "./Pages/DashboardStudentAdd/dashboardStudentAdd";
 const ErrorPage = () => (
   <div style={{ padding: "2rem", textAlign: "center" }}>
     <h1>404 - Not Found</h1>
@@ -44,24 +13,27 @@ const ErrorPage = () => (
   </div>
 );
 
-function App() {
-  return (
-    <Router>
-      <Routes>
-        {/* Landing page will be shown first */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/signUp" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/addStudent" element={<DashboardStudentAdd />} />
-        {/* Student attendance page */}
-        <Route path="/attendance" element={<StudentAttendance />} />
+const router = createBrowserRouter([
+  {
+    path: "/StudentAttendance-s",
+    element: <StudentAttendance />,
+    errorElement: <ErrorPage />,
+  },
 
-        {/* Catch-all for 404 errors */}
-        <Route path="*" element={<ErrorPage />} />
-      </Routes>
-    </Router>
-  );
+  {
+    path: "/",
+    element: <Register />,
+    errorElement: <ErrorPage />,
+  },
+
+  {
+    path: "/stdAttendance-s",
+    element: <StdAttendance />,
+    errorElement: <ErrorPage />,
+  },
+]);
+function App() {
+  return <RouterProvider router={router} />;
 }
 
 export default App;
