@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // import "./App.css";
-import StudentAttendance from "./Pages/StudentAttendance";
+import StudentAttendance from "./Pages/studentAttendance/StudentAttendance";
 import Register from "./Pages/Student/Register";
 import StdAttendance from "./Pages/studentAttendance/stdAttendance";
 
@@ -15,13 +15,18 @@ const ErrorPage = () => (
 
 const router = createBrowserRouter([
   {
+    path: "/",
+    element: <StdAttendance />,
+    errorElement: <ErrorPage />,
+  },
+  {
     path: "/StudentAttendance-s",
     element: <StudentAttendance />,
     errorElement: <ErrorPage />,
   },
 
   {
-    path: "/",
+    path: "/Register-s",
     element: <Register />,
     errorElement: <ErrorPage />,
   },

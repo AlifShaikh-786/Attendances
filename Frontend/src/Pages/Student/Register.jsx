@@ -1,23 +1,37 @@
 // import React, { useRef, useState, useEffect } from "react";
 // import axios from "axios";
+// import * as faceapi from "@vladmandic/face-api";
 
 // export default function StudentRegistration() {
 //   const videoRef = useRef(null);
 //   const canvasRef = useRef(null);
 
-//   const [capturedImages, setCapturedImages] = useState([]); // multiple captures
+//   const [capturedImages, setCapturedImages] = useState([]);
+//   const [modelsLoaded, setModelsLoaded] = useState(false);
 //   const [formData, setFormData] = useState({
 //     stdName: "",
 //     rollNo: "",
-//     class: "",
+//     Class: "",
 //     semester: "",
 //     div: "",
 //     email: "",
 //     contact: "",
+//     faceDescriptor: [],
 //   });
 
-//   // Start camera
 //   useEffect(() => {
+//     const loadModels = async () => {
+//       const MODEL_URL =
+//         "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/";
+//       await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+//       await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+//       await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+//       setModelsLoaded(true);
+//       console.log("Face-api models loaded from CDN");
+//     };
+
+//     loadModels();
+
 //     navigator.mediaDevices
 //       .getUserMedia({ video: true })
 //       .then((stream) => {
@@ -26,19 +40,66 @@
 //       .catch((err) => console.error("Camera error:", err));
 //   }, []);
 
-//   // Capture image from video and add to images array
-//   const captureImage = () => {
-//     const ctx = canvasRef.current.getContext("2d");
+//   // const captureImage = async () => {
+//   //   if (!modelsLoaded) {
+//   //     alert("Models not loaded yet, please wait...");
+//   //     return;
+//   //   }
+//   //   const canvas = canvasRef.current;
+//   //   const ctx = canvas.getContext("2d");
+//   //   ctx.drawImage(videoRef.current, 0, 0, 320, 240);
+
+//   //   // Detect faces on the canvas image
+//   //   const detections = await faceapi.detectAllFaces(
+//   //     canvas,
+//   //     new faceapi.TinyFaceDetectorOptions()
+//   //   );
+
+//   //   if (detections.length === 0) {
+//   //     alert("❌ No face detected! Please try again.");
+//   //     return;
+//   //   }
+
+//   //   const imgData = canvas.toDataURL("image/png");
+//   //   setCapturedImages((prev) => [...prev, imgData]);
+//   // };
+//   const captureImage = async () => {
+//     if (!modelsLoaded) {
+//       alert("Models not loaded yet, please wait...");
+//       return;
+//     }
+
+//     const canvas = canvasRef.current;
+//     const ctx = canvas.getContext("2d");
 //     ctx.drawImage(videoRef.current, 0, 0, 320, 240);
-//     const imgData = canvasRef.current.toDataURL("image/png");
+
+//     // Detect with descriptor
+//     const detection = await faceapi
+//       .detectSingleFace(canvas, new faceapi.TinyFaceDetectorOptions())
+//       .withFaceLandmarks()
+//       .withFaceDescriptor();
+
+//     if (!detection) {
+//       alert("❌ No face detected! Please try again.");
+//       return;
+//     }
+
+//     const imgData = canvas.toDataURL("image/png");
+
+//     // Store image & descriptor
 //     setCapturedImages((prev) => [...prev, imgData]);
+//     setFormData((prev) => ({
+//       ...prev,
+//       faceDescriptor: Array.from(detection.descriptor), // convert Float32Array to normal array
+//     }));
+
+//     console.log("✅ Face descriptor captured:", detection.descriptor);
 //   };
 
 //   const handleChange = (e) => {
 //     setFormData({ ...formData, [e.target.name]: e.target.value });
 //   };
 
-//   // Submit form with multiple images
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 
@@ -50,18 +111,19 @@
 //     try {
 //       await axios.post("http://localhost:7070/api/register", {
 //         ...formData,
-//         faceDescriptor: [], // add real data if you have
+//         faceDescriptor: [], // add real descriptor if you want
 //         image: capturedImages,
 //       });
 //       alert("✅ Student registered successfully!");
 //       setFormData({
 //         stdName: "",
 //         rollNo: "",
-//         class: "",
+//         Class: "",
 //         semester: "",
 //         div: "",
 //         email: "",
 //         contact: "",
+//         faceDescriptor: "",
 //       });
 //       setCapturedImages([]);
 //     } catch (error) {
@@ -91,9 +153,9 @@
 //         />
 //         <br />
 //         <input
-//           name="class"
+//           name="Class"
 //           placeholder="Class"
-//           value={formData.class}
+//           value={formData.Class}
 //           onChange={handleChange}
 //           required
 //         />
@@ -171,17 +233,17 @@ export default function StudentRegistration() {
     div: "",
     email: "",
     contact: "",
+    faceDescriptor: []
   });
 
   useEffect(() => {
     const loadModels = async () => {
-      const MODEL_URL =
-        "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/";
+      const MODEL_URL = "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/";
       await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
       await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
       await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
       setModelsLoaded(true);
-      console.log("Face-api models loaded from CDN");
+      console.log("✅ Face-api models loaded from CDN");
     };
 
     loadModels();
@@ -199,23 +261,31 @@ export default function StudentRegistration() {
       alert("Models not loaded yet, please wait...");
       return;
     }
+
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.drawImage(videoRef.current, 0, 0, 320, 240);
 
-    // Detect faces on the canvas image
-    const detections = await faceapi.detectAllFaces(
-      canvas,
-      new faceapi.TinyFaceDetectorOptions()
-    );
+    // Detect with descriptor
+    const detection = await faceapi
+      .detectSingleFace(canvas, new faceapi.TinyFaceDetectorOptions())
+      .withFaceLandmarks()
+      .withFaceDescriptor();
 
-    if (detections.length === 0) {
+    if (!detection) {
       alert("❌ No face detected! Please try again.");
       return;
     }
 
     const imgData = canvas.toDataURL("image/png");
+
     setCapturedImages((prev) => [...prev, imgData]);
+    setFormData((prev) => ({
+      ...prev,
+      faceDescriptor: Array.from(detection.descriptor) // Convert Float32Array to normal array
+    }));
+
+    console.log("✅ Face descriptor captured:", detection.descriptor);
   };
 
   const handleChange = (e) => {
@@ -233,8 +303,7 @@ export default function StudentRegistration() {
     try {
       await axios.post("http://localhost:7070/api/register", {
         ...formData,
-        faceDescriptor: [], // add real descriptor if you want
-        image: capturedImages,
+        image: capturedImages
       });
       alert("✅ Student registered successfully!");
       setFormData({
@@ -245,6 +314,7 @@ export default function StudentRegistration() {
         div: "",
         email: "",
         contact: "",
+        faceDescriptor: []
       });
       setCapturedImages([]);
     } catch (error) {

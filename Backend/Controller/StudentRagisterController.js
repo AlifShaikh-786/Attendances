@@ -103,16 +103,87 @@ export const StdRagistration = async (req, res) => {
 //     return res.status(500).json({ msg: error.message });
 //   }
 // };
+
+// export const StdDisplay = async (req, res) => {
+//   try {
+//     const { div, semester, Class } = req.body;
+
+//     // Find students matching all three fields
+//     const display = await StudentRagisterSchema.find({
+//       Class,
+//       semester,
+//       div,
+//     });
+
+//     if (!display || display.length === 0) {
+//       return res.status(404).json({
+//         msg: "Student with provided Class, Semester, and Div not found",
+//       });
+//     }
+
+//     // Student(s) found
+//     res.status(200).json(display);
+//   } catch (error) {
+//     return res.status(500).json({ msg: error.message });
+//   }
+// };
+
+// export const StdDisplay = async (req, res) => {
+//   try {
+//     const { div, semester, Class } = req.body;
+
+//     // Find students with only needed fields
+//     const display = await StudentRagisterSchema.find(
+//       { Class, semester, div },
+//       { stdName: 1, rollNo: 1, image: 1, faceDescriptor: 1 } // only required fields
+//     ).lean(); // lean() returns plain JS objects instead of Mongoose docs
+
+//     if (!display || display.length === 0) {
+//       return res.status(404).json({
+//         msg: "Student with provided Class, Semester, and Div not found",
+//       });
+//     }
+
+//     // ✅ Convert Buffer -> number[] if stored as Buffer
+//     const formatted = display.map((student) => {
+//       let faceDesc = student.faceDescriptor || [];
+
+//       // If it's a Buffer or single descriptor, normalize to [[...]]
+//       if (!Array.isArray(faceDesc)) {
+//         faceDesc = [];
+//       } else if (faceDesc.length === 128 && typeof faceDesc[0] === "number") {
+//         // Single descriptor → wrap in another array
+//         faceDesc = [faceDesc];
+//       } else if (faceDesc.length > 0 && faceDesc[0].data) {
+//         // If stored as array of Buffers
+//         faceDesc = faceDesc.map((fd) => Array.from(fd.data));
+//       }
+
+//       return {
+//         _id: student._id.toString(),
+//         stdName: student.stdName,
+//         rollNo: student.rollNo,
+//         image: student.image || [],
+//         faceDescriptor: faceDesc,
+//       };
+//     });
+
+//     res.status(200).json(formatted);
+//   } catch (error) {
+//     console.error("StdDisplay error:", error);
+//     return res.status(500).json({ msg: error.message });
+//   }
+// };
+
 export const StdDisplay = async (req, res) => {
   try {
     const { div, semester, Class } = req.body;
 
-    // Find students matching all three fields
-    const display = await StudentRagisterSchema.find({
-      Class,
-      semester,
-      div,
-    });
+    // Step 1: Find students with only needed fields
+    let display = await StudentRagisterSchema.find(
+      { Class, semester, div },
+      { stdName: 1, rollNo: 1, image: 1, faceDescriptor: 1 }
+    ).lean();
 
     if (!display || display.length === 0) {
       return res.status(404).json({
@@ -120,9 +191,40 @@ export const StdDisplay = async (req, res) => {
       });
     }
 
-    // Student(s) found
-    res.status(200).json(display);
+    // Step 2: Convert Buffer -> number[] if stored as Buffer
+    display = display.map((student) => {
+      let faceDesc = student.faceDescriptor || [];
+
+      if (!Array.isArray(faceDesc)) {
+        faceDesc = [];
+      } else if (faceDesc.length === 128 && typeof faceDesc[0] === "number") {
+        // Single descriptor → wrap in another array
+        faceDesc = [faceDesc];
+      } else if (faceDesc.length > 0 && faceDesc[0].data) {
+        // If stored as array of Buffers
+        faceDesc = faceDesc.map((fd) => Array.from(fd.data));
+      }
+
+      return {
+        _id: student._id.toString(),
+        stdName: student.stdName,
+        rollNo: student.rollNo,
+        image: student.image || [],
+        faceDescriptor: faceDesc,
+      };
+    });
+
+    // Step 3: Keep only valid students with [[128 floats]]
+    const validStudents = display.filter(
+      (s) =>
+        Array.isArray(s.faceDescriptor) &&
+        s.faceDescriptor.length > 0 &&
+        s.faceDescriptor.every((fd) => Array.isArray(fd) && fd.length === 128)
+    );
+
+    res.status(200).json(validStudents);
   } catch (error) {
+    console.error("StdDisplay error:", error);
     return res.status(500).json({ msg: error.message });
   }
 };

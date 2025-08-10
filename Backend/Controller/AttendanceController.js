@@ -46,12 +46,9 @@ export const AddAttendance = async (req, res) => {
       !Array.isArray(attendanceList) ||
       attendanceList.length === 0
     ) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Attendance list is required and should be a non-empty array.",
-        });
+      return res.status(400).json({
+        message: "Attendance list is required and should be a non-empty array.",
+      });
     }
 
     // Validate each attendance object (optional but recommended)
