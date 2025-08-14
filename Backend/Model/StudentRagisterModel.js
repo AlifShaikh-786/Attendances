@@ -43,6 +43,7 @@ const StudentRagisterSchema = new mongoose.Schema({
   faceDescriptor: { type: [Number], default: [] },
   email: { type: String, required: true },
   contact: { type: String, required: true },
+  password: { type: String, required: true },
   image: { type: [String], default: [] }, // paths to saved images
 });
 

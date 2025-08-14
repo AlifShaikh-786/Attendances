@@ -233,12 +233,13 @@ export default function StudentRegistration() {
     div: "",
     email: "",
     contact: "",
-    faceDescriptor: []
+    faceDescriptor: [],
   });
 
   useEffect(() => {
     const loadModels = async () => {
-      const MODEL_URL = "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/";
+      const MODEL_URL =
+        "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/";
       await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
       await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
       await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
@@ -282,7 +283,7 @@ export default function StudentRegistration() {
     setCapturedImages((prev) => [...prev, imgData]);
     setFormData((prev) => ({
       ...prev,
-      faceDescriptor: Array.from(detection.descriptor) // Convert Float32Array to normal array
+      faceDescriptor: Array.from(detection.descriptor), // Convert Float32Array to normal array
     }));
 
     console.log("✅ Face descriptor captured:", detection.descriptor);
@@ -303,7 +304,7 @@ export default function StudentRegistration() {
     try {
       await axios.post("http://localhost:7070/api/register", {
         ...formData,
-        image: capturedImages
+        image: capturedImages,
       });
       alert("✅ Student registered successfully!");
       setFormData({
@@ -314,7 +315,7 @@ export default function StudentRegistration() {
         div: "",
         email: "",
         contact: "",
-        faceDescriptor: []
+        faceDescriptor: [],
       });
       setCapturedImages([]);
     } catch (error) {

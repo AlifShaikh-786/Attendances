@@ -66,3 +66,88 @@ export const AddAttendance = async (req, res) => {
       .json({ message: "Internal server error", error: error.message });
   }
 };
+
+// const DisplayReport = await AttendanceSchema.find({
+//   Class: new RegExp(`^${Class}$`, "i"),
+//   semester: new RegExp(`^${semester}$`, "i"),
+//   div: new RegExp(`^${div}$`, "i"),
+//   rollNo: new RegExp(`^${rollNo}$`, "i"),
+//   Subject: new RegExp(`^${Subject}$`, "i"),
+// });
+
+// export const AttendanceReport = async (req, res) => {
+//   try {
+//     const { Class, semester, div, rollNo, Subject } = req.body;
+
+//     const DisplayReport = await AttendanceSchema.find({
+//       Class,
+//       semester,
+//       div,
+//       rollNo,
+//       Subject,
+//     });
+
+//     res.status(200).json(DisplayReport);
+//   } catch (error) {
+//     return res
+//       .status(500)
+//       .json({ msg: "Internal server error", error: error.message });
+//   }
+// };
+
+export const AttendanceReport = async (req, res) => {
+  try {
+    const { Class, semester, div, rollNo, Subject, date, status } = req.body;
+
+    let query = {};
+
+    if (Class && Class.trim() !== "") query.Class = Class;
+    if (semester && semester.trim() !== "") query.semester = semester;
+    if (div && div.trim() !== "") query.div = div;
+    if (rollNo && rollNo.trim() !== "") query.rollNo = rollNo;
+    if (Subject && Subject.trim() !== "") query.Subject = Subject;
+    if (date && date.trim() !== "") query.date = date;
+    if (status && status.trim() !== "") query.status = status;
+
+    const DisplayReport = await AttendanceSchema.find(query);
+
+    if (!DisplayReport || DisplayReport.length === 0) {
+      return res.status(404).json({ msg: "No students found" });
+    }
+
+    res.status(200).json(DisplayReport);
+  } catch (error) {
+    return res.status(500).json({
+      msg: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+// export const AttendanceReport = async (req, res) => {
+//   try {
+//     const { Class, semester, div, rollNo, Subject } = req.body;
+
+//     console.log("📩 Request body:", req.body);
+
+//     const query = { Class, semester, div, rollNo, Subject };
+//     console.log("🔍 DB query:", query);
+
+//     const DisplayReport = await AttendanceSchema.find(query);
+
+//     console.log("📊 DB result:", DisplayReport);
+
+//     if (!DisplayReport || DisplayReport.length === 0) {
+//       return res.status(404).json({
+//         msg: "No students found for provided filters",
+//       });
+//     }
+
+//     res.status(200).json(DisplayReport);
+//   } catch (error) {
+//     console.error("❌ Error fetching attendance report:", error.message);
+//     return res
+//       .status(500)
+//       .json({ msg: "Internal server error", error: error.message });
+//   }
+// };

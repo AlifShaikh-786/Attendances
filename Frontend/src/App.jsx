@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import StudentAttendance from "./Pages/studentAttendance/StudentAttendance";
 import Register from "./Pages/Student/Register";
 import StdAttendance from "./Pages/studentAttendance/stdAttendance";
+import AttendanceForm from "./Pages/Reports/Reports";
 
 const ErrorPage = () => (
   <div style={{ padding: "2rem", textAlign: "center" }}>
@@ -16,7 +17,7 @@ const ErrorPage = () => (
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <StdAttendance />,
+    element: <AttendanceForm />,
     errorElement: <ErrorPage />,
   },
   {

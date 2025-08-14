@@ -17,6 +17,7 @@ export const registerStudent = async (req, res) => {
       faceDescriptor,
       email,
       contact,
+      password,
       image, // array of base64 strings
     } = req.body;
 
@@ -53,6 +54,7 @@ export const registerStudent = async (req, res) => {
       faceDescriptor,
       email,
       contact,
+      password,
       image: savedImagePaths,
     });
 
