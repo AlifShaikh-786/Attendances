@@ -1,17 +1,24 @@
+// Router/StudentRagisterRoute.js
 import express from "express";
 import {
   registerStudent,
   StdDisplay,
   StdRagistration,
+  loginStudent,
 } from "../Controller/StudentRagisterController.js";
 import { upload } from "../authintication/multerConfig.js";
 
 const router = express.Router();
 
+// Student registration routes
 router.post("/StdRagistrations", StdRagistration);
 router.post("/StdDisplays", StdDisplay);
-
-// ✅ Correct multer usage: `upload.single('image')`
+router.post("/Stdlogin", loginStudent);
 router.post("/register", upload.single("image"), registerStudent);
+
+// Block GET requests to login
+// router.get("/Stdlogin", (req, res) => {
+//   res.status(405).json({ error: "Use POST method for login" });
+// });
 
 export default router;
