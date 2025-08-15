@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import React, { useState } from "react";
 
 // const StdAttendance = () => {
@@ -1120,6 +1121,8 @@
 
 // export default StdAttendance;
 
+=======
+>>>>>>> a95da0d8ea4b01cfbb91751c7cb71cb4a354a0da
 import React, { useState, useEffect, useRef } from "react";
 import * as faceapi from "@vladmandic/face-api";
 
@@ -1429,6 +1432,7 @@ const StdAttendance = () => {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
+<<<<<<< HEAD
       <div className="flex gap-3 justify-center mt-6">
         <img
           src="/Assets/DYPIMED-Logo.png"
@@ -1445,6 +1449,8 @@ const StdAttendance = () => {
           DYPIMED
         </h3>
       </div>
+=======
+>>>>>>> a95da0d8ea4b01cfbb91751c7cb71cb4a354a0da
       {/* Attendance Form */}
       <form
         onSubmit={StdDetailSubmit}

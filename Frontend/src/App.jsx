@@ -1,10 +1,18 @@
 // import { useState } from "react";
 // import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+<<<<<<< HEAD
 // // import "./App.css";
 // import StudentAttendance from "./Pages/StudentAttendance";
 // import Register from "./Pages/Student/Register";
 // import StdAttendance from "./Pages/studentAttendance/stdAttendance";
+=======
+// import "./App.css";
+import StudentAttendance from "./Pages/studentAttendance/StudentAttendance";
+import Register from "./Pages/Student/Register";
+import StdAttendance from "./Pages/studentAttendance/stdAttendance";
+import AttendanceForm from "./Pages/Reports/Reports";
+>>>>>>> a95da0d8ea4b01cfbb91751c7cb71cb4a354a0da
 
 // const ErrorPage = () => (
 //   <div style={{ padding: "2rem", textAlign: "center" }}>
@@ -13,6 +21,7 @@
 //   </div>
 // );
 
+<<<<<<< HEAD
 // const router = createBrowserRouter([
 //   {
 //     path: "/StudentAttendance-s",
@@ -50,6 +59,25 @@ import StudentLogin from "./Pages/Login/studentLogin";
 import FacultyDashboard from "./components/FacultyDashboard/facultyDashboard";
 import StudentDashboard from "./components/StudentDashboard/studentDashboard";
 // import ErrorPage from "./Pages/Error/ErrorPage"; // your 404 page
+=======
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <AttendanceForm />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/StudentAttendance-s",
+    element: <StudentAttendance />,
+    errorElement: <ErrorPage />,
+  },
+
+  {
+    path: "/Register-s",
+    element: <Register />,
+    errorElement: <ErrorPage />,
+  },
+>>>>>>> a95da0d8ea4b01cfbb91751c7cb71cb4a354a0da
 
 function App() {
   return (
