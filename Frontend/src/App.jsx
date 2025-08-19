@@ -1,54 +1,6 @@
-// import { useState } from "react";
-// import { createBrowserRouter, RouterProvider } from "react-router-dom";
-
-<<<<<<< HEAD
-// // import "./App.css";
-// import StudentAttendance from "./Pages/StudentAttendance";
-// import Register from "./Pages/Student/Register";
-// import StdAttendance from "./Pages/studentAttendance/stdAttendance";
-=======
-// import "./App.css";
-import StudentAttendance from "./Pages/studentAttendance/StudentAttendance";
-import Register from "./Pages/Student/Register";
-import StdAttendance from "./Pages/studentAttendance/stdAttendance";
-import AttendanceForm from "./Pages/Reports/Reports";
->>>>>>> a95da0d8ea4b01cfbb91751c7cb71cb4a354a0da
-
-// const ErrorPage = () => (
-//   <div style={{ padding: "2rem", textAlign: "center" }}>
-//     <h1>404 - Not Found</h1>
-//     <p>The page you're looking for does not exist.</p>
-//   </div>
-// );
-
-<<<<<<< HEAD
-// const router = createBrowserRouter([
-//   {
-//     path: "/StudentAttendance-s",
-//     element: <StudentAttendance />,
-//     errorElement: <ErrorPage />,
-//   },
-
-//   {
-//     path: "/",
-//     element: <Register />,
-//     errorElement: <ErrorPage />,
-//   },
-
-//   {
-//     path: "/stdAttendance-s",
-//     element: <StdAttendance />,
-//     errorElement: <ErrorPage />,
-//   },
-// ]);
-// function App() {
-//   return <RouterProvider router={router} />;
-// }
-
-// export default App;
-
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+
 import LandingPage from "./Pages/LandingPage/LandingPage";
 import SignUp from "./Pages/SignUp/SignUp";
 import Login from "./Pages/Login/Login";
@@ -58,26 +10,18 @@ import StudentLogin from "./Pages/Login/studentLogin";
 
 import FacultyDashboard from "./components/FacultyDashboard/facultyDashboard";
 import StudentDashboard from "./components/StudentDashboard/studentDashboard";
-// import ErrorPage from "./Pages/Error/ErrorPage"; // your 404 page
-=======
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <AttendanceForm />,
-    errorElement: <ErrorPage />,
-  },
-  {
-    path: "/StudentAttendance-s",
-    element: <StudentAttendance />,
-    errorElement: <ErrorPage />,
-  },
+import Register from "./Pages/Student/Register";
+import StdAttendance from "./Pages/studentAttendance/stdAttendance";
+import StudentAttendance from "./Pages/studentAttendance/StudentAttendance";
+import AttendanceForm from "./Pages/Reports/Reports";
 
-  {
-    path: "/Register-s",
-    element: <Register />,
-    errorElement: <ErrorPage />,
-  },
->>>>>>> a95da0d8ea4b01cfbb91751c7cb71cb4a354a0da
+// Optional 404 page
+const ErrorPage = () => (
+  <div style={{ padding: "2rem", textAlign: "center" }}>
+    <h1>404 - Not Found</h1>
+    <p>The page you're looking for does not exist.</p>
+  </div>
+);
 
 function App() {
   return (
@@ -88,11 +32,16 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/adminLogin" element={<AdminLogin />} />
       <Route path="/studentLogin" element={<StudentLogin />} />
-
       <Route path="/adminDashboard" element={<AdminDashboard />} />
       <Route path="/facultyDashboard" element={<FacultyDashboard />} />
       <Route path="/studentDashboard" element={<StudentDashboard />} />
-      {/* <Route path="*" element={<ErrorPage />} /> */}
+      <Route path="/Register-s" element={<Register />} />
+      <Route path="/stdAttendance-s" element={<StdAttendance />} />
+      <Route path="/StudentAttendance-s" element={<StudentAttendance />} />
+      <Route path="/AttendanceForm-s" element={<AttendanceForm />} />
+
+      {/* Catch-all 404 route */}
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 }

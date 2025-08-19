@@ -458,10 +458,7 @@ export default function StudentRegistration() {
     div: "",
     email: "",
     contact: "",
-<<<<<<< HEAD
     password: "",
-=======
->>>>>>> a95da0d8ea4b01cfbb91751c7cb71cb4a354a0da
     faceDescriptor: [],
   });
 
@@ -493,14 +490,9 @@ export default function StudentRegistration() {
     }
 
     const canvas = canvasRef.current;
-    // add willReadFrequently to address the warning & improve perf
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
     ctx.drawImage(videoRef.current, 0, 0, 320, 240);
 
-<<<<<<< HEAD
-=======
-    // Detect with descriptor
->>>>>>> a95da0d8ea4b01cfbb91751c7cb71cb4a354a0da
     const detection = await faceapi
       .detectSingleFace(canvas, new faceapi.TinyFaceDetectorOptions())
       .withFaceLandmarks()
@@ -516,11 +508,7 @@ export default function StudentRegistration() {
     setCapturedImages((prev) => [...prev, imgData]);
     setFormData((prev) => ({
       ...prev,
-<<<<<<< HEAD
       faceDescriptor: Array.from(detection.descriptor),
-=======
-      faceDescriptor: Array.from(detection.descriptor), // Convert Float32Array to normal array
->>>>>>> a95da0d8ea4b01cfbb91751c7cb71cb4a354a0da
     }));
 
     console.log("✅ Face descriptor captured:", detection.descriptor);
@@ -530,11 +518,9 @@ export default function StudentRegistration() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Optional: prevent submit if browser reports invalid fields
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Let the browser show built-in messages first
     const formEl = e.currentTarget;
     if (!formEl.checkValidity()) {
       formEl.reportValidity();
@@ -547,7 +533,6 @@ export default function StudentRegistration() {
     }
 
     try {
-      // NOTE: If your backend expects multipart/form-data, switch to FormData.
       await axios.post("http://localhost:7070/api/register", {
         ...formData,
         image: capturedImages,
@@ -561,10 +546,7 @@ export default function StudentRegistration() {
         div: "",
         email: "",
         contact: "",
-<<<<<<< HEAD
         password: "",
-=======
->>>>>>> a95da0d8ea4b01cfbb91751c7cb71cb4a354a0da
         faceDescriptor: [],
       });
       setCapturedImages([]);
@@ -621,7 +603,7 @@ export default function StudentRegistration() {
                 />
               </div>
 
-              {/* Roll Number: exactly 5 Numbers */}
+              {/* Roll Number */}
               <div className="flex flex-col">
                 <label className="mb-1 font-semibold text-gray-700">
                   Roll Number <span className="text-red-600">*</span>
@@ -640,7 +622,7 @@ export default function StudentRegistration() {
                 />
               </div>
 
-              {/* Class Dropdown */}
+              {/* Class */}
               <div className="flex flex-col">
                 <label className="mb-1 font-semibold text-gray-700">
                   Class <span className="text-red-600">*</span>
@@ -658,7 +640,7 @@ export default function StudentRegistration() {
                 </select>
               </div>
 
-              {/* Semester Dropdown */}
+              {/* Semester */}
               <div className="flex flex-col">
                 <label className="mb-1 font-semibold text-gray-700">
                   Semester <span className="text-red-600">*</span>
@@ -678,7 +660,7 @@ export default function StudentRegistration() {
                 </select>
               </div>
 
-              {/* Division Dropdown */}
+              {/* Division */}
               <div className="flex flex-col">
                 <label className="mb-1 font-semibold text-gray-700">
                   Division <span className="text-red-600">*</span>
@@ -709,14 +691,13 @@ export default function StudentRegistration() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  // Simple robust pattern to catch obvious mistakes
                   pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"
                   title="Enter a valid email like name@example.com"
                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
                 />
               </div>
 
-              {/* Contact (Phone): exactly 10 digits */}
+              {/* Contact */}
               <div className="flex flex-col">
                 <label className="mb-1 font-semibold text-gray-700">
                   Contact Number <span className="text-red-600">*</span>
@@ -728,7 +709,6 @@ export default function StudentRegistration() {
                   placeholder="10-digit phone number"
                   value={formData.contact}
                   onChange={(e) => {
-                    // keep only digits
                     e.target.value = e.target.value.replace(/\D/g, "");
                     handleChange(e);
                   }}
@@ -740,7 +720,7 @@ export default function StudentRegistration() {
                 />
               </div>
 
-              {/* Password: min 8 characters */}
+              {/* Password */}
               <div className="flex flex-col">
                 <label className="mb-1 font-semibold text-gray-700">
                   Password <span className="text-red-600">*</span>
