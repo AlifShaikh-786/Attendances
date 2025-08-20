@@ -14,6 +14,8 @@ import Register from "./Pages/Student/Register";
 import StdAttendance from "./Pages/studentAttendance/stdAttendance";
 import StudentAttendance from "./Pages/studentAttendance/StudentAttendance";
 import AttendanceForm from "./Pages/Reports/Reports";
+import About from "./Pages/About/about";
+import LearnMore from "./Pages/LearnMore/learnMore";
 
 // Optional 404 page
 const ErrorPage = () => (
@@ -28,6 +30,8 @@ function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/landingPage" element={<LandingPage />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/learnMore" element={<LearnMore />} />
       <Route path="/signUp" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
       <Route path="/adminLogin" element={<AdminLogin />} />
