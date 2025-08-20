@@ -74,18 +74,29 @@ const Navbar = () => {
         <img
           src="/Assets/DYPIMED-Logo.png"
           alt="DYPIMED Logo"
-          className="w-30 h-28 animate-bounce transition-transform duration-300 group-hover:scale-110"
+          className="w-24 h-24 sm:w-30 sm:h-28 animate-bounce transition-transform duration-300 group-hover:scale-110"
           loading="lazy"
           draggable={false}
         />
+
         <h3
           className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-orange-500 to-red-500
-             font-extrabold text-lg sm:text-xl md:text-2xl lg:text-3xl select-none
-             drop-shadow-[0_0_8px_rgba(255,165,0,0.9)] leading-snug"
+       font-extrabold select-none drop-shadow-[0_0_8px_rgba(255,165,0,0.9)] leading-snug"
         >
-          Dr. D.Y. Patil Institute of Management & Entrepreneur Development
-          <span className="block text-sm md:text-base font-semibold text-gray-200">
-            Varale, Pune
+          {/* Full name - only visible on medium screens and above */}
+          <span className="hidden sm:block text-lg sm:text-xl md:text-2xl lg:text-3xl">
+            Dr. D.Y. Patil Institute of Management & Entrepreneur Development
+            <span className="block text-sm md:text-base font-semibold text-gray-200">
+              Varale, Pune
+            </span>
+          </span>
+
+          {/* Short name - only visible on mobile */}
+          <span className="block sm:hidden text-lg font-bold">
+            DYPIMED
+            <span className="block text-sm font-semibold text-gray-200">
+              Varale, Pune
+            </span>
           </span>
         </h3>
       </Link>
