@@ -17,7 +17,7 @@ git push
 
 
 
-
+npm run dev -- --host 0.0.0.0
 
 
 
@@ -39,3 +39,51 @@ in package ,json =(
     "test": "echo \"Error: no test specified\" && exit 1"
   },
 )
+
+
+
+
+
+
+
+
+
+
+3. Use SSD Mobilenet Descriptors for Student DB
+
+When storing students’ face embeddings in DB, generate them with SSD Mobilenet (not Tiny).
+
+Example preprocessing for DB images:
+
+const img = await faceapi.fetchImage(student.imageUrl);
+const detections = await faceapi
+  .detectSingleFace(img, new faceapi.SsdMobilenetv1Options({ minConfidence: 0.7 }))
+  .withFaceLandmarks()
+  .withFaceDescriptor();
+
+if (detections) {
+  return new Float32Array(detections.descriptor);
+}
+
+
+👉 This ensures high-quality reference descriptors in DB.
+
+4. Stricter Matching Threshold
+const faceMatcher = new faceapi.FaceMatcher(labeledDescriptors, 0.4);
+
+
+0.6 = default → loose, many false matches.
+
+0.4 = strict → >95% accuracy in controlled conditions.
+
+5. Support Multiple Face Samples per Student
+const createLabeledDescriptors = () =>
+  students.map(student => {
+    const descriptors = student.faceDescriptors.map(
+      desc => new Float32Array(desc)
+    );
+    return new faceapi.LabeledFaceDescriptors(student._id, descriptors);
+  });
+
+
+👉 Store at least 3–5 embeddings per student (different angles & lighting).

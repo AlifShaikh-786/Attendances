@@ -14,8 +14,13 @@ import Register from "./Pages/Student/Register";
 import StdAttendance from "./Pages/studentAttendance/stdAttendance";
 import StudentAttendance from "./Pages/studentAttendance/StudentAttendance";
 import AttendanceForm from "./Pages/Reports/Reports";
+
 import About from "./Pages/About/about";
 import LearnMore from "./Pages/LearnMore/learnMore";
+
+// import AttendanceForms from "./Pages/Report/report";
+// import StudentAttendance from "./Pages/Report/StudentAttendance";
+import StudentAttendanceReport from "./Pages/Report/StudentAttendanceReport";
 
 // Optional 404 page
 const ErrorPage = () => (
@@ -43,6 +48,10 @@ function App() {
       <Route path="/stdAttendance-s" element={<StdAttendance />} />
       <Route path="/StudentAttendance-s" element={<StudentAttendance />} />
       <Route path="/AttendanceForm-s" element={<AttendanceForm />} />
+      <Route
+        path="/StudentAttendanceReport-s"
+        element={<StudentAttendanceReport />}
+      />
 
       {/* Catch-all 404 route */}
       <Route path="*" element={<ErrorPage />} />
