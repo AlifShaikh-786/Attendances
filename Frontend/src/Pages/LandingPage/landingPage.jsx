@@ -107,20 +107,6 @@ const LandingPage = () => {
                 className="absolute left-0 bottom-full mb-3 w-44 bg-white rounded-xl shadow-xl overflow-hidden animate-fadeSlide z-50"
               >
                 <button
-                  onClick={() => onNavigate("/adminLogin")}
-                  className="block w-full px-5 py-3 text-gray-800 font-semibold hover:bg-pink-100 transition"
-                  role="menuitem"
-                >
-                  Admin
-                </button>
-                <button
-                  onClick={() => onNavigate("/login")}
-                  className="block w-full px-5 py-3 text-gray-800 font-semibold hover:bg-pink-100 transition"
-                  role="menuitem"
-                >
-                  Faculty
-                </button>
-                <button
                   onClick={() => onNavigate("/studentLogin")}
                   className="block w-full px-5 py-3 text-gray-800 font-semibold hover:bg-pink-100 transition"
                   role="menuitem"

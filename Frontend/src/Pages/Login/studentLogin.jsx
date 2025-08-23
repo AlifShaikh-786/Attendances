@@ -9,6 +9,7 @@ import Footer from "../../components/Footer/footer";
 const StudentLogin = () => {
   const navigate = useNavigate();
   const [loginField, setLoginField] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
 
   const onChangeInput = (event, key) => {
     setLoginField({ ...loginField, [key]: event.target.value });
@@ -20,29 +21,51 @@ const StudentLogin = () => {
     }
 
     try {
+      setLoading(true);
+
       const res = await axios.post(
         "http://localhost:7070/api/Stdlogin",
         loginField,
         { withCredentials: true }
       );
 
+      const userData = res.data.student || res.data.user || {};
+      const token = res.data.token || userData.token; // depending on backend
+      const role = userData.role;
+
+      if (!token) {
+        toast.error("Token not received from server");
+        return;
+      }
+
+      // Store data in localStorage
+      localStorage.setItem("token", token);
+      localStorage.setItem("isStudentLogin", "true");
+      localStorage.setItem("studentInfo", JSON.stringify(userData));
+
       toast.success("Login successful");
 
-      // Store student details
-      localStorage.setItem("isStudentLogin", "true");
-      localStorage.setItem("studentInfo", JSON.stringify(res.data.student));
-
-      navigate("/studentDashboard"); // Redirect student
+      // Redirect based on role
+      if (role === "admin") navigate("/adminDashboard");
+      else if (role === "faculty") navigate("/facultyDashboard");
+      else if (role === "student") navigate("/studentDashboard");
+      else toast.error("Invalid role");
     } catch (err) {
       console.error(err);
-      toast.error(err?.response?.data?.error || "Student login failed");
+      toast.error(
+        err?.response?.data?.message ||
+          err?.response?.data?.error ||
+          "Student login failed"
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gray-900 text-gray-100">
       <img
-        src="../../../public/Assets/AttendenceBG.jpg"
+        src="/Assets/AttendenceBG.jpg"
         alt="College Attendance Background"
         className="absolute inset-0 w-full h-full object-cover brightness-50"
       />
@@ -57,7 +80,7 @@ const StudentLogin = () => {
           className="space-y-6"
           onSubmit={(e) => {
             e.preventDefault();
-            handleLogin();
+            if (!loading) handleLogin();
           }}
         >
           <div>
@@ -101,8 +124,9 @@ const StudentLogin = () => {
           <button
             type="submit"
             className="w-full py-3 rounded-md bg-gradient-to-r from-blue-600 to-purple-700 hover:from-purple-700 hover:to-blue-600 text-white font-semibold transition duration-300 shadow-lg"
+            disabled={loading}
           >
-            Sign In
+            {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
       </div>

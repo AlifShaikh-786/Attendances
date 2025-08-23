@@ -9,8 +9,8 @@
 //   const [capturedImages, setCapturedImages] = useState([]);
 //   const [modelsLoaded, setModelsLoaded] = useState(false);
 //   const [formData, setFormData] = useState({
-//     stdName: "",
-//     rollNo: "",
+//     fName: "",
+//     rollNo_id: "",
 //     Class: "",
 //     semester: "",
 //     div: "",
@@ -116,8 +116,8 @@
 //       });
 //       alert("✅ Student registered successfully!");
 //       setFormData({
-//         stdName: "",
-//         rollNo: "",
+//         fName: "",
+//         rollNo_id: "",
 //         Class: "",
 //         semester: "",
 //         div: "",
@@ -137,17 +137,17 @@
 //       <h2>Student Registration</h2>
 //       <form onSubmit={handleSubmit}>
 //         <input
-//           name="stdName"
+//           name="fName"
 //           placeholder="Name"
-//           value={formData.stdName}
+//           value={formData.fName}
 //           onChange={handleChange}
 //           required
 //         />
 //         <br />
 //         <input
-//           name="rollNo"
+//           name="rollNo_id"
 //           placeholder="Roll No"
-//           value={formData.rollNo}
+//           value={formData.rollNo_id}
 //           onChange={handleChange}
 //           required
 //         />
@@ -226,8 +226,8 @@
 //   const [capturedImages, setCapturedImages] = useState([]);
 //   const [modelsLoaded, setModelsLoaded] = useState(false);
 //   const [formData, setFormData] = useState({
-//     stdName: "",
-//     rollNo: "",
+//     fName: "",
+//     rollNo_id: "",
 //     Class: "",
 //     semester: "",
 //     div: "",
@@ -307,8 +307,8 @@
 //       });
 //       alert("✅ Student registered successfully!");
 //       setFormData({
-//         stdName: "",
-//         rollNo: "",
+//         fName: "",
+//         rollNo_id: "",
 //         Class: "",
 //         semester: "",
 //         div: "",
@@ -355,8 +355,8 @@
 //           <form onSubmit={handleSubmit} className="space-y-8 w-full">
 //             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 w-full">
 //               {[
-//                 { name: "stdName", label: "Full Name" },
-//                 { name: "rollNo", label: "Roll Number" },
+//                 { name: "fName", label: "Full Name" },
+//                 { name: "rollNo_id", label: "Roll Number" },
 //                 { name: "Class", label: "Class" },
 //                 { name: "semester", label: "Semester" },
 //                 { name: "div", label: "Division" },
@@ -451,8 +451,13 @@ export default function StudentRegistration() {
   const [capturedImages, setCapturedImages] = useState([]);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [formData, setFormData] = useState({
-    stdName: "",
-    rollNo: "",
+    rollNo_id: "",
+    fName: "",
+    mName: "",
+    lName: "",
+    // batch: "",
+    // year: "",
+
     Class: "",
     semester: "",
     div: "",
@@ -508,7 +513,11 @@ export default function StudentRegistration() {
     setCapturedImages((prev) => [...prev, imgData]);
     setFormData((prev) => ({
       ...prev,
-      faceDescriptor: Array.from(detection.descriptor),
+      faceDescriptor: prev.faceDescriptor.length
+        ? prev.faceDescriptor.map(
+            (val, i) => (val + detection.descriptor[i]) / 2
+          )
+        : Array.from(detection.descriptor),
     }));
 
     console.log("✅ Face descriptor captured:", detection.descriptor);
@@ -517,7 +526,13 @@ export default function StudentRegistration() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  // Validate password strength
+  const validatePassword = (password) => {
+    const regex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/;
+    return regex.test(password);
+  };
 
+  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -531,6 +546,12 @@ export default function StudentRegistration() {
       alert("Please capture at least one image");
       return;
     }
+    if (!validatePassword(formData.password)) {
+      alert(
+        "Password must have at least 8 characters, one uppercase letter, one number, and one special character."
+      );
+      return;
+    }
 
     try {
       await axios.post("http://localhost:7070/api/register", {
@@ -539,8 +560,13 @@ export default function StudentRegistration() {
       });
       alert("✅ Student registered successfully!");
       setFormData({
-        stdName: "",
-        rollNo: "",
+        fName: "",
+        rollNo_id: "",
+        mName: "",
+        lName: "",
+        // batch: "",
+        // year: "",
+
         Class: "",
         semester: "",
         div: "",
@@ -590,29 +616,56 @@ export default function StudentRegistration() {
               {/* Full Name */}
               <div className="flex flex-col">
                 <label className="mb-1 font-semibold text-gray-700">
-                  Full Name <span className="text-red-600">*</span>
+                  First Name <span className="text-red-600">*</span>
                 </label>
                 <input
-                  name="stdName"
+                  name="fName"
                   type="text"
                   placeholder="Enter full name"
-                  value={formData.stdName}
+                  value={formData.fName}
                   onChange={handleChange}
                   required
                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
                 />
               </div>
-
+              <div className="flex flex-col">
+                <label className="mb-1 font-semibold text-gray-700">
+                  Middal Name <span className="text-red-600">*</span>
+                </label>
+                <input
+                  name="mName"
+                  type="text"
+                  placeholder="Enter middal name"
+                  value={formData.mName}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+                />
+              </div>
+              <div className="flex flex-col">
+                <label className="mb-1 font-semibold text-gray-700">
+                  Last Name <span className="text-red-600">*</span>
+                </label>
+                <input
+                  name="lName"
+                  type="text"
+                  placeholder="Enter Last name"
+                  value={formData.lName}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+                />
+              </div>
               {/* Roll Number */}
               <div className="flex flex-col">
                 <label className="mb-1 font-semibold text-gray-700">
                   Roll Number <span className="text-red-600">*</span>
                 </label>
                 <input
-                  name="rollNo"
+                  name="rollNo_id"
                   type="text"
                   placeholder="Exactly 5 digits (e.g., 12345)"
-                  value={formData.rollNo}
+                  value={formData.rollNo_id}
                   onChange={handleChange}
                   required
                   pattern="^[0-9]{5}$"
@@ -675,7 +728,7 @@ export default function StudentRegistration() {
                   <option value="">Select Division</option>
                   <option value="A">A</option>
                   <option value="B">B</option>
-                  <option value="AB">AB</option>
+                  {/* <option value="AB">AB</option> */}
                 </select>
               </div>
 

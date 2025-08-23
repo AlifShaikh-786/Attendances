@@ -60,7 +60,7 @@ export const AddAttendance = async (req, res) => {
       .status(201)
       .json({ message: "Attendances saved successfully", savedAttendances });
   } catch (error) {
-    console.error("Error saving attendance:", error);
+    console.error("Error saving attendance:", error);                                                     
     return res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
@@ -97,14 +97,14 @@ export const AddAttendance = async (req, res) => {
 
 export const AttendanceReport = async (req, res) => {
   try {
-    const { Class, semester, div, rollNo, Subject, date, status } = req.body;
+    const { Class, semester, div, rollNo_id, Subject, date, status } = req.body;
 
     let query = {};
 
     if (Class && Class.trim() !== "") query.Class = Class;
     if (semester && semester.trim() !== "") query.semester = semester;
     if (div && div.trim() !== "") query.div = div;
-    if (rollNo && rollNo.trim() !== "") query.rollNo = rollNo;
+    if (rollNo_id && rollNo_id.trim() !== "") query.rollNo_id = rollNo_id;
     if (Subject && Subject.trim() !== "") query.Subject = Subject;
     if (date && date.trim() !== "") query.date = date;
     if (status && status.trim() !== "") query.status = status;

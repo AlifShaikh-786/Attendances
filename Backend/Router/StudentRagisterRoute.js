@@ -5,6 +5,7 @@ import {
   StdDisplay,
   StdRagistration,
   loginStudent,
+  facultyRagistration,
 } from "../Controller/StudentRagisterController.js";
 import { upload } from "../authintication/multerConfig.js";
 
@@ -14,6 +15,7 @@ const router = express.Router();
 router.post("/StdRagistrations", StdRagistration);
 router.post("/StdDisplays", StdDisplay);
 router.post("/Stdlogin", loginStudent);
+router.post("/facultyRagistrations", facultyRagistration);
 router.post("/register", upload.single("image"), registerStudent);
 
 // Block GET requests to login

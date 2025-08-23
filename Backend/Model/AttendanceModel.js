@@ -28,6 +28,10 @@ const AttendanceSchema = mongoose.Schema({
     // enum: ["Present", "Absent", "Leave"],
     required: true,
   },
+  reportType: {
+    type: String,
+    required: true,
+  },
   Time: {
     type: String,
     required: true,
@@ -36,14 +40,34 @@ const AttendanceSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  stdName: {
+  fName: {
     type: String,
     required: true,
   },
-  rollNo: {
+  lName: {
     type: String,
     required: true,
   },
+  mName: {
+    type: String,
+    required: true,
+  },
+  rollNo_id: {
+    type: String,
+    required: true,
+  },
+  facultyId_id: {
+    type: String,
+
+    unique: true,
+    default: null,
+  },
+  department: {
+    type: String,
+
+    default: "",
+  },
+  batch: { type: String, default: "" },
 });
 
 export default mongoose.model("AttendanceAdd", AttendanceSchema);

@@ -7,11 +7,66 @@ import jwt from "jsonwebtoken";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// faculty ragistration
+export const facultyRagistration = async (req, res) => {
+  try {
+    const {
+      fName,
+      mName,
+      lName,
+
+      facultyId_id,
+      department,
+      subject,
+      role,
+
+      faceDescriptor,
+      email,
+      contact,
+      password,
+    } = req.body;
+
+    const newStudent = new StudentRagisterSchema({
+      fName,
+      mName,
+      lName,
+
+      facultyId_id,
+      department,
+      subject,
+      role,
+
+      faceDescriptor,
+      email,
+      contact,
+      password,
+    });
+
+    await newStudent.save();
+
+    res.json({ message: "✅ Student registered successfully" });
+  } catch (error) {
+    console.error("Save error:", error);
+    res
+      .status(500)
+      .json({ message: "❌ Error saving student", error: error.message });
+  }
+};
+
+// Student ragistration
 export const registerStudent = async (req, res) => {
   try {
     const {
-      stdName,
-      rollNo,
+      rollNo_id,
+      fName,
+      mName,
+      lName,
+      batch,
+      year,
+      facultyId_id,
+      department,
+      subject,
+      role,
       Class,
       semester,
       div,
@@ -38,7 +93,7 @@ export const registerStudent = async (req, res) => {
     for (let i = 0; i < image.length; i++) {
       const base64Str = image[i];
       const base64Data = base64Str.replace(/^data:image\/\w+;base64,/, "");
-      const fileName = `${Date.now()}_${stdName.replace(/\s/g, "_")}_${i}.png`;
+      const fileName = `${Date.now()}_${fName.replace(/\s/g, "_")}_${i}.png`;
       const filePath = path.join(uploadDir, fileName);
 
       fs.writeFileSync(filePath, base64Data, "base64");
@@ -47,8 +102,16 @@ export const registerStudent = async (req, res) => {
 
     // Create new student doc
     const newStudent = new StudentRagisterSchema({
-      stdName,
-      rollNo,
+      rollNo_id,
+      fName,
+      mName,
+      lName,
+      batch,
+      year,
+      facultyId_id,
+      department,
+      subject,
+      role,
       Class,
       semester,
       div,
@@ -89,12 +152,7 @@ export const loginStudent = async (req, res) => {
     res.status(200).json({
       message: "Login successful",
       token,
-      student: {
-        id: student._id,
-        name: student.stdName,
-        email: student.email,
-        rollNo: student.rollNo,
-      },
+      student,
     });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
@@ -216,7 +274,14 @@ export const StdDisplay = async (req, res) => {
     // Step 1: Find students with only needed fields
     let display = await StudentRagisterSchema.find(
       { Class, semester, div },
-      { stdName: 1, rollNo: 1, image: 1, faceDescriptor: 1 }
+      {
+        fName: 1,
+        lName: 1,
+        mName: 1,
+        rollNo_id: 1,
+        image: 1,
+        faceDescriptor: 1,
+      }
     ).lean();
 
     if (!display || display.length === 0) {
@@ -238,11 +303,13 @@ export const StdDisplay = async (req, res) => {
         // If stored as array of Buffers
         faceDesc = faceDesc.map((fd) => Array.from(fd.data));
       }
-
+      // return res.status(200).join(student);
       return {
         _id: student._id.toString(),
-        stdName: student.stdName,
-        rollNo: student.rollNo,
+        fName: student.fName,
+        mName: student.mName,
+        lName: student.lName,
+        rollNo_id: student.rollNo_id,
         image: student.image || [],
         faceDescriptor: faceDesc,
       };
