@@ -455,7 +455,7 @@ export default function StudentRegistration() {
     fName: "",
     mName: "",
     lName: "",
-    // batch: "",
+    batch: "",
     // year: "",
 
     Class: "",
@@ -564,7 +564,7 @@ export default function StudentRegistration() {
         rollNo_id: "",
         mName: "",
         lName: "",
-        // batch: "",
+        batch: "",
         // year: "",
 
         Class: "",
@@ -690,6 +690,25 @@ export default function StudentRegistration() {
                   <option value="">Select Class</option>
                   <option value="MCA-I">MCA-I</option>
                   <option value="MCA-II">MCA-II</option>
+                </select>
+              </div>
+
+              <div className="flex flex-col">
+                <label className="mb-1 font-semibold text-gray-700">
+                  Batch <span className="text-red-600">*</span>
+                </label>
+                <select
+                  name="batch"
+                  value={formData.batch}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+                >
+                  <option value="">Select Batch</option>
+                  <option value="2024-2026">2024-2026</option>
+                  <option value="2025-2027">2025-2027</option>
+                  {/* <option value="III">III</option>
+                  <option value="IV">IV</option> */}
                 </select>
               </div>
 

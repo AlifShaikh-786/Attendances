@@ -15,12 +15,17 @@ const AttendanceSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+
   image: {
     type: [String],
     required: true,
   },
   date: {
     type: Date,
+    required: true,
+  },
+  batch: {
+    type: String,
     required: true,
   },
   status: {
@@ -30,7 +35,6 @@ const AttendanceSchema = mongoose.Schema({
   },
   reportType: {
     type: String,
-    required: true,
   },
   Time: {
     type: String,

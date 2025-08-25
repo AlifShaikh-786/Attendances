@@ -20,6 +20,7 @@ import LearnMore from "./Pages/LearnMore/learnMore";
 import StudentAttendanceReport from "./Pages/Report/studentAttendanceReport";
 import PersonalInfoStd from "./Pages/Student/PersonalInfo";
 import PersonalInfoFaculty from "./Pages/Faculty/PersonalInfoFaculty";
+import StdAttendancess from "./Pages/Login/Login";
 
 // import AttendanceForms from "./Pages/Report/report";
 // import StudentAttendance from "./Pages/Report/StudentAttendance";
@@ -57,6 +58,7 @@ function App() {
       />
       <Route path="/PersonalInfoStd-s" element={<PersonalInfoStd />} />
       <Route path="/PersonalInfoFaculty-s" element={<PersonalInfoFaculty />} />
+      <Route path="/StdAttendance-s" element={<StdAttendancess />} />
       {/* Catch-all 404 route */}
       <Route path="*" element={<ErrorPage />} />
     </Routes>

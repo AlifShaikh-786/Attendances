@@ -269,11 +269,11 @@ export const StdRagistration = async (req, res) => {
 
 export const StdDisplay = async (req, res) => {
   try {
-    const { div, semester, Class } = req.body;
+    const { div, semester, Class, batch } = req.body;
 
     // Step 1: Find students with only needed fields
     let display = await StudentRagisterSchema.find(
-      { Class, semester, div },
+      { Class, semester, div, batch },
       {
         fName: 1,
         lName: 1,
