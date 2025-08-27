@@ -132,6 +132,7 @@ import Register1 from "../../Pages/Faculty/register";
 import StudentAttendance from "../../Pages/studentAttendance/StudentAttendance";
 import StdAttendance from "../../Pages/studentAttendance/stdAttendance";
 import { Menu, X } from "lucide-react";
+import Report from "../../Pages/Report/report";
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState("welcome");
@@ -153,6 +154,7 @@ const AdminDashboard = () => {
       title: "Digital Attendance",
       component: <StdAttendance />,
     },
+    Reports: { title: "Reports/Records", component: <Report /> },
   };
 
   const handleLogout = () => {

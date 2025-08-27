@@ -17,3 +17,15 @@ export const upload = multer({
     }
   },
 });
+
+export const uploadExcel = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (ext === ".xlsx" || ext === ".xls") {
+      cb(null, true);
+    } else {
+      cb(new Error("Only Excel files are allowed"));
+    }
+  },
+});

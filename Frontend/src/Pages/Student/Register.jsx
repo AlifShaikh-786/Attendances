@@ -584,7 +584,7 @@ export default function StudentRegistration() {
 
   return (
     <div className="items-center gap-3 group">
-      <div className="flex gap-3 justify-center mt-6">
+      {/* <div className="flex gap-3 justify-center mt-6">
         <img
           src="/Assets/DYPIMED-Logo.png"
           alt="DYPIMED Logo"
@@ -599,7 +599,7 @@ export default function StudentRegistration() {
         >
           DYPIMED
         </h3>
-      </div>
+      </div> */}
 
       <div className="min-h-screen flex items-center justify-center p-6 sm:p-12">
         <div

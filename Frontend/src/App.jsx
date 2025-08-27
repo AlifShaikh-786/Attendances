@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import LandingPage from "./Pages/LandingPage/LandingPage";
+// import LandingPage from "./Pages/LandingPage/LandingPage";
 import SignUp from "./Pages/SignUp/SignUp";
 import Login from "./Pages/Login/Login";
 import AdminDashboard from "./components/AdminDashboard/adminDashboard";
@@ -21,6 +21,10 @@ import StudentAttendanceReport from "./Pages/Report/studentAttendanceReport";
 import PersonalInfoStd from "./Pages/Student/PersonalInfo";
 import PersonalInfoFaculty from "./Pages/Faculty/PersonalInfoFaculty";
 import StdAttendancess from "./Pages/Login/Login";
+import ExcelUploadPage from "./Pages/ExcelUpload/ExcelUploadPage";
+import LandingPage from "./Pages/LandingPage/landingPage";
+import EditProfile from "./Pages/Student/EditProfile";
+import StudentInfo from "./Pages/Users/StudentInfo";
 
 // import AttendanceForms from "./Pages/Report/report";
 // import StudentAttendance from "./Pages/Report/StudentAttendance";
@@ -59,6 +63,10 @@ function App() {
       <Route path="/PersonalInfoStd-s" element={<PersonalInfoStd />} />
       <Route path="/PersonalInfoFaculty-s" element={<PersonalInfoFaculty />} />
       <Route path="/StdAttendance-s" element={<StdAttendancess />} />
+      <Route path="/ExcelUploadPage-s" element={<ExcelUploadPage />} />
+      <Route path="/EditProfile-s" element={<EditProfile />} />
+      <Route path="/StudentInfo-s" element={<StudentInfo />} />
+
       {/* Catch-all 404 route */}
       <Route path="*" element={<ErrorPage />} />
     </Routes>

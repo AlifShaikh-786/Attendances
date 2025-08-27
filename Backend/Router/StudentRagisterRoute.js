@@ -6,8 +6,11 @@ import {
   StdRagistration,
   loginStudent,
   facultyRagistration,
+  RagistarByuploadExcel,
+  EditUserProfile,
+  displayUsers,
 } from "../Controller/StudentRagisterController.js";
-import { upload } from "../authintication/multerConfig.js";
+import { upload, uploadExcel } from "../authintication/multerConfig.js";
 
 const router = express.Router();
 
@@ -17,7 +20,14 @@ router.post("/StdDisplays", StdDisplay);
 router.post("/Stdlogin", loginStudent);
 router.post("/facultyRagistrations", facultyRagistration);
 router.post("/register", upload.single("image"), registerStudent);
+router.post(
+  "/RagistarByuploadExcels",
+  uploadExcel.single("file"),
+  RagistarByuploadExcel
+);
+router.put("/EditUserProfiles/:id", EditUserProfile);
 
+router.get("/displayUsers-s", displayUsers);
 // Block GET requests to login
 // router.get("/Stdlogin", (req, res) => {
 //   res.status(405).json({ error: "Use POST method for login" });

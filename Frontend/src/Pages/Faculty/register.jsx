@@ -98,7 +98,7 @@ export default function FacultyRegistration() {
   return (
     <div className="items-center gap-3 group">
       {/* Header with Logo */}
-      <div className="flex gap-3 justify-center mt-6">
+      {/* <div className="flex gap-3 justify-center mt-6">
         <img
           src="/Assets/DYPIMED-Logo.png"
           alt="DYPIMED Logo"
@@ -109,7 +109,7 @@ export default function FacultyRegistration() {
         <h3 className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-600 to-blue-600 font-extrabold text-2xl md:text-3xl select-none drop-shadow-[0_0_6px_rgba(236,72,153,0.8)]">
           DYPIMED
         </h3>
-      </div>
+      </div> */}
 
       {/* Form Card */}
       <div className="min-h-screen flex items-center justify-center p-6 sm:p-12">
@@ -232,7 +232,7 @@ export default function FacultyRegistration() {
               <button
                 type="button"
                 onClick={handleAddSubject}
-                className="px-4 py-2 bg-indigo-700 hover:bg-indigo-900 text-white font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
+                className="px-2 py-1.5 bg-indigo-700 hover:bg-indigo-900 text-white font-bold rounded-full shadow-lg transition duration-300 transform hover:scale-105"
               >
                 ➕ Add
               </button>

@@ -15,12 +15,12 @@ const Footer = () => {
         </div>
 
         <div
-          className="text-sm text-blue-600 drop-shadow-[0_0_4px_rgba(59,130,246,0.8)] select-none"
+          className="text-sm text-white drop-shadow-[0_0_4px_rgba(59,130,246,0.8)] select-none"
           aria-label="Copyright"
         >
           <p>
             © {new Date().getFullYear()} DYPIMED Digital Attendance Management |
-            Built with ❤️ by Students of MCA
+            Built with ❤️ by Alif & Shoyab
           </p>
         </div>
       </div>

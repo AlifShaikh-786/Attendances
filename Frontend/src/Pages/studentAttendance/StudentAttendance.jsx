@@ -199,7 +199,7 @@ const StudentAttendance = () => {
   return (
     <div className="p-6 max-w-3xl mx-auto mt-10">
       {/* Logo + College Name */}
-      <div className="flex gap-3 justify-center mb-6">
+      {/* <div className="flex gap-3 justify-center mb-6">
         <img
           src="/Assets/DYPIMED-Logo.png"
           alt="DYPIMED Logo"
@@ -214,7 +214,7 @@ const StudentAttendance = () => {
         >
           DYPIMED
         </h3>
-      </div>
+      </div> */}
 
       {/* Main Attendance Form Container */}
       <div className="bg-slate-300 p-6 rounded-2xl shadow-lg">

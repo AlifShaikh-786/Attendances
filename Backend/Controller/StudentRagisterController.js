@@ -1,8 +1,10 @@
 import fs from "fs";
+import xlsx from "xlsx";
 import path from "path";
 import StudentRagisterSchema from "../Model/StudentRagisterModel.js";
 import { fileURLToPath } from "url";
 import jwt from "jsonwebtoken";
+import { constants } from "fs/promises";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -133,6 +135,7 @@ export const registerStudent = async (req, res) => {
   }
 };
 
+// login api
 export const loginStudent = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -327,5 +330,108 @@ export const StdDisplay = async (req, res) => {
   } catch (error) {
     console.error("StdDisplay error:", error);
     return res.status(500).json({ msg: error.message });
+  }
+};
+
+// API to upload Excel and insert data
+
+export const RagistarByuploadExcel = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    // Read the Excel file
+    const filePath = path.join(req.file.path);
+    const workbook = xlsx.readFile(filePath);
+    const sheetName = workbook.SheetNames[0];
+    const sheetData = xlsx.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+    if (sheetData.length === 0) {
+      return res.status(400).json({ message: "Excel file is empty" });
+    }
+
+    // Loop through each row and insert into DB
+    const students = sheetData.map((row) => ({
+      rollNo_id: row.rollNo_id || "",
+      fName: row.fName || "",
+      mName: row.mName || "",
+      lName: row.lName || "",
+      batch: row.batch || "",
+      // year: row.year || "",
+      // facultyId_id: row.facultyId_id || "",
+      // department: row.department || "",
+      // subject: row.subject || "",
+      // role: row.role || "student",
+      Class: row.Class || "",
+      semester: row.semester || "",
+      div: row.div || "",
+      faceDescriptor: row.faceDescriptor || "",
+      email: row.email || "",
+      contact: row.contact || "",
+      password: row.password || "",
+      image: [], // No image in Excel
+    }));
+
+    await StudentRagisterSchema.insertMany(students);
+
+    res.json({ message: "✅ Excel data inserted successfully" });
+  } catch (error) {
+    console.error("Error uploading Excel:", error);
+    res
+      .status(500)
+      .json({ message: "❌ Error inserting data", error: error.message });
+  }
+};
+
+// Whitelist fields to avoid unwanted updates
+//   const allowedUpdates = ["name", "email", "phone", "address"]; // customize as needed
+// const updateData = {};
+// for (const key of allowedUpdates) {
+//   if (req.body[key] !== undefined) {
+//     updateData[key] = req.body[key];
+//   }
+// }
+
+// Edit profile
+
+export const EditUserProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    const updatedUser = await StudentRagisterSchema.findOneAndUpdate(
+      {
+        $or: [{ rollNo_id: id }, { facultyId_id: id }],
+      },
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+    if (!updatedUser) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+    return res
+      .status(200)
+      .json({ msg: "Profile updated successfully", user: updatedUser });
+  } catch (error) {
+    console.error("Error editing profile:", error);
+    return res
+      .status(500)
+      .json({ msg: "Internal server error", error: error.message });
+  }
+};
+
+// Display Info
+
+export const displayUsers = async (req, res) => {
+  try {
+    const users = await StudentRagisterSchema.find();
+    if (!users || users.length === 0) {
+      return res.status(404).json({ msg: "No users found" });
+    }
+    return res.status(200).json(users);
+  } catch (error) {
+    console.error("Error Display User Info:", error);
+    return res.status(500).json({ error: error.message });
   }
 };

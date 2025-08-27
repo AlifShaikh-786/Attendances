@@ -95,9 +95,11 @@ export const AddAttendance = async (req, res) => {
 //   }
 // };
 
+// Attendance  Report page
 export const AttendanceReport = async (req, res) => {
   try {
-    const { Class, semester, div, rollNo_id, Subject, date, status } = req.body;
+    const { Class, semester, div, rollNo_id, Subject, date, batch, status } =
+      req.body;
 
     let query = {};
     if (batch && batch.trim() !== "") query.batch = batch;
@@ -124,6 +126,22 @@ export const AttendanceReport = async (req, res) => {
   }
 };
 
+// Update attendance report
+
+export const UpdateAttendances = async (req, res) => {
+  try {
+    const UpdateAttendance = await AttendanceSchema.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(UpdateAttendance);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+//
 // export const AttendanceReport = async (req, res) => {
 //   try {
 //     const { Class, semester, div, rollNo, Subject } = req.body;
