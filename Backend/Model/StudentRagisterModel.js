@@ -107,6 +107,8 @@ const StudentRagisterSchema = new mongoose.Schema(
       enum: ["admin", "faculty", "hod", "student"], // Allowed roles
       default: "student", // If not provided, 'student' will be stored
     },
+    otp: String,
+    otpExpiry: Date,
   },
   { timestamps: true }
 );

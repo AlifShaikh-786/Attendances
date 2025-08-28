@@ -25,6 +25,9 @@ import ExcelUploadPage from "./Pages/ExcelUpload/ExcelUploadPage";
 import LandingPage from "./Pages/LandingPage/landingPage";
 import EditProfile from "./Pages/Student/EditProfile";
 import StudentInfo from "./Pages/Users/StudentInfo";
+import FacultyInfo from "./Pages/Users/FacutiInfo";
+import ForgotPassword from "./Pages/Users/ForgotPassword";
+import DisplyApplication from "./Pages/Application/DisplyApplication";
 
 // import AttendanceForms from "./Pages/Report/report";
 // import StudentAttendance from "./Pages/Report/StudentAttendance";
@@ -66,6 +69,9 @@ function App() {
       <Route path="/ExcelUploadPage-s" element={<ExcelUploadPage />} />
       <Route path="/EditProfile-s" element={<EditProfile />} />
       <Route path="/StudentInfo-s" element={<StudentInfo />} />
+      <Route path="/FacultyInfo-s" element={<FacultyInfo />} />
+      <Route path="/ForgotPassword-s" element={<ForgotPassword />} />
+      <Route path="/DisplyApplication-s" element={<DisplyApplication />} />
 
       {/* Catch-all 404 route */}
       <Route path="*" element={<ErrorPage />} />

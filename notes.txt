@@ -13,6 +13,7 @@ git push
 3-- npx tailwindcss init -p   
 4-- npm install react-router-dom
 5-- npm install @react-oauth/google
+6-- npm install nodemailer
 
 
 

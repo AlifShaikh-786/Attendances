@@ -9,6 +9,9 @@ import {
   RagistarByuploadExcel,
   EditUserProfile,
   displayUsers,
+  resetPasswordWithOtp,
+  sendOtpToEmail,
+  DeleteUsers,
 } from "../Controller/StudentRagisterController.js";
 import { upload, uploadExcel } from "../authintication/multerConfig.js";
 
@@ -26,8 +29,10 @@ router.post(
   RagistarByuploadExcel
 );
 router.put("/EditUserProfiles/:id", EditUserProfile);
-
+router.delete("/DeleteUsers/:id", DeleteUsers);
 router.get("/displayUsers-s", displayUsers);
+router.post("/resetPasswordWithOtp-s", resetPasswordWithOtp);
+router.post("/sendOtpToEmail-s", sendOtpToEmail);
 // Block GET requests to login
 // router.get("/Stdlogin", (req, res) => {
 //   res.status(405).json({ error: "Use POST method for login" });

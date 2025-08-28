@@ -137,6 +137,7 @@ import UserRoutes from "./Router/user.js";
 import adminRoutes from "./Router/admin.js";
 import StudentRouter from "./Router/StudentRagisterRoute.js";
 import facultyRoutes from "./Router/facultyRoutes.js";
+import router2 from "./Router/ApplicationRouter.js";
 
 dotenv.config();
 
@@ -160,6 +161,7 @@ const URL = process.env.MONGOURL;
 
 app.use("/api", router);
 app.use("/api", router1);
+app.use("/api", router2);
 app.use("/api/user", UserRoutes);
 app.use("/api", adminRoutes);
 app.use("/api", StudentRouter);

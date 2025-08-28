@@ -98,10 +98,21 @@ export const AddAttendance = async (req, res) => {
 // Attendance  Report page
 export const AttendanceReport = async (req, res) => {
   try {
-    const { Class, semester, div, rollNo_id, Subject, date, batch, status } =
-      req.body;
+    const {
+      Class,
+      semester,
+      div,
+      rollNo_id,
+      Subject,
+      date,
+      batch,
+      facultyId_id,
+      status,
+    } = req.body;
 
     let query = {};
+    if (facultyId_id && facultyId_id.trim() !== "")
+      query.facultyId_id = facultyId_id;
     if (batch && batch.trim() !== "") query.batch = batch;
     if (Class && Class.trim() !== "") query.Class = Class;
     if (semester && semester.trim() !== "") query.semester = semester;
@@ -169,3 +180,23 @@ export const UpdateAttendances = async (req, res) => {
 //       .json({ msg: "Internal server error", error: error.message });
 //   }
 // };
+
+
+export const AttendanceReports = async (req, res) => {
+  try {
+    const reports = await AttendanceSchema.find();
+
+    if (!reports || reports.length === 0) {
+      return res.json({ success: false, msg: "No records found", reports: [] });
+    }
+
+    return res.json({ success: true, reports });
+  } catch (error) {
+    console.error("Error fetching attendance reports:", error);
+    return res.status(500).json({
+      success: false,
+      msg: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};

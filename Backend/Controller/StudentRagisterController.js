@@ -5,6 +5,7 @@ import StudentRagisterSchema from "../Model/StudentRagisterModel.js";
 import { fileURLToPath } from "url";
 import jwt from "jsonwebtoken";
 import { constants } from "fs/promises";
+import { sendEmail } from "../Utils/sendEmail.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -366,6 +367,7 @@ export const RagistarByuploadExcel = async (req, res) => {
       Class: row.Class || "",
       semester: row.semester || "",
       div: row.div || "",
+      department: row.department || "",
       faceDescriptor: row.faceDescriptor || "",
       email: row.email || "",
       contact: row.contact || "",
@@ -398,7 +400,8 @@ export const RagistarByuploadExcel = async (req, res) => {
 export const EditUserProfile = async (req, res) => {
   try {
     const { id } = req.params;
-    const updateData = req.body;
+    const updateData = { ...req.body };
+    delete updateData._id;
 
     const updatedUser = await StudentRagisterSchema.findOneAndUpdate(
       {
@@ -435,3 +438,96 @@ export const displayUsers = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+// delete user
+export const DeleteUsers = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const userDelete = await StudentRagisterSchema.findOneAndDelete({
+      $or: [{ rollNo_id: id }, { facultyId_id: id }],
+    });
+
+    if (!userDelete) {
+      return res.status(404).json({ msg: "User Not Found!" });
+    }
+
+    return res.status(200).json({
+      msg: "✅ User deleted successfully",
+      user: userDelete,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+// export const DeleteUsers = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     // const updateData = req.body;
+//     const userDelete = await StudentRagisterSchema.findOneAndDelete({
+//       $or: [{ rollNo_id: id }, { facultyId_id: id }],
+//     });
+//     if (!userDelete) {
+//       return res.status(404).json({ msg: "User Not Found!" });
+//     }
+//     return res
+//       .status(200)
+//       .json({ msg: "User Delete Succesfully.", user: userDelete });
+//   } catch (error) {
+//     return res.status(500).json({ error: error.message });
+//   }
+// };
+
+//                                  email section
+// ====================================================================================================================
+
+export const resetPasswordWithOtp = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    // Fetch user with await
+    const user = await StudentRagisterSchema.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    // Check OTP
+    if (user.otp !== otp) {
+      return res.status(400).json({ msg: "Invalid OTP" });
+    }
+
+    // Check OTP expiry
+    if (user.otpExpiry < new Date()) {
+      return res.status(400).json({ msg: "OTP expired" });
+    }
+
+    // Update password (you should hash it)
+    user.password = newPassword;
+    user.otp = null;
+    user.otpExpiry = null;
+
+    await user.save();
+    res.status(200).json({ msg: "Password reset successful" });
+  } catch (error) {
+    console.error("Error in resetPasswordWithOtp:", error);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+
+export const sendOtpToEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await StudentRagisterSchema.findOne({ email });
+  if (!user) {
+    return res.status(400).json({ msg: "User Not Find." });
+  }
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiry = new Date(Date.now() + 2 * 60 * 1000);
+  (user.otp = otp), (user.otpExpiry = expiry), await user.save();
+  await sendEmail(
+    email,
+    `Your OTP for Password Reset: ${otp}. It is valid for 2 minutes.`
+  );
+  res.status(200).json({ msg: "OTP sent to email" });
+};
+// ==============================================================================================

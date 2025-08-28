@@ -457,7 +457,7 @@ export default function StudentRegistration() {
     lName: "",
     batch: "",
     // year: "",
-
+    department: "",
     Class: "",
     semester: "",
     div: "",
@@ -566,7 +566,7 @@ export default function StudentRegistration() {
         lName: "",
         batch: "",
         // year: "",
-
+        department: "",
         Class: "",
         semester: "",
         div: "",
@@ -580,6 +580,64 @@ export default function StudentRegistration() {
       console.error("Registration error:", error);
       alert("❌ Error registering student");
     }
+  };
+  // Capture multiple images at guided angles
+  const captureMultipleAngles = async () => {
+    if (!modelsLoaded) {
+      alert("Models not loaded yet, please wait...");
+      return;
+    }
+
+    // Steps for head rotation
+    const steps = [
+      "Look straight (front)",
+      "Turn LEFT 30°",
+      "Turn LEFT 60°",
+      "Turn LEFT 90°",
+      "Turn RIGHT 30°",
+      "Turn RIGHT 60°",
+      "Turn RIGHT 90°",
+    ];
+
+    for (let i = 0; i < steps.length; i++) {
+      alert(`📸 Please ${steps[i]} and click OK when ready.`); // <-- Instruction
+
+      // Small delay to allow student to adjust
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      ctx.drawImage(videoRef.current, 0, 0, 320, 240);
+
+      const detection = await faceapi
+        .detectSingleFace(canvas, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+      if (!detection) {
+        alert(`❌ No face detected at step: ${steps[i]}. Please retry.`);
+        i--; // retry the same step
+        continue;
+      }
+
+      const imgData = canvas.toDataURL("image/png");
+
+      // Save captured image & averaged descriptor
+      setCapturedImages((prev) => [...prev, imgData]);
+      setFormData((prev) => ({
+        ...prev,
+        image: [...prev.image, imgData],
+        faceDescriptor: prev.faceDescriptor.length
+          ? prev.faceDescriptor.map(
+              (val, j) => (val + detection.descriptor[j]) / 2
+            )
+          : Array.from(detection.descriptor),
+      }));
+
+      console.log(`✅ Captured ${steps[i]}`, detection.descriptor);
+    }
+
+    alert("✅ All angles captured successfully!");
   };
 
   return (
@@ -674,7 +732,18 @@ export default function StudentRegistration() {
                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
                 />
               </div>
-
+              {/*department*/}
+              <div>
+                <label className="block text-gray-700 font-medium">
+                  Department:
+                </label>
+                <input
+                  type="text"
+                  name="department"
+                  value={formData.department}
+                  className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-600"
+                />
+              </div>
               {/* Class */}
               <div className="flex flex-col">
                 <label className="mb-1 font-semibold text-gray-700">
@@ -822,12 +891,10 @@ export default function StudentRegistration() {
 
               <button
                 type="button"
-                onClick={captureImage}
-                className="w-full max-w-xs py-3 bg-indigo-700 hover:bg-indigo-900
-                     text-white font-bold rounded-full shadow-lg
-                     transition duration-300 transform hover:scale-105"
+                onClick={captureMultipleAngles}
+                className="mt-3 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
               >
-                📸 Capture Image
+                Capture All Angles
               </button>
 
               <div className="flex flex-wrap justify-center gap-4 mt-4">

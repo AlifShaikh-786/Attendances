@@ -1,164 +1,3 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-
-// const EditProfile = () => {
-//   const [formData, setFormData] = useState({
-//     rollNo_id: "",
-//     fName: "",
-//     mName: "",
-//     lName: "",
-//     batch: "",
-//     Class: "",
-//     semester: "",
-//     div: "",
-//     email: "",
-//     contact: "",
-//   });
-
-//   const [message, setMessage] = useState("");
-
-//   useEffect(() => {
-//     try {
-//       const storedUser = JSON.parse(localStorage.getItem("studentInfo"));
-//       if (storedUser) {
-//         setFormData(storedUser);
-//         console.log("Loaded user from localStorage:", storedUser);
-//       } else {
-//         setMessage("User data not found in localStorage.");
-//       }
-//     } catch (error) {
-//       console.error("Error loading user data:", error);
-//       setMessage("Failed to load user data.");
-//     }
-//   }, []);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (!formData.rollNo_id) {
-//       setMessage("❌ User ID is missing. Cannot update profile.");
-//       return;
-//     }
-
-//     try {
-//       console.log("Sending PUT request with data:", formData);
-//       const response = await axios.put(
-//         `http://localhost:7070/api/EditUserProfiles/${formData.rollNo_id}`,
-//         formData
-//       );
-
-//       console.log("API Response:", response.data);
-//       setMessage("✅ Profile updated successfully!");
-
-//       // Update localStorage correctly
-//       localStorage.setItem("studentInfo", JSON.stringify(response.data.user));
-//     } catch (error) {
-//       console.error("Error updating profile:", error.response || error);
-//       setMessage(
-//         error.response?.data?.message || "❌ Failed to update profile."
-//       );
-//     }
-//   };
-
-//   return (
-//     <div style={containerStyle}>
-//       <h2>Edit Profile</h2>
-//       {message && <p>{message}</p>}
-//       <form onSubmit={handleSubmit}>
-//         <InputField
-//           label="Roll No:"
-//           name="rollNo_id"
-//           value={formData.rollNo_id}
-//           readOnly
-//         />
-//         <InputField
-//           label="Batch:"
-//           name="batch"
-//           value={formData.batch}
-//           readOnly
-//         />
-
-//         {/* Editable Fields */}
-//         {[
-//           "Class",
-//           "semester",
-//           "div",
-//           "fName",
-//           "mName",
-//           "lName",
-//           "email",
-//           "contact",
-//         ].map((field) => (
-//           <InputField
-//             key={field}
-//             label={field}
-//             name={field}
-//             value={formData[field] || ""}
-//             onChange={handleChange}
-//             type={field === "email" ? "email" : "text"}
-//           />
-//         ))}
-
-//         <button type="submit" style={buttonStyle}>
-//           Update Profile
-//         </button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// // Reusable input field
-// const InputField = ({
-//   label,
-//   name,
-//   value,
-//   onChange,
-//   readOnly = false,
-//   type = "text",
-// }) => (
-//   <div style={fieldStyle}>
-//     <label>{label}</label>
-//     <input
-//       type={type}
-//       name={name}
-//       value={value}
-//       onChange={onChange}
-//       readOnly={readOnly}
-//       style={inputStyle}
-//     />
-//   </div>
-// );
-
-// // Styles
-// const containerStyle = {
-//   maxWidth: "500px",
-//   margin: "20px auto",
-//   padding: "20px",
-//   border: "1px solid #ccc",
-//   borderRadius: "8px",
-// };
-// const fieldStyle = { marginBottom: "10px" };
-// const inputStyle = {
-//   width: "100%",
-//   padding: "8px",
-//   borderRadius: "4px",
-//   border: "1px solid #ccc",
-// };
-// const buttonStyle = {
-//   padding: "10px",
-//   background: "#4CAF50",
-//   color: "#fff",
-//   border: "none",
-//   borderRadius: "4px",
-// };
-
-// export default EditProfile;
-
 // =====================================================================================================================================
 
 // import React, { useEffect, useState, useRef } from "react";
@@ -439,6 +278,7 @@ const EditProfile = () => {
     Class: "",
     semester: "",
     div: "",
+    department: "",
     email: "",
     contact: "",
     faceDescriptor: [],
@@ -580,14 +420,72 @@ const EditProfile = () => {
       alert(error.response?.data?.message || "❌ Failed to update profile.");
     }
   };
-  //  "Class",
-  //           "semester",
-  //           "div",
-  //           "fName",
-  //           "mName",
-  //           "lName",
-  //           "email",
-  //           "contact",
+
+  // When user clicks ✕, remove that image from formData.image:
+  const handleDeleteImage = (index) => {
+    const updatedImages = formData.image.filter((_, i) => i !== index);
+    setFormData((prev) => ({ ...prev, image: updatedImages }));
+  };
+
+  // Capture multiple images at guided angles
+  const captureMultipleAngles = async () => {
+    if (!modelsLoaded) {
+      alert("Models not loaded yet, please wait...");
+      return;
+    }
+
+    // Steps for head rotation
+    const steps = [
+      "Look straight (front)",
+      "Turn LEFT 30°",
+      "Turn LEFT 60°",
+      "Turn LEFT 90°",
+      "Turn RIGHT 30°",
+      "Turn RIGHT 60°",
+      "Turn RIGHT 90°",
+    ];
+
+    for (let i = 0; i < steps.length; i++) {
+      alert(`📸 Please ${steps[i]} and click OK when ready.`); // <-- Instruction
+
+      // Small delay to allow student to adjust
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      ctx.drawImage(videoRef.current, 0, 0, 320, 240);
+
+      const detection = await faceapi
+        .detectSingleFace(canvas, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+
+      if (!detection) {
+        alert(`❌ No face detected at step: ${steps[i]}. Please retry.`);
+        i--; // retry the same step
+        continue;
+      }
+
+      const imgData = canvas.toDataURL("image/png");
+
+      // Save captured image & averaged descriptor
+      setCapturedImages((prev) => [...prev, imgData]);
+      setFormData((prev) => ({
+        ...prev,
+        image: [...prev.image, imgData],
+        faceDescriptor: prev.faceDescriptor.length
+          ? prev.faceDescriptor.map(
+              (val, j) => (val + detection.descriptor[j]) / 2
+            )
+          : Array.from(detection.descriptor),
+      }));
+
+      console.log(`✅ Captured ${steps[i]}`, detection.descriptor);
+    }
+
+    alert("✅ All angles captured successfully!");
+  };
+
   return (
     <div className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
       <h2 className="text-2xl font-bold text-center mb-6">Edit Profile</h2>
@@ -622,7 +520,17 @@ const EditProfile = () => {
             className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-600"
           />
         </div>
-
+        {/*department*/}
+        <div>
+          <label className="block text-gray-700 font-medium">Department:</label>
+          <input
+            type="text"
+            name="department"
+            value={formData.department}
+            readOnly
+            className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-600"
+          />
+        </div>
         {/* Class Dropdown */}
         <div>
           <label className="block text-gray-700 font-medium">Class:</label>
@@ -739,8 +647,8 @@ const EditProfile = () => {
         <div className="text-center mt-6">
           <video
             ref={videoRef}
-            width="320"
-            height="240"
+            width="420"
+            height="440"
             autoPlay
             muted
             className="rounded-lg border-2 border-gray-300 shadow-md"
@@ -774,12 +682,19 @@ const EditProfile = () => {
               Capture Image
             </button> */}
           </div>
-          <button
+          {/* <button
             type="button"
             onClick={captureImage}
             className="mt-3 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
           >
             Capture Image
+          </button> */}
+          <button
+            type="button"
+            onClick={captureMultipleAngles}
+            className="mt-3 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+          >
+            Capture All Angles
           </button>
 
           <div className="flex flex-wrap justify-center gap-3 mt-4">
@@ -794,6 +709,56 @@ const EditProfile = () => {
           </div>
 
           <canvas ref={canvasRef} width="320" height="240" className="hidden" />
+        </div>
+        {/* Image Gallery with Delete Option */}
+        <div className="flex flex-wrap justify-center gap-3 mt-4">
+          {capturedImages.map((img, idx) => (
+            <div key={idx} className="relative">
+              <img
+                src={img}
+                alt={`capture-${idx}`}
+                className="w-20 h-20 rounded-xl border-2 border-indigo-400 shadow-md"
+              />
+              {/* Delete Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  // Remove from capturedImages & formData.image
+                  setCapturedImages((prev) => prev.filter((_, i) => i !== idx));
+                  setFormData((prev) => ({
+                    ...prev,
+                    image: prev.image.filter((_, i) => i !== idx),
+                  }));
+                }}
+                className="absolute top-0 right-0 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full shadow-md hover:bg-red-700"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
+        {/* ================ */}
+        {/* Previously saved images */}
+        <div className="mt-4">
+          <h3 className="font-semibold text-gray-700 mb-2">Saved Images</h3>
+          <div className="flex flex-wrap gap-3">
+            {formData.image?.map((img, idx) => (
+              <div key={idx} className="relative">
+                <img
+                  src={img}
+                  alt={`saved-${idx}`}
+                  className="w-20 h-20 rounded-xl border-2 border-gray-400 shadow-md"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleDeleteImage(idx)}
+                  className="absolute top-0 right-0 bg-red-500 text-white px-1 rounded-full text-xs"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Submit Button */}

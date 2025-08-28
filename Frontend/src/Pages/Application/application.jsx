@@ -1,222 +1,274 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 const Application = () => {
   const [formData, setFormData] = useState({
-    studentName: "",
-    rollNumber: "",
-    className: "",
+    rollNo_id: "",
+    fName: "",
+    mName: "",
+    lName: "",
+    batch: "",
+    Class: "",
     semester: "",
-    subject: "",
-    date: "",
-    time: "",
+    div: "",
+    email: "",
+    contact: "",
+    Subject: "",
     reason: "",
+    date: "",
+    Time: "",
   });
 
-  const [showLetter, setShowLetter] = useState(false);
-
-  // Automatically set current date and time on component mount
+  // Load user from localStorage on mount
   useEffect(() => {
-    const now = new Date();
-    const formattedDate = now.toISOString().split("T")[0]; // YYYY-MM-DD
-    const formattedTime = now.toTimeString().slice(0, 5); // HH:MM
-    setFormData((prev) => ({
-      ...prev,
-      date: formattedDate,
-      time: formattedTime,
-    }));
+    try {
+      const storedUser = JSON.parse(localStorage.getItem("studentInfo"));
+      if (storedUser) {
+        setFormData((prev) => ({ ...prev, ...storedUser }));
+        console.log("Loaded user from localStorage:", storedUser);
+      }
+    } catch (error) {
+      console.error("Error loading user data:", error);
+    }
   }, []);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowLetter(true);
+    try {
+      await axios.post(
+        "http://localhost:7070/api/ApplayApplication-s",
+        formData
+      );
+      alert("✅ Application submitted successfully");
+    } catch (error) {
+      console.error(error);
+      alert("❌ Failed to submit application");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col md:flex-row">
-      {/* Main Content */}
-      <main className="flex-1 p-6 md:p-10 bg-white shadow-lg">
-        {!showLetter && (
-          <form
-            className="max-w-lg mx-auto space-y-4 bg-gray-50 p-6 rounded shadow-md"
-            onSubmit={handleSubmit}
-          >
-            <h1 className="text-2xl font-bold text-gray-700 mb-4">
-              College Attendance Letter Form
-            </h1>
+    <div className="min-h-screen bg-gray-100 flex justify-center items-start py-10 px-4">
+      <form
+        className="w-full max-w-xl bg-white p-8 rounded-2xl shadow-xl space-y-6"
+        onSubmit={handleSubmit}
+      >
+        <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
+          College Attendance Letter Form
+        </h1>
 
-            <div>
-              <label className="block text-gray-700">Student Name</label>
-              <input
-                type="text"
-                name="studentName"
-                value={formData.studentName}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700">Roll Number</label>
-              <input
-                type="text"
-                name="rollNumber"
-                value={formData.rollNumber}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700">Class</label>
-              <input
-                type="text"
-                name="className"
-                value={formData.className}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700">Semester</label>
-              <input
-                type="text"
-                name="semester"
-                value={formData.semester}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700">Subject</label>
-              <input
-                type="text"
-                name="subject"
-                value={formData.subject}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700">Date</label>
-              <input
-                type="date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700">Time</label>
-              <input
-                type="time"
-                name="time"
-                value={formData.time}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700">Reason</label>
-              <textarea
-                name="reason"
-                value={formData.reason}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded"
-                rows="3"
-              ></textarea>
-            </div>
-
-            <button
-              type="submit"
-              className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              Show Letter
-            </button>
-          </form>
-        )}
-
-        {/* Letter */}
-        {showLetter && (
-          <div className="max-w-3xl mx-auto p-10 bg-white rounded shadow-lg border-2 border-blue-300 mt-6 relative">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-gray-800">
-                Official Attendance Letter
-              </h2>
-              <p className="text-gray-500 mt-1">
-                Visual confirmation for college attendance
-              </p>
-            </div>
-
-            <p>
-              <strong>Date:</strong> {formData.date}
-            </p>
-            <p>
-              <strong>Time:</strong> {formData.time}
-            </p>
-
-            <p className="mt-4">To Whom It May Concern,</p>
-
-            <p className="mt-2">
-              This is to certify that{" "}
-              <span className="font-semibold text-blue-600">
-                {formData.studentName}
-              </span>{" "}
-              (Roll No:{" "}
-              <span className="font-semibold text-blue-600">
-                {formData.rollNumber}
-              </span>
-              ) of class{" "}
-              <span className="font-semibold text-blue-600">
-                {formData.className}
-              </span>
-              , Semester{" "}
-              <span className="font-semibold text-blue-600">
-                {formData.semester}
-              </span>
-              , was present during the college session for the subject{" "}
-              <span className="font-semibold text-blue-600">
-                {formData.subject}
-              </span>
-              .
-            </p>
-
-            {formData.reason && (
-              <p className="mt-2 italic text-gray-500">
-                Reason: {formData.reason}
-              </p>
-            )}
-
-            <p className="mt-6">Sincerely,</p>
-            <p className="font-bold mt-2">
-              Admin / College Attendance Department
-            </p>
-
-            <button
-              onClick={() => setShowLetter(false)}
-              className="mt-6 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              Back to Form
-            </button>
+        {/* Name Fields */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="flex flex-col">
+            <label className="mb-1 text-gray-600 font-medium">First Name</label>
+            <input
+              type="text"
+              name="fName"
+              placeholder="First Name"
+              value={formData.fName}
+              onChange={handleChange}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              required
+            />
           </div>
-        )}
-      </main>
+
+          <div className="flex flex-col">
+            <label className="mb-1 text-gray-600 font-medium">
+              Middle Name
+            </label>
+            <input
+              type="text"
+              name="mName"
+              placeholder="Middle Name"
+              value={formData.mName}
+              onChange={handleChange}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="mb-1 text-gray-600 font-medium">Last Name</label>
+            <input
+              type="text"
+              name="lName"
+              placeholder="Last Name"
+              value={formData.lName}
+              onChange={handleChange}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Roll No  and Batch*/}
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="flex flex-col">
+            <label className="mb-1 text-gray-600 font-medium">
+              Roll Number
+            </label>
+            <input
+              type="text"
+              name="rollNo_id"
+              placeholder="Roll Number"
+              value={formData.rollNo_id}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="mb-1 text-gray-600 font-medium">Batch</label>
+            <input
+              type="text"
+              name="batch"
+              placeholder="Batch"
+              value={formData.batch}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              required
+            />
+          </div>
+        </div>
+        {/* Class, Semester, Division */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="flex flex-col">
+            <label className="mb-1 text-gray-600 font-medium">Class</label>
+            <input
+              type="text"
+              name="Class"
+              placeholder="Class"
+              value={formData.Class}
+              onChange={handleChange}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="mb-1 text-gray-600 font-medium">Semester</label>
+            <input
+              type="text"
+              name="semester"
+              placeholder="Semester"
+              value={formData.semester}
+              onChange={handleChange}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="mb-1 text-gray-600 font-medium">Division</label>
+            <input
+              type="text"
+              name="div"
+              placeholder="Division"
+              value={formData.div}
+              onChange={handleChange}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Email & Contact */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col">
+            <label className="mb-1 text-gray-600 font-medium">Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="mb-1 text-gray-600 font-medium">Contact</label>
+            <input
+              type="text"
+              name="contact"
+              placeholder="Contact Number"
+              value={formData.contact}
+              onChange={handleChange}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Subject */}
+        <div className="flex flex-col">
+          <label className="mb-1 text-gray-600 font-medium">Subject</label>
+          <input
+            type="text"
+            name="Subject"
+            placeholder="Enter Subject"
+            value={formData.Subject}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+            required
+          />
+        </div>
+
+        {/* Date & Time */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col">
+            <label className="mb-1 text-gray-600 font-medium">Date</label>
+            <input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleChange}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              required
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="mb-1 text-gray-600 font-medium">Time</label>
+            <input
+              type="time"
+              name="Time"
+              value={formData.Time}
+              onChange={handleChange}
+              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Reason */}
+        <div className="flex flex-col">
+          <label className="mb-1 text-gray-600 font-medium">
+            Reason (Optional)
+          </label>
+          <textarea
+            name="reason"
+            placeholder="Reason for attendance"
+            value={formData.reason}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+            rows="4"
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+        >
+          Submit
+        </button>
+      </form>
     </div>
   );
 };
