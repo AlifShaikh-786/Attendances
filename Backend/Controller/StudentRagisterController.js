@@ -283,6 +283,7 @@ export const StdDisplay = async (req, res) => {
         lName: 1,
         mName: 1,
         rollNo_id: 1,
+        div: 1,
         image: 1,
         faceDescriptor: 1,
       }
@@ -313,6 +314,7 @@ export const StdDisplay = async (req, res) => {
         fName: student.fName,
         mName: student.mName,
         lName: student.lName,
+        div: student.div,
         rollNo_id: student.rollNo_id,
         image: student.image || [],
         faceDescriptor: faceDesc,

@@ -23,7 +23,7 @@ const DisplyApplication = ({ Subjects }) => {
   const handleApprove = async (app) => {
     try {
       const response = await axios.put(
-        `http://localhost:7070/api/approveApplication/${app.rollNo_id}`,
+        `http://localhost:7070/api/approveApplication/${app.ApplicationId}`,
         {
           Subject: app.Subject,
           date: app.date,
@@ -40,10 +40,10 @@ const DisplyApplication = ({ Subjects }) => {
   };
 
   // ✅ Reject Application
-  const handleReject = async (rollNo_id) => {
+  const handleReject = async (ApplicationId) => {
     try {
       const response = await axios.put(
-        `http://localhost:7070/api/rejectApplication/${rollNo_id}`
+        `http://localhost:7070/api/rejectApplication/${ApplicationId}`
       );
       alert(response.data.message || "Application rejected successfully!");
       fetchApplications();
@@ -79,6 +79,7 @@ const DisplyApplication = ({ Subjects }) => {
           <table className="table-auto w-full border-collapse border border-gray-200">
             <thead className="bg-gray-800 text-white">
               <tr>
+                <th className="px-4 py-2">ApplicationId</th>
                 <th className="px-4 py-2">Roll No</th>
                 <th className="px-4 py-2">First Name</th>
                 <th className="px-4 py-2">Middle Name</th>
@@ -103,6 +104,7 @@ const DisplyApplication = ({ Subjects }) => {
                   key={index}
                   className="hover:bg-gray-100 text-center border-b border-gray-200"
                 >
+                  <td className="px-4 py-2">{app.ApplicationId}</td>
                   <td className="px-4 py-2">{app.rollNo_id}</td>
                   <td className="px-4 py-2">{app.fName}</td>
                   <td className="px-4 py-2">{app.mName}</td>
@@ -133,14 +135,15 @@ const DisplyApplication = ({ Subjects }) => {
                   <td className="px-4 py-2">
                     <div className="flex justify-center">
                       <button
-                        onClick={() => handleApprove(app)}
+                        onClick={() => handleApprove(app)} // ✅ pass full object
                         className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mr-2"
                         disabled={app.Status === "Accept"}
                       >
                         Approve
                       </button>
+
                       <button
-                        onClick={() => handleReject(app.rollNo_id)}
+                        onClick={() => handleReject(app.ApplicationId)}
                         className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
                         disabled={app.Status === "Reject"}
                       >

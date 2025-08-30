@@ -51,7 +51,8 @@ in package ,json =(
 
 
 
-
+import bcrypt from "bcrypt";
+// const hashpassword = await bcrypt.hash(password, 10);
 
 
 

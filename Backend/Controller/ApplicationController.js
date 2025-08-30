@@ -1,6 +1,21 @@
 import ApplicationSchema from "../Model/ApplicationModel.js"; // adjust path
 import AttendanceSchema from "../Model/AttendanceModel.js";
 
+// ganarate randaom id
+export const generateId = async () => {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  while (true) {
+    let Id = "";
+    for (let i = 0; i < 4; i++) {
+      Id += letters.charAt(Math.floor(Math.random() * letters.length));
+    }
+    Id += Math.floor(10000000 + Math.random() * 90000000); //4-letters+ 8-digit=12
+    const existID = await ApplicationSchema.findOne({ ApplicationId: Id });
+    if (!existID) return Id;
+  }
+};
+
+// create application
 export const ApplayApplication = async (req, res) => {
   try {
     const {
@@ -19,9 +34,10 @@ export const ApplayApplication = async (req, res) => {
       date,
       Time,
     } = req.body;
-
+    const ApplicationId = await generateId();
     // Create new application document
     const application = new ApplicationSchema({
+      ApplicationId,
       rollNo_id,
       fName,
       mName,
@@ -126,45 +142,40 @@ export const DisplayApplication = async (req, res) => {
 // import Attendance from "../models/AttendanceModel.js";
 
 export const approveApplication = async (req, res) => {
-  const { rollNo_id } = req.params;
+  const { ApplicationId } = req.params;
   const { Subject, date, Time } = req.body;
 
   try {
-    console.log("✅ Received rollNo_id:", rollNo_id);
-    console.log("✅ Body data:", { Subject, date, Time });
-
     // ✅ 1. Update Application Status
     const application = await ApplicationSchema.findOneAndUpdate(
-      { rollNo_id: String(rollNo_id) }, // enforce type as string
-      { Status: "Accept" },
+      { ApplicationId: String(ApplicationId) },
+      { Status: "Accept" }, // use consistent lowercase
       { new: true }
     );
 
     if (!application) {
-      console.log("❌ Application not found in DB for rollNo_id:", rollNo_id);
+      console.log("❌ Application not found for ApplicationId:", ApplicationId);
       return res.status(404).json({ message: "Application not found" });
     }
 
-    // ✅ Add debug log before attendance update
-    console.log("Looking for attendance with:", {
-      rollNo_id,
-      Subject,
-      date,
-      Time,
-    });
-    // Convert string date to start and end of day
+    const rollNo_id = application.rollNo_id; // ✅ get rollNo_id from the application
+
+    console.log("✅ Found application:", { rollNo_id, Subject, date, Time });
+
+    // ✅ Convert string date to start and end of day
     const startOfDay = new Date(date);
     startOfDay.setHours(0, 0, 0, 0);
 
     const endOfDay = new Date(date);
     endOfDay.setHours(23, 59, 59, 999);
+
     console.log("Normalized date range:", startOfDay, "to", endOfDay);
 
     // ✅ 2. Update Attendance (mark as Present)
     const attendance = await AttendanceSchema.findOneAndUpdate(
       {
         rollNo_id,
-        Subject: Subject, // ✅ use correct field name as in DB
+        Subject,
         Time,
         date: { $gte: startOfDay, $lte: endOfDay },
       },
@@ -180,9 +191,9 @@ export const approveApplication = async (req, res) => {
         Time,
       });
 
-      return res
-        .status(404)
-        .json({ message: "Attendance record not found for given details" });
+      return res.status(404).json({
+        message: "Attendance record not found for given details",
+      });
     }
 
     res.json({
@@ -197,26 +208,51 @@ export const approveApplication = async (req, res) => {
 };
 
 // Reject Application
+// export const rejectApplication = async (req, res) => {
+//   try {
+//     const { ApplicationId } = req.params;
+
+//     // Find application
+//     const application = await ApplicationSchema.findOneAndUpdate(
+//       {
+//         ApplicationId: String(ApplicationId),
+//         // Subject, // ✅ use correct field name as in DB
+//         // Time,
+//         // date: { $gte: startOfDay, $lte: endOfDay },
+//       }, // enforce type as string
+//       { Status: "Reject" },
+//       { new: true }
+//     );
+
+//     res
+//       .status(200)
+//       .json({ message: "Application rejected successfully!", application });
+//   } catch (error) {
+//     res.status(500).json({ message: "Error rejecting application", error });
+//   }
+// };
+
 export const rejectApplication = async (req, res) => {
   try {
-    const { rollNo_id } = req.params;
+    const { ApplicationId } = req.params;
 
-    // Find application
+    // Find and update application
     const application = await ApplicationSchema.findOneAndUpdate(
-      {
-        rollNo_id: String(rollNo_id),
-        // Subject, // ✅ use correct field name as in DB
-        // Time,
-        // date: { $gte: startOfDay, $lte: endOfDay },
-      }, // enforce type as string
-      { Status: "Reject" },
+      { ApplicationId: String(ApplicationId) },
+      { Status: "Reject" }, // ✅ use same case as in schema
       { new: true }
     );
 
-    res
-      .status(200)
-      .json({ message: "Application rejected successfully!", application });
+    if (!application) {
+      return res.status(404).json({ message: "Application not found" });
+    }
+
+    res.status(200).json({
+      message: "Application rejected successfully!",
+      application,
+    });
   } catch (error) {
+    console.error("Error rejecting application:", error);
     res.status(500).json({ message: "Error rejecting application", error });
   }
 };

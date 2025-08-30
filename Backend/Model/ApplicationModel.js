@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 const ApplicationSchema = new mongoose.Schema({
+  ApplicationId: { type: String, required: true, unique: true },
   rollNo_id: { type: String, required: true },
+
   fName: { type: String, required: true },
   mName: { type: String, required: true },
   lName: { type: String, required: true },

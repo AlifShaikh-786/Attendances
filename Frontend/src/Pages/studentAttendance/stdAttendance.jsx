@@ -662,7 +662,7 @@ const StdAttendance = () => {
       Class: formdata.Class,
       semester: formdata.semester,
       batch: formdata.batch,
-      div: formdata.div,
+      div: student.div,
       image: student.image?.[0] || "",
       fName: student.fName,
       mName: student.mName,
@@ -857,7 +857,7 @@ const StdAttendance = () => {
                       {[student.fName, student.mName, student.lName]
                         .filter(Boolean)
                         .join(" ")}{" "}
-                      ({student.rollNo_id})
+                      ({student.rollNo_id})({student.div})
                     </span>
                   </label>
                 </li>

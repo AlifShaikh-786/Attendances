@@ -12,7 +12,7 @@ const router2 = express.Router();
 router2.post("/ApplayApplication-s", ApplayApplication);
 router2.get("/DisplayApplication-s", DisplayApplication);
 // router2.put("/approveApplication/:rollNo_id", approveApplication);
-router2.put("/approveApplication/:rollNo_id", approveApplication);
-router2.put("/rejectApplication/:rollNo_id", rejectApplication);
+router2.put("/approveApplication/:ApplicationId", approveApplication);
+router2.put("/rejectApplication/:ApplicationId", rejectApplication);
 
 export default router2;
