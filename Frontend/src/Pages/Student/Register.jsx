@@ -1,3 +1,445 @@
+// // import React, { useRef, useState, useEffect } from "react";
+// // import axios from "axios";
+// // import * as faceapi from "@vladmandic/face-api";
+
+// // export default function StudentRegistration() {
+// //   const videoRef = useRef(null);
+// //   const canvasRef = useRef(null);
+
+// //   const [capturedImages, setCapturedImages] = useState([]);
+// //   const [modelsLoaded, setModelsLoaded] = useState(false);
+// //   const [formData, setFormData] = useState({
+// //     fName: "",
+// //     rollNo_id: "",
+// //     Class: "",
+// //     semester: "",
+// //     div: "",
+// //     email: "",
+// //     contact: "",
+// //     faceDescriptor: [],
+// //   });
+
+// //   useEffect(() => {
+// //     const loadModels = async () => {
+// //       const MODEL_URL =
+// //         "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/";
+// //       await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+// //       await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+// //       await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+// //       setModelsLoaded(true);
+// //       console.log("Face-api models loaded from CDN");
+// //     };
+
+// //     loadModels();
+
+// //     navigator.mediaDevices
+// //       .getUserMedia({ video: true })
+// //       .then((stream) => {
+// //         videoRef.current.srcObject = stream;
+// //       })
+// //       .catch((err) => console.error("Camera error:", err));
+// //   }, []);
+
+// //   // const captureImage = async () => {
+// //   //   if (!modelsLoaded) {
+// //   //     alert("Models not loaded yet, please wait...");
+// //   //     return;
+// //   //   }
+// //   //   const canvas = canvasRef.current;
+// //   //   const ctx = canvas.getContext("2d");
+// //   //   ctx.drawImage(videoRef.current, 0, 0, 320, 240);
+
+// //   //   // Detect faces on the canvas image
+// //   //   const detections = await faceapi.detectAllFaces(
+// //   //     canvas,
+// //   //     new faceapi.TinyFaceDetectorOptions()
+// //   //   );
+
+// //   //   if (detections.length === 0) {
+// //   //     alert("❌ No face detected! Please try again.");
+// //   //     return;
+// //   //   }
+
+// //   //   const imgData = canvas.toDataURL("image/png");
+// //   //   setCapturedImages((prev) => [...prev, imgData]);
+// //   // };
+// //   const captureImage = async () => {
+// //     if (!modelsLoaded) {
+// //       alert("Models not loaded yet, please wait...");
+// //       return;
+// //     }
+
+// //     const canvas = canvasRef.current;
+// //     const ctx = canvas.getContext("2d");
+// //     ctx.drawImage(videoRef.current, 0, 0, 320, 240);
+
+// //     // Detect with descriptor
+// //     const detection = await faceapi
+// //       .detectSingleFace(canvas, new faceapi.TinyFaceDetectorOptions())
+// //       .withFaceLandmarks()
+// //       .withFaceDescriptor();
+
+// //     if (!detection) {
+// //       alert("❌ No face detected! Please try again.");
+// //       return;
+// //     }
+
+// //     const imgData = canvas.toDataURL("image/png");
+
+// //     // Store image & descriptor
+// //     setCapturedImages((prev) => [...prev, imgData]);
+// //     setFormData((prev) => ({
+// //       ...prev,
+// //       faceDescriptor: Array.from(detection.descriptor), // convert Float32Array to normal array
+// //     }));
+
+// //     console.log("✅ Face descriptor captured:", detection.descriptor);
+// //   };
+
+// //   const handleChange = (e) => {
+// //     setFormData({ ...formData, [e.target.name]: e.target.value });
+// //   };
+
+// //   const handleSubmit = async (e) => {
+// //     e.preventDefault();
+
+// //     if (capturedImages.length === 0) {
+// //       alert("Please capture at least one image");
+// //       return;
+// //     }
+
+// //     try {
+// //       await axios.post("http://localhost:7070/api/register", {
+// //         ...formData,
+// //         faceDescriptor: [], // add real descriptor if you want
+// //         image: capturedImages,
+// //       });
+// //       alert("✅ Student registered successfully!");
+// //       setFormData({
+// //         fName: "",
+// //         rollNo_id: "",
+// //         Class: "",
+// //         semester: "",
+// //         div: "",
+// //         email: "",
+// //         contact: "",
+// //         faceDescriptor: "",
+// //       });
+// //       setCapturedImages([]);
+// //     } catch (error) {
+// //       console.error("Registration error:", error);
+// //       alert("❌ Error registering student");
+// //     }
+// //   };
+
+// //   return (
+// //     <div style={{ textAlign: "center" }}>
+// //       <h2>Student Registration</h2>
+// //       <form onSubmit={handleSubmit}>
+// //         <input
+// //           name="fName"
+// //           placeholder="Name"
+// //           value={formData.fName}
+// //           onChange={handleChange}
+// //           required
+// //         />
+// //         <br />
+// //         <input
+// //           name="rollNo_id"
+// //           placeholder="Roll No"
+// //           value={formData.rollNo_id}
+// //           onChange={handleChange}
+// //           required
+// //         />
+// //         <br />
+// //         <input
+// //           name="Class"
+// //           placeholder="Class"
+// //           value={formData.Class}
+// //           onChange={handleChange}
+// //           required
+// //         />
+// //         <br />
+// //         <input
+// //           name="semester"
+// //           placeholder="Semester"
+// //           value={formData.semester}
+// //           onChange={handleChange}
+// //           required
+// //         />
+// //         <br />
+// //         <input
+// //           name="div"
+// //           placeholder="Division"
+// //           value={formData.div}
+// //           onChange={handleChange}
+// //           required
+// //         />
+// //         <br />
+// //         <input
+// //           name="email"
+// //           type="email"
+// //           placeholder="Email"
+// //           value={formData.email}
+// //           onChange={handleChange}
+// //           required
+// //         />
+// //         <br />
+// //         <input
+// //           name="contact"
+// //           placeholder="Contact"
+// //           value={formData.contact}
+// //           onChange={handleChange}
+// //           required
+// //         />
+// //         <br />
+// //         <video ref={videoRef} autoPlay width="320" height="240" />
+// //         <br />
+// //         <button type="button" onClick={captureImage}>
+// //           📸 Capture Image
+// //         </button>
+// //         <br />
+// //         {capturedImages.map((img, idx) => (
+// //           <img key={idx} src={img} alt={`capture-${idx}`} width="100" />
+// //         ))}
+// //         <canvas
+// //           ref={canvasRef}
+// //           width="320"
+// //           height="240"
+// //           style={{ display: "none" }}
+// //         />
+// //         <br />
+// //         <button type="submit">📝 Register Student</button>
+// //       </form>
+// //     </div>
+// //   );
+// // }
+
+// // import React, { useRef, useState, useEffect } from "react";
+// // import axios from "axios";
+// // import * as faceapi from "@vladmandic/face-api";
+
+// // export default function StudentRegistration() {
+// //   const videoRef = useRef(null);
+// //   const canvasRef = useRef(null);
+
+// //   const [capturedImages, setCapturedImages] = useState([]);
+// //   const [modelsLoaded, setModelsLoaded] = useState(false);
+// //   const [formData, setFormData] = useState({
+// //     fName: "",
+// //     rollNo_id: "",
+// //     Class: "",
+// //     semester: "",
+// //     div: "",
+// //     email: "",
+// //     contact: "",
+// //     faceDescriptor: [],
+// //   });
+
+// //   useEffect(() => {
+// //     const loadModels = async () => {
+// //       const MODEL_URL =
+// //         "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/";
+// //       await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+// //       await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+// //       await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+// //       setModelsLoaded(true);
+// //       console.log("✅ Face-api models loaded from CDN");
+// //     };
+
+// //     loadModels();
+
+// //     navigator.mediaDevices
+// //       .getUserMedia({ video: true })
+// //       .then((stream) => {
+// //         if (videoRef.current) videoRef.current.srcObject = stream;
+// //       })
+// //       .catch((err) => console.error("Camera error:", err));
+// //   }, []);
+
+// //   const captureImage = async () => {
+// //     if (!modelsLoaded) {
+// //       alert("Models not loaded yet, please wait...");
+// //       return;
+// //     }
+
+// //     const canvas = canvasRef.current;
+// //     const ctx = canvas.getContext("2d");
+// //     ctx.drawImage(videoRef.current, 0, 0, 320, 240);
+
+// //     const detection = await faceapi
+// //       .detectSingleFace(canvas, new faceapi.TinyFaceDetectorOptions())
+// //       .withFaceLandmarks()
+// //       .withFaceDescriptor();
+
+// //     if (!detection) {
+// //       alert("❌ No face detected! Please try again.");
+// //       return;
+// //     }
+
+// //     const imgData = canvas.toDataURL("image/png");
+
+// //     setCapturedImages((prev) => [...prev, imgData]);
+// //     setFormData((prev) => ({
+// //       ...prev,
+// //       faceDescriptor: Array.from(detection.descriptor),
+// //     }));
+
+// //     console.log("✅ Face descriptor captured:", detection.descriptor);
+// //   };
+
+// //   const handleChange = (e) => {
+// //     setFormData({ ...formData, [e.target.name]: e.target.value });
+// //   };
+
+// //   const handleSubmit = async (e) => {
+// //     e.preventDefault();
+
+// //     if (capturedImages.length === 0) {
+// //       alert("Please capture at least one image");
+// //       return;
+// //     }
+
+// //     try {
+// //       await axios.post("http://localhost:7070/api/register", {
+// //         ...formData,
+// //         image: capturedImages,
+// //       });
+// //       alert("✅ Student registered successfully!");
+// //       setFormData({
+// //         fName: "",
+// //         rollNo_id: "",
+// //         Class: "",
+// //         semester: "",
+// //         div: "",
+// //         email: "",
+// //         contact: "",
+// //         faceDescriptor: [],
+// //       });
+// //       setCapturedImages([]);
+// //     } catch (error) {
+// //       console.error("Registration error:", error);
+// //       alert("❌ Error registering student");
+// //     }
+// //   };
+
+// //   return (
+// //     <div className=" items-center gap-3 group">
+// //       <div className="flex gap-3">
+// //         <img
+// //           src="/Assets/DYPIMED-Logo.png"
+// //           alt="DYPIMED Logo"
+// //           className="w-20 h-20 animate-bounce transition-transform duration-300 group-hover:scale-110"
+// //           loading="lazy"
+// //           draggable={false}
+// //         />
+// //         <h3
+// //           className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-600 to-blue-600
+// //                      font-extrabold text-2xl md:text-3xl select-none
+// //                      drop-shadow-[0_0_6px_rgba(236,72,153,0.8)]"
+// //         >
+// //           DYPIMED
+// //         </h3>
+// //       </div>
+
+// //       <div className="min-h-screen flex items-center justify-center p-6 sm:p-12 ">
+// //         <div
+// //           className="w-full max-w-3xl bg-slate-300 rounded-3xl shadow-2xl p-8 sm:p-12
+// //                   border border-slate-400 flex flex-col items-center
+// //                   hover:shadow-indigo-500/50 transition-shadow duration-300"
+// //         >
+// //           <h2 className="text-3xl sm:text-4xl font-extrabold text-center text-indigo-900 mb-10 tracking-wide drop-shadow-md">
+// //             Student Registration
+// //           </h2>
+
+// //           <form onSubmit={handleSubmit} className="space-y-8 w-full">
+// //             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 w-full">
+// //               {[
+// //                 { name: "fName", label: "Full Name" },
+// //                 { name: "rollNo_id", label: "Roll Number" },
+// //                 { name: "Class", label: "Class" },
+// //                 { name: "semester", label: "Semester" },
+// //                 { name: "div", label: "Division" },
+// //                 { name: "email", label: "Email", type: "email" },
+// //                 { name: "contact", label: "Contact Number" },
+// //                 { name: "password", label: "Password", type: "password" },
+// //               ].map(({ name, label, type }) => (
+// //                 <div key={name} className="flex flex-col">
+// //                   <label
+// //                     htmlFor={name}
+// //                     className="mb-1 font-semibold text-gray-700 flex items-center gap-1"
+// //                   >
+// //                     {label} <span className="text-red-600">*</span>
+// //                   </label>
+// //                   <input
+// //                     id={name}
+// //                     name={name}
+// //                     type={type || "text"}
+// //                     placeholder={`Enter ${label.toLowerCase()}`}
+// //                     value={formData[name]}
+// //                     onChange={handleChange}
+// //                     required
+// //                     className="w-full px-5 py-3 border border-slate-300 rounded-2xl
+// //                        text-gray-900 placeholder-slate-500
+// //                        focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400
+// //                        transition duration-300 shadow-sm hover:shadow-md text-lg"
+// //                   />
+// //                 </div>
+// //               ))}
+// //             </div>
+
+// //             <div className="flex flex-col items-center space-y-6 sm:space-y-8 mt-6">
+// //               <video
+// //                 ref={videoRef}
+// //                 autoPlay
+// //                 className="rounded-3xl border-4 border-indigo-600 shadow-lg
+// //                      w-full max-w-[320px] h-auto"
+// //               />
+
+// //               <button
+// //                 type="button"
+// //                 onClick={captureImage}
+// //                 className="w-full max-w-xs py-3 bg-indigo-700 hover:bg-indigo-900
+// //                      text-white font-bold rounded-full shadow-lg
+// //                      transition duration-300 transform hover:scale-105"
+// //               >
+// //                 📸 Capture Image
+// //               </button>
+
+// //               <div className="flex flex-wrap justify-center gap-4 mt-4">
+// //                 {capturedImages.map((img, idx) => (
+// //                   <img
+// //                     key={idx}
+// //                     src={img}
+// //                     alt={`capture-${idx}`}
+// //                     className="w-20 h-20 rounded-2xl border-2 border-indigo-400 shadow-md"
+// //                   />
+// //                 ))}
+// //               </div>
+
+// //               <canvas
+// //                 ref={canvasRef}
+// //                 width="320"
+// //                 height="240"
+// //                 style={{ display: "none" }}
+// //               />
+// //             </div>
+
+// //             <button
+// //               type="submit"
+// //               className="w-full py-4 bg-indigo-700 hover:bg-indigo-900
+// //                    text-white font-extrabold rounded-3xl shadow-xl
+// //                    transition duration-300 transform hover:scale-105 mt-10"
+// //             >
+// //               📝 Register Student
+// //             </button>
+// //           </form>
+// //         </div>
+// //       </div>
+// //     </div>
+// //   );
+// // }
+
 // import React, { useRef, useState, useEffect } from "react";
 // import axios from "axios";
 // import * as faceapi from "@vladmandic/face-api";
@@ -9,230 +451,19 @@
 //   const [capturedImages, setCapturedImages] = useState([]);
 //   const [modelsLoaded, setModelsLoaded] = useState(false);
 //   const [formData, setFormData] = useState({
-//     fName: "",
 //     rollNo_id: "",
+//     fName: "",
+//     mName: "",
+//     lName: "",
+//     batch: "",
+//     // year: "",
+//     department: "",
 //     Class: "",
 //     semester: "",
 //     div: "",
 //     email: "",
 //     contact: "",
-//     faceDescriptor: [],
-//   });
-
-//   useEffect(() => {
-//     const loadModels = async () => {
-//       const MODEL_URL =
-//         "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/";
-//       await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
-//       await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-//       await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-//       setModelsLoaded(true);
-//       console.log("Face-api models loaded from CDN");
-//     };
-
-//     loadModels();
-
-//     navigator.mediaDevices
-//       .getUserMedia({ video: true })
-//       .then((stream) => {
-//         videoRef.current.srcObject = stream;
-//       })
-//       .catch((err) => console.error("Camera error:", err));
-//   }, []);
-
-//   // const captureImage = async () => {
-//   //   if (!modelsLoaded) {
-//   //     alert("Models not loaded yet, please wait...");
-//   //     return;
-//   //   }
-//   //   const canvas = canvasRef.current;
-//   //   const ctx = canvas.getContext("2d");
-//   //   ctx.drawImage(videoRef.current, 0, 0, 320, 240);
-
-//   //   // Detect faces on the canvas image
-//   //   const detections = await faceapi.detectAllFaces(
-//   //     canvas,
-//   //     new faceapi.TinyFaceDetectorOptions()
-//   //   );
-
-//   //   if (detections.length === 0) {
-//   //     alert("❌ No face detected! Please try again.");
-//   //     return;
-//   //   }
-
-//   //   const imgData = canvas.toDataURL("image/png");
-//   //   setCapturedImages((prev) => [...prev, imgData]);
-//   // };
-//   const captureImage = async () => {
-//     if (!modelsLoaded) {
-//       alert("Models not loaded yet, please wait...");
-//       return;
-//     }
-
-//     const canvas = canvasRef.current;
-//     const ctx = canvas.getContext("2d");
-//     ctx.drawImage(videoRef.current, 0, 0, 320, 240);
-
-//     // Detect with descriptor
-//     const detection = await faceapi
-//       .detectSingleFace(canvas, new faceapi.TinyFaceDetectorOptions())
-//       .withFaceLandmarks()
-//       .withFaceDescriptor();
-
-//     if (!detection) {
-//       alert("❌ No face detected! Please try again.");
-//       return;
-//     }
-
-//     const imgData = canvas.toDataURL("image/png");
-
-//     // Store image & descriptor
-//     setCapturedImages((prev) => [...prev, imgData]);
-//     setFormData((prev) => ({
-//       ...prev,
-//       faceDescriptor: Array.from(detection.descriptor), // convert Float32Array to normal array
-//     }));
-
-//     console.log("✅ Face descriptor captured:", detection.descriptor);
-//   };
-
-//   const handleChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (capturedImages.length === 0) {
-//       alert("Please capture at least one image");
-//       return;
-//     }
-
-//     try {
-//       await axios.post("http://localhost:7070/api/register", {
-//         ...formData,
-//         faceDescriptor: [], // add real descriptor if you want
-//         image: capturedImages,
-//       });
-//       alert("✅ Student registered successfully!");
-//       setFormData({
-//         fName: "",
-//         rollNo_id: "",
-//         Class: "",
-//         semester: "",
-//         div: "",
-//         email: "",
-//         contact: "",
-//         faceDescriptor: "",
-//       });
-//       setCapturedImages([]);
-//     } catch (error) {
-//       console.error("Registration error:", error);
-//       alert("❌ Error registering student");
-//     }
-//   };
-
-//   return (
-//     <div style={{ textAlign: "center" }}>
-//       <h2>Student Registration</h2>
-//       <form onSubmit={handleSubmit}>
-//         <input
-//           name="fName"
-//           placeholder="Name"
-//           value={formData.fName}
-//           onChange={handleChange}
-//           required
-//         />
-//         <br />
-//         <input
-//           name="rollNo_id"
-//           placeholder="Roll No"
-//           value={formData.rollNo_id}
-//           onChange={handleChange}
-//           required
-//         />
-//         <br />
-//         <input
-//           name="Class"
-//           placeholder="Class"
-//           value={formData.Class}
-//           onChange={handleChange}
-//           required
-//         />
-//         <br />
-//         <input
-//           name="semester"
-//           placeholder="Semester"
-//           value={formData.semester}
-//           onChange={handleChange}
-//           required
-//         />
-//         <br />
-//         <input
-//           name="div"
-//           placeholder="Division"
-//           value={formData.div}
-//           onChange={handleChange}
-//           required
-//         />
-//         <br />
-//         <input
-//           name="email"
-//           type="email"
-//           placeholder="Email"
-//           value={formData.email}
-//           onChange={handleChange}
-//           required
-//         />
-//         <br />
-//         <input
-//           name="contact"
-//           placeholder="Contact"
-//           value={formData.contact}
-//           onChange={handleChange}
-//           required
-//         />
-//         <br />
-//         <video ref={videoRef} autoPlay width="320" height="240" />
-//         <br />
-//         <button type="button" onClick={captureImage}>
-//           📸 Capture Image
-//         </button>
-//         <br />
-//         {capturedImages.map((img, idx) => (
-//           <img key={idx} src={img} alt={`capture-${idx}`} width="100" />
-//         ))}
-//         <canvas
-//           ref={canvasRef}
-//           width="320"
-//           height="240"
-//           style={{ display: "none" }}
-//         />
-//         <br />
-//         <button type="submit">📝 Register Student</button>
-//       </form>
-//     </div>
-//   );
-// }
-
-// import React, { useRef, useState, useEffect } from "react";
-// import axios from "axios";
-// import * as faceapi from "@vladmandic/face-api";
-
-// export default function StudentRegistration() {
-//   const videoRef = useRef(null);
-//   const canvasRef = useRef(null);
-
-//   const [capturedImages, setCapturedImages] = useState([]);
-//   const [modelsLoaded, setModelsLoaded] = useState(false);
-//   const [formData, setFormData] = useState({
-//     fName: "",
-//     rollNo_id: "",
-//     Class: "",
-//     semester: "",
-//     div: "",
-//     email: "",
-//     contact: "",
+//     password: "",
 //     faceDescriptor: [],
 //   });
 
@@ -264,7 +495,7 @@
 //     }
 
 //     const canvas = canvasRef.current;
-//     const ctx = canvas.getContext("2d");
+//     const ctx = canvas.getContext("2d", { willReadFrequently: true });
 //     ctx.drawImage(videoRef.current, 0, 0, 320, 240);
 
 //     const detection = await faceapi
@@ -282,7 +513,11 @@
 //     setCapturedImages((prev) => [...prev, imgData]);
 //     setFormData((prev) => ({
 //       ...prev,
-//       faceDescriptor: Array.from(detection.descriptor),
+//       faceDescriptor: prev.faceDescriptor.length
+//         ? prev.faceDescriptor.map(
+//             (val, i) => (val + detection.descriptor[i]) / 2
+//           )
+//         : Array.from(detection.descriptor),
 //     }));
 
 //     console.log("✅ Face descriptor captured:", detection.descriptor);
@@ -291,12 +526,30 @@
 //   const handleChange = (e) => {
 //     setFormData({ ...formData, [e.target.name]: e.target.value });
 //   };
+//   // Validate password strength
+//   const validatePassword = (password) => {
+//     const regex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/;
+//     return regex.test(password);
+//   };
 
+//   // Submit form
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 
+//     const formEl = e.currentTarget;
+//     if (!formEl.checkValidity()) {
+//       formEl.reportValidity();
+//       return;
+//     }
+
 //     if (capturedImages.length === 0) {
 //       alert("Please capture at least one image");
+//       return;
+//     }
+//     if (!validatePassword(formData.password)) {
+//       alert(
+//         "Password must have at least 8 characters, one uppercase letter, one number, and one special character."
+//       );
 //       return;
 //     }
 
@@ -309,11 +562,17 @@
 //       setFormData({
 //         fName: "",
 //         rollNo_id: "",
+//         mName: "",
+//         lName: "",
+//         batch: "",
+//         // year: "",
+//         department: "",
 //         Class: "",
 //         semester: "",
 //         div: "",
 //         email: "",
 //         contact: "",
+//         password: "",
 //         faceDescriptor: [],
 //       });
 //       setCapturedImages([]);
@@ -322,10 +581,68 @@
 //       alert("❌ Error registering student");
 //     }
 //   };
+//   // Capture multiple images at guided angles
+//   const captureMultipleAngles = async () => {
+//     if (!modelsLoaded) {
+//       alert("Models not loaded yet, please wait...");
+//       return;
+//     }
+
+//     // Steps for head rotation
+//     const steps = [
+//       "Look straight (front)",
+//       "Turn LEFT 30°",
+//       "Turn LEFT 60°",
+//       "Turn LEFT 90°",
+//       "Turn RIGHT 30°",
+//       "Turn RIGHT 60°",
+//       "Turn RIGHT 90°",
+//     ];
+
+//     for (let i = 0; i < steps.length; i++) {
+//       alert(`📸 Please ${steps[i]} and click OK when ready.`); // <-- Instruction
+
+//       // Small delay to allow student to adjust
+//       await new Promise((resolve) => setTimeout(resolve, 1500));
+
+//       const canvas = canvasRef.current;
+//       const ctx = canvas.getContext("2d", { willReadFrequently: true });
+//       ctx.drawImage(videoRef.current, 0, 0, 320, 240);
+
+//       const detection = await faceapi
+//         .detectSingleFace(canvas, new faceapi.TinyFaceDetectorOptions())
+//         .withFaceLandmarks()
+//         .withFaceDescriptor();
+
+//       if (!detection) {
+//         alert(`❌ No face detected at step: ${steps[i]}. Please retry.`);
+//         i--; // retry the same step
+//         continue;
+//       }
+
+//       const imgData = canvas.toDataURL("image/png");
+
+//       // Save captured image & averaged descriptor
+//       setCapturedImages((prev) => [...prev, imgData]);
+//       setFormData((prev) => ({
+//         ...prev,
+//         image: [...prev.image, imgData],
+//         faceDescriptor: prev.faceDescriptor.length
+//           ? prev.faceDescriptor.map(
+//               (val, j) => (val + detection.descriptor[j]) / 2
+//             )
+//           : Array.from(detection.descriptor),
+//       }));
+
+//       console.log(`✅ Captured ${steps[i]}`, detection.descriptor);
+//     }
+
+//     alert("✅ All angles captured successfully!");
+//   };
 
 //   return (
-//     <div className=" items-center gap-3 group">
-//       <div className="flex gap-3">
+//     <div className="items-center gap-3 group">
+//       {/* <div className="flex gap-3 justify-center mt-6">
 //         <img
 //           src="/Assets/DYPIMED-Logo.png"
 //           alt="DYPIMED Logo"
@@ -340,9 +657,9 @@
 //         >
 //           DYPIMED
 //         </h3>
-//       </div>
+//       </div> */}
 
-//       <div className="min-h-screen flex items-center justify-center p-6 sm:p-12 ">
+//       <div className="min-h-screen flex items-center justify-center p-6 sm:p-12">
 //         <div
 //           className="w-full max-w-3xl bg-slate-300 rounded-3xl shadow-2xl p-8 sm:p-12
 //                   border border-slate-400 flex flex-col items-center
@@ -352,42 +669,226 @@
 //             Student Registration
 //           </h2>
 
-//           <form onSubmit={handleSubmit} className="space-y-8 w-full">
+//           <form onSubmit={handleSubmit} className="space-y-8 w-full" noValidate>
 //             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 w-full">
-//               {[
-//                 { name: "fName", label: "Full Name" },
-//                 { name: "rollNo_id", label: "Roll Number" },
-//                 { name: "Class", label: "Class" },
-//                 { name: "semester", label: "Semester" },
-//                 { name: "div", label: "Division" },
-//                 { name: "email", label: "Email", type: "email" },
-//                 { name: "contact", label: "Contact Number" },
-//                 { name: "password", label: "Password", type: "password" },
-//               ].map(({ name, label, type }) => (
-//                 <div key={name} className="flex flex-col">
-//                   <label
-//                     htmlFor={name}
-//                     className="mb-1 font-semibold text-gray-700 flex items-center gap-1"
-//                   >
-//                     {label} <span className="text-red-600">*</span>
-//                   </label>
-//                   <input
-//                     id={name}
-//                     name={name}
-//                     type={type || "text"}
-//                     placeholder={`Enter ${label.toLowerCase()}`}
-//                     value={formData[name]}
-//                     onChange={handleChange}
-//                     required
-//                     className="w-full px-5 py-3 border border-slate-300 rounded-2xl
-//                        text-gray-900 placeholder-slate-500
-//                        focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400
-//                        transition duration-300 shadow-sm hover:shadow-md text-lg"
-//                   />
-//                 </div>
-//               ))}
+//               {/* Full Name */}
+//               <div className="flex flex-col">
+//                 <label className="mb-1 font-semibold text-gray-700">
+//                   First Name <span className="text-red-600">*</span>
+//                 </label>
+//                 <input
+//                   name="fName"
+//                   type="text"
+//                   placeholder="Enter full name"
+//                   value={formData.fName}
+//                   onChange={handleChange}
+//                   required
+//                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+//                 />
+//               </div>
+//               <div className="flex flex-col">
+//                 <label className="mb-1 font-semibold text-gray-700">
+//                   Middal Name <span className="text-red-600">*</span>
+//                 </label>
+//                 <input
+//                   name="mName"
+//                   type="text"
+//                   placeholder="Enter middal name"
+//                   value={formData.mName}
+//                   onChange={handleChange}
+//                   required
+//                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+//                 />
+//               </div>
+//               <div className="flex flex-col">
+//                 <label className="mb-1 font-semibold text-gray-700">
+//                   Last Name <span className="text-red-600">*</span>
+//                 </label>
+//                 <input
+//                   name="lName"
+//                   type="text"
+//                   placeholder="Enter Last name"
+//                   value={formData.lName}
+//                   onChange={handleChange}
+//                   required
+//                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+//                 />
+//               </div>
+//               {/* Roll Number */}
+//               <div className="flex flex-col">
+//                 <label className="mb-1 font-semibold text-gray-700">
+//                   Roll Number <span className="text-red-600">*</span>
+//                 </label>
+//                 <input
+//                   name="rollNo_id"
+//                   type="text"
+//                   placeholder="Exactly 5 digits (e.g., 12345)"
+//                   value={formData.rollNo_id}
+//                   onChange={handleChange}
+//                   required
+//                   pattern="^[0-9]{5}$"
+//                   title="Roll number must be exactly 5 digits (0–9)."
+//                   maxLength={5}
+//                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+//                 />
+//               </div>
+//               {/*department*/}
+//               <div>
+//                 <label className="block text-gray-700 font-medium">
+//                   Department:
+//                 </label>
+
+//                 <select
+//                   name="department"
+//                   value={formData.department}
+//                   onChange={handleChange}
+//                   required
+//                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+//                 >
+//                   <option value="">Select department</option>
+//                   <option value="MCA">MCA</option>
+//                   <option value="MBA">MBA</option>
+//                   {/* <option value="III">III</option>
+//                   <option value="IV">IV</option> */}
+//                 </select>
+//               </div>
+//               {/* Class */}
+//               <div className="flex flex-col">
+//                 <label className="mb-1 font-semibold text-gray-700">
+//                   Class <span className="text-red-600">*</span>
+//                 </label>
+//                 <select
+//                   name="Class"
+//                   value={formData.Class}
+//                   onChange={handleChange}
+//                   required
+//                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+//                 >
+//                   <option value="">Select Class</option>
+//                   <option value="MCA-I">MCA-I</option>
+//                   <option value="MCA-II">MCA-II</option>
+//                 </select>
+//               </div>
+
+//               <div className="flex flex-col">
+//                 <label className="mb-1 font-semibold text-gray-700">
+//                   Batch <span className="text-red-600">*</span>
+//                 </label>
+//                 <select
+//                   name="batch"
+//                   value={formData.batch}
+//                   onChange={handleChange}
+//                   required
+//                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+//                 >
+//                   <option value="">Select Batch</option>
+//                   <option value="2024-2026">2024-2026</option>
+//                   <option value="2025-2027">2025-2027</option>
+//                   {/* <option value="III">III</option>
+//                   <option value="IV">IV</option> */}
+//                 </select>
+//               </div>
+
+//               {/* Semester */}
+//               <div className="flex flex-col">
+//                 <label className="mb-1 font-semibold text-gray-700">
+//                   Semester <span className="text-red-600">*</span>
+//                 </label>
+//                 <select
+//                   name="semester"
+//                   value={formData.semester}
+//                   onChange={handleChange}
+//                   required
+//                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+//                 >
+//                   <option value="">Select Semester</option>
+//                   <option value="I">I</option>
+//                   <option value="II">II</option>
+//                   <option value="III">III</option>
+//                   <option value="IV">IV</option>
+//                 </select>
+//               </div>
+
+//               {/* Division */}
+//               <div className="flex flex-col">
+//                 <label className="mb-1 font-semibold text-gray-700">
+//                   Division <span className="text-red-600">*</span>
+//                 </label>
+//                 <select
+//                   name="div"
+//                   value={formData.div}
+//                   onChange={handleChange}
+//                   required
+//                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+//                 >
+//                   <option value="">Select Division</option>
+//                   <option value="A">A</option>
+//                   <option value="B">B</option>
+//                   {/* <option value="AB">AB</option> */}
+//                 </select>
+//               </div>
+
+//               {/* Email */}
+//               <div className="flex flex-col">
+//                 <label className="mb-1 font-semibold text-gray-700">
+//                   Email <span className="text-red-600">*</span>
+//                 </label>
+//                 <input
+//                   name="email"
+//                   type="email"
+//                   placeholder="name@example.com"
+//                   value={formData.email}
+//                   onChange={handleChange}
+//                   required
+//                   pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"
+//                   title="Enter a valid email like name@example.com"
+//                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+//                 />
+//               </div>
+
+//               {/* Contact */}
+//               <div className="flex flex-col">
+//                 <label className="mb-1 font-semibold text-gray-700">
+//                   Contact Number <span className="text-red-600">*</span>
+//                 </label>
+//                 <input
+//                   name="contact"
+//                   type="text"
+//                   inputMode="numeric"
+//                   placeholder="10-digit phone number"
+//                   value={formData.contact}
+//                   onChange={(e) => {
+//                     e.target.value = e.target.value.replace(/\D/g, "");
+//                     handleChange(e);
+//                   }}
+//                   required
+//                   pattern="^\d{10}$"
+//                   title="Phone number must be exactly 10 digits."
+//                   maxLength={10}
+//                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+//                 />
+//               </div>
+
+//               {/* Password */}
+//               <div className="flex flex-col">
+//                 <label className="mb-1 font-semibold text-gray-700">
+//                   Password <span className="text-red-600">*</span>
+//                 </label>
+//                 <input
+//                   name="password"
+//                   type="password"
+//                   placeholder="At least 8 characters"
+//                   value={formData.password}
+//                   onChange={handleChange}
+//                   required
+//                   minLength={8}
+//                   title="Password must be at least 8 characters long."
+//                   className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+//                 />
+//               </div>
 //             </div>
 
+//             {/* Camera Section */}
 //             <div className="flex flex-col items-center space-y-6 sm:space-y-8 mt-6">
 //               <video
 //                 ref={videoRef}
@@ -398,12 +899,10 @@
 
 //               <button
 //                 type="button"
-//                 onClick={captureImage}
-//                 className="w-full max-w-xs py-3 bg-indigo-700 hover:bg-indigo-900
-//                      text-white font-bold rounded-full shadow-lg
-//                      transition duration-300 transform hover:scale-105"
+//                 onClick={captureMultipleAngles}
+//                 className="mt-3 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
 //               >
-//                 📸 Capture Image
+//                 Capture All Angles
 //               </button>
 
 //               <div className="flex flex-wrap justify-center gap-4 mt-4">
@@ -425,6 +924,7 @@
 //               />
 //             </div>
 
+//             {/* Submit */}
 //             <button
 //               type="submit"
 //               className="w-full py-4 bg-indigo-700 hover:bg-indigo-900
@@ -439,156 +939,180 @@
 //     </div>
 //   );
 // }
-
-import React, { useRef, useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import * as faceapi from "@vladmandic/face-api";
 
-export default function StudentRegistration() {
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-
-  const [capturedImages, setCapturedImages] = useState([]);
-  const [modelsLoaded, setModelsLoaded] = useState(false);
+const EditProfile = () => {
   const [formData, setFormData] = useState({
     rollNo_id: "",
     fName: "",
     mName: "",
     lName: "",
     batch: "",
-    // year: "",
-    department: "",
     Class: "",
     semester: "",
     div: "",
+    department: "",
     email: "",
     contact: "",
     password: "",
     faceDescriptor: [],
+    image: [], // base64 images we’ll submit
   });
 
+  const [message, setMessage] = useState("");
+  const [capturedImages, setCapturedImages] = useState([]); // mirrors formData.image for preview UX
+  const [modelsLoaded, setModelsLoaded] = useState(false);
+
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const streamRef = useRef(null);
+
+  // Load models & start camera
   useEffect(() => {
     const loadModels = async () => {
-      const MODEL_URL =
-        "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/";
-      await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
-      await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
-      await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-      setModelsLoaded(true);
-      console.log("✅ Face-api models loaded from CDN");
+      try {
+        // Keep your CDN. If you host locally, put your /models path here.
+        const MODEL_URL =
+          "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/";
+        await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
+        await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
+        await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
+        setModelsLoaded(true);
+        console.log("✅ face-api models loaded");
+      } catch (err) {
+        console.error("❌ Failed to load face-api models:", err);
+        setModelsLoaded(false);
+      }
     };
 
-    loadModels();
+    const startCam = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user", width: 640, height: 480 },
+          audio: false,
+        });
+        streamRef.current = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (err) {
+        console.error("❌ Camera error:", err);
+      }
+    };
 
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then((stream) => {
-        if (videoRef.current) videoRef.current.srcObject = stream;
-      })
-      .catch((err) => console.error("Camera error:", err));
+    loadModels().then(startCam);
+
+    // Cleanup on unmount
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
+      }
+    };
   }, []);
 
-  const captureImage = async () => {
-    if (!modelsLoaded) {
-      alert("Models not loaded yet, please wait...");
-      return;
+  // Helpers
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const startCamera = async () => {
+    try {
+      if (streamRef.current) return; // already running
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "user", width: 640, height: 480 },
+        audio: false,
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (error) {
+      console.error("Error accessing camera:", error);
     }
+  };
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
+      }
+    }
+  };
+
+  const grabDetection = async () => {
+    if (!modelsLoaded) {
+      alert("Models not loaded yet, please wait…");
+      return null;
+    }
+    if (!videoRef.current) return null;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
-    ctx.drawImage(videoRef.current, 0, 0, 320, 240);
+    const W = 320;
+    const H = 240;
+    canvas.width = W;
+    canvas.height = H;
 
+    // Draw current frame
+    ctx.drawImage(videoRef.current, 0, 0, W, H);
+
+    // Detect
     const detection = await faceapi
-      .detectSingleFace(canvas, new faceapi.TinyFaceDetectorOptions())
+      .detectSingleFace(
+        canvas,
+        new faceapi.TinyFaceDetectorOptions({
+          inputSize: 224,
+          scoreThreshold: 0.5,
+        })
+      )
       .withFaceLandmarks()
       .withFaceDescriptor();
 
-    if (!detection) {
+    return { detection, canvas };
+  };
+
+  const captureImage = async () => {
+    const result = await grabDetection();
+    if (!result || !result.detection) {
       alert("❌ No face detected! Please try again.");
       return;
     }
 
+    const { detection, canvas } = result;
     const imgData = canvas.toDataURL("image/png");
 
+    // Average descriptor across captures
+    setFormData((prev) => {
+      const nextDescriptor =
+        prev.faceDescriptor.length > 0
+          ? prev.faceDescriptor.map((v, i) => (v + detection.descriptor[i]) / 2)
+          : Array.from(detection.descriptor);
+
+      const nextImages = [...prev.image, imgData];
+
+      return { ...prev, faceDescriptor: nextDescriptor, image: nextImages };
+    });
+
     setCapturedImages((prev) => [...prev, imgData]);
-    setFormData((prev) => ({
-      ...prev,
-      faceDescriptor: prev.faceDescriptor.length
-        ? prev.faceDescriptor.map(
-            (val, i) => (val + detection.descriptor[i]) / 2
-          )
-        : Array.from(detection.descriptor),
-    }));
 
-    console.log("✅ Face descriptor captured:", detection.descriptor);
+    console.log(
+      "✅ Captured descriptor length:",
+      result.detection.descriptor.length
+    );
   };
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-  // Validate password strength
-  const validatePassword = (password) => {
-    const regex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$/;
-    return regex.test(password);
-  };
-
-  // Submit form
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formEl = e.currentTarget;
-    if (!formEl.checkValidity()) {
-      formEl.reportValidity();
-      return;
-    }
-
-    if (capturedImages.length === 0) {
-      alert("Please capture at least one image");
-      return;
-    }
-    if (!validatePassword(formData.password)) {
-      alert(
-        "Password must have at least 8 characters, one uppercase letter, one number, and one special character."
-      );
-      return;
-    }
-
-    try {
-      await axios.post("http://localhost:7070/api/register", {
-        ...formData,
-        image: capturedImages,
-      });
-      alert("✅ Student registered successfully!");
-      setFormData({
-        fName: "",
-        rollNo_id: "",
-        mName: "",
-        lName: "",
-        batch: "",
-        // year: "",
-        department: "",
-        Class: "",
-        semester: "",
-        div: "",
-        email: "",
-        contact: "",
-        password: "",
-        faceDescriptor: [],
-      });
-      setCapturedImages([]);
-    } catch (error) {
-      console.error("Registration error:", error);
-      alert("❌ Error registering student");
-    }
-  };
-  // Capture multiple images at guided angles
   const captureMultipleAngles = async () => {
     if (!modelsLoaded) {
-      alert("Models not loaded yet, please wait...");
+      alert("Models not loaded yet, please wait…");
       return;
     }
 
-    // Steps for head rotation
     const steps = [
       "Look straight (front)",
       "Turn LEFT 30°",
@@ -600,334 +1124,364 @@ export default function StudentRegistration() {
     ];
 
     for (let i = 0; i < steps.length; i++) {
-      alert(`📸 Please ${steps[i]} and click OK when ready.`); // <-- Instruction
+      alert(`📸 Please ${steps[i]} and tap OK when ready.`);
+      await new Promise((r) => setTimeout(r, 800));
 
-      // Small delay to allow student to adjust
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d", { willReadFrequently: true });
-      ctx.drawImage(videoRef.current, 0, 0, 320, 240);
-
-      const detection = await faceapi
-        .detectSingleFace(canvas, new faceapi.TinyFaceDetectorOptions())
-        .withFaceLandmarks()
-        .withFaceDescriptor();
-
-      if (!detection) {
-        alert(`❌ No face detected at step: ${steps[i]}. Please retry.`);
-        i--; // retry the same step
+      const result = await grabDetection();
+      if (!result || !result.detection) {
+        alert(
+          `❌ No face detected at step: ${steps[i]}. We'll retry that step.`
+        );
+        i--;
         continue;
       }
 
+      const { detection, canvas } = result;
       const imgData = canvas.toDataURL("image/png");
 
-      // Save captured image & averaged descriptor
-      setCapturedImages((prev) => [...prev, imgData]);
-      setFormData((prev) => ({
-        ...prev,
-        image: [...prev.image, imgData],
-        faceDescriptor: prev.faceDescriptor.length
-          ? prev.faceDescriptor.map(
-              (val, j) => (val + detection.descriptor[j]) / 2
-            )
-          : Array.from(detection.descriptor),
-      }));
+      setFormData((prev) => {
+        const nextDescriptor =
+          prev.faceDescriptor.length > 0
+            ? prev.faceDescriptor.map(
+                (v, j) => (v + detection.descriptor[j]) / 2
+              )
+            : Array.from(detection.descriptor);
 
-      console.log(`✅ Captured ${steps[i]}`, detection.descriptor);
+        const nextImages = [...prev.image, imgData];
+
+        return { ...prev, faceDescriptor: nextDescriptor, image: nextImages };
+      });
+
+      setCapturedImages((prev) => [...prev, imgData]);
+      console.log(`✅ Captured ${steps[i]}`);
     }
 
     alert("✅ All angles captured successfully!");
   };
 
+  const handleDeleteImage = (index) => {
+    setCapturedImages((prev) => prev.filter((_, i) => i !== index));
+    setFormData((prev) => ({
+      ...prev,
+      image: prev.image.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formEl = e.currentTarget;
+    if (!formEl.checkValidity()) {
+      formEl.reportValidity();
+      return;
+    }
+
+    if (capturedImages.length === 0) {
+      alert("Please capture at least one image.");
+      return;
+    }
+
+    try {
+      const payload = {
+        ...formData,
+        image: capturedImages,
+      };
+
+      console.log("🚀 Submitting:", payload);
+      await axios.post("http://localhost:7070/api/register", payload);
+
+      alert("✅ Student registered successfully!");
+      setMessage("Student registered successfully!");
+
+      setFormData({
+        rollNo_id: "",
+        fName: "",
+        mName: "",
+        lName: "",
+        batch: "",
+        Class: "",
+        semester: "",
+        div: "",
+        department: "",
+        email: "",
+        contact: "",
+        password: "",
+        faceDescriptor: [],
+        image: [],
+      });
+      setCapturedImages([]);
+    } catch (error) {
+      console.error("Registration error:", error);
+      alert(error?.response?.data?.message || "❌ Error registering student");
+    }
+  };
+
   return (
-    <div className="items-center gap-3 group">
-      {/* <div className="flex gap-3 justify-center mt-6">
-        <img
-          src="/Assets/DYPIMED-Logo.png"
-          alt="DYPIMED Logo"
-          className="w-20 h-20 animate-bounce transition-transform duration-300 group-hover:scale-110"
-          loading="lazy"
-          draggable={false}
-        />
-        <h3
-          className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-600 to-blue-600
-                     font-extrabold text-2xl md:text-3xl select-none
-                     drop-shadow-[0_0_6px_rgba(236,72,153,0.8)]"
-        >
-          DYPIMED
-        </h3>
-      </div> */}
+    <div className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
+      <h2 className="text-2xl font-bold text-center mb-6">Edit Profile</h2>
 
-      <div className="min-h-screen flex items-center justify-center p-6 sm:p-12">
-        <div
-          className="w-full max-w-3xl bg-slate-300 rounded-3xl shadow-2xl p-8 sm:p-12
-                  border border-slate-400 flex flex-col items-center
-                  hover:shadow-indigo-500/50 transition-shadow duration-300"
-        >
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-center text-indigo-900 mb-10 tracking-wide drop-shadow-md">
-            Student Registration
-          </h2>
+      {message && (
+        <p className="text-center text-green-600 font-semibold mb-4">
+          {message}
+        </p>
+      )}
 
-          <form onSubmit={handleSubmit} className="space-y-8 w-full" noValidate>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 w-full">
-              {/* Full Name */}
-              <div className="flex flex-col">
-                <label className="mb-1 font-semibold text-gray-700">
-                  First Name <span className="text-red-600">*</span>
-                </label>
-                <input
-                  name="fName"
-                  type="text"
-                  placeholder="Enter full name"
-                  value={formData.fName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="mb-1 font-semibold text-gray-700">
-                  Middal Name <span className="text-red-600">*</span>
-                </label>
-                <input
-                  name="mName"
-                  type="text"
-                  placeholder="Enter middal name"
-                  value={formData.mName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="mb-1 font-semibold text-gray-700">
-                  Last Name <span className="text-red-600">*</span>
-                </label>
-                <input
-                  name="lName"
-                  type="text"
-                  placeholder="Enter Last name"
-                  value={formData.lName}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
-                />
-              </div>
-              {/* Roll Number */}
-              <div className="flex flex-col">
-                <label className="mb-1 font-semibold text-gray-700">
-                  Roll Number <span className="text-red-600">*</span>
-                </label>
-                <input
-                  name="rollNo_id"
-                  type="text"
-                  placeholder="Exactly 5 digits (e.g., 12345)"
-                  value={formData.rollNo_id}
-                  onChange={handleChange}
-                  required
-                  pattern="^[0-9]{5}$"
-                  title="Roll number must be exactly 5 digits (0–9)."
-                  maxLength={5}
-                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
-                />
-              </div>
-              {/*department*/}
-              <div>
-                <label className="block text-gray-700 font-medium">
-                  Department:
-                </label>
-                <input
-                  type="text"
-                  name="department"
-                  value={formData.department}
-                  className="w-full px-4 py-2 border rounded-lg bg-gray-100 text-gray-600"
-                />
-              </div>
-              {/* Class */}
-              <div className="flex flex-col">
-                <label className="mb-1 font-semibold text-gray-700">
-                  Class <span className="text-red-600">*</span>
-                </label>
-                <select
-                  name="Class"
-                  value={formData.Class}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
-                >
-                  <option value="">Select Class</option>
-                  <option value="MCA-I">MCA-I</option>
-                  <option value="MCA-II">MCA-II</option>
-                </select>
-              </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Roll No */}
+        <div>
+          <label className="block text-gray-700 font-medium">Roll No:</label>
+          <input
+            type="text"
+            name="rollNo_id"
+            value={formData.rollNo_id}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg"
+            required
+          />
+        </div>
 
-              <div className="flex flex-col">
-                <label className="mb-1 font-semibold text-gray-700">
-                  Batch <span className="text-red-600">*</span>
-                </label>
-                <select
-                  name="batch"
-                  value={formData.batch}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
-                >
-                  <option value="">Select Batch</option>
-                  <option value="2024-2026">2024-2026</option>
-                  <option value="2025-2027">2025-2027</option>
-                  {/* <option value="III">III</option>
-                  <option value="IV">IV</option> */}
-                </select>
-              </div>
+        {/* Batch */}
+        <div>
+          <label className="block text-gray-700 font-medium">Batch:</label>
+          <input
+            type="text"
+            name="batch"
+            value={formData.batch}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg"
+            required
+          />
+        </div>
 
-              {/* Semester */}
-              <div className="flex flex-col">
-                <label className="mb-1 font-semibold text-gray-700">
-                  Semester <span className="text-red-600">*</span>
-                </label>
-                <select
-                  name="semester"
-                  value={formData.semester}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
-                >
-                  <option value="">Select Semester</option>
-                  <option value="I">I</option>
-                  <option value="II">II</option>
-                  <option value="III">III</option>
-                  <option value="IV">IV</option>
-                </select>
-              </div>
+        {/* Department */}
+        <div>
+          <label className="block text-gray-700 font-medium">Department:</label>
+          <input
+            type="text"
+            name="department"
+            value={formData.department}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg"
+            required
+          />
+        </div>
 
-              {/* Division */}
-              <div className="flex flex-col">
-                <label className="mb-1 font-semibold text-gray-700">
-                  Division <span className="text-red-600">*</span>
-                </label>
-                <select
-                  name="div"
-                  value={formData.div}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
-                >
-                  <option value="">Select Division</option>
-                  <option value="A">A</option>
-                  <option value="B">B</option>
-                  {/* <option value="AB">AB</option> */}
-                </select>
-              </div>
+        {/* Class */}
+        <div>
+          <label className="block text-gray-700 font-medium">Class:</label>
+          <select
+            name="Class"
+            value={formData.Class}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg"
+            required
+          >
+            <option value="">Select Class</option>
+            <option value="MCA-I">MCA-I</option>
+            <option value="MCA-II">MCA-II</option>
+          </select>
+        </div>
 
-              {/* Email */}
-              <div className="flex flex-col">
-                <label className="mb-1 font-semibold text-gray-700">
-                  Email <span className="text-red-600">*</span>
-                </label>
-                <input
-                  name="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  pattern="^[^\s@]+@[^\s@]+\.[^\s@]{2,}$"
-                  title="Enter a valid email like name@example.com"
-                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
-                />
-              </div>
+        {/* Semester */}
+        <div>
+          <label className="block text-gray-700 font-medium">Semester:</label>
+          <select
+            name="semester"
+            value={formData.semester}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg"
+            required
+          >
+            <option value="">Select Semester</option>
+            <option value="I">I</option>
+            <option value="II">II</option>
+            <option value="III">III</option>
+            <option value="IV">IV</option>
+          </select>
+        </div>
 
-              {/* Contact */}
-              <div className="flex flex-col">
-                <label className="mb-1 font-semibold text-gray-700">
-                  Contact Number <span className="text-red-600">*</span>
-                </label>
-                <input
-                  name="contact"
-                  type="text"
-                  inputMode="numeric"
-                  placeholder="10-digit phone number"
-                  value={formData.contact}
-                  onChange={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, "");
-                    handleChange(e);
-                  }}
-                  required
-                  pattern="^\d{10}$"
-                  title="Phone number must be exactly 10 digits."
-                  maxLength={10}
-                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
-                />
-              </div>
+        {/* Division */}
+        <div>
+          <label className="block text-gray-700 font-medium">Division:</label>
+          <select
+            name="div"
+            value={formData.div}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg"
+            required
+          >
+            <option value="">Select Division</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+          </select>
+        </div>
 
-              {/* Password */}
-              <div className="flex flex-col">
-                <label className="mb-1 font-semibold text-gray-700">
-                  Password <span className="text-red-600">*</span>
-                </label>
-                <input
-                  name="password"
-                  type="password"
-                  placeholder="At least 8 characters"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  minLength={8}
-                  title="Password must be at least 8 characters long."
-                  className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
-                />
-              </div>
-            </div>
+        {/* Names */}
+        <div>
+          <label className="block text-gray-700 font-medium">First Name:</label>
+          <input
+            type="text"
+            name="fName"
+            value={formData.fName}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg"
+            required
+          />
+        </div>
 
-            {/* Camera Section */}
-            <div className="flex flex-col items-center space-y-6 sm:space-y-8 mt-6">
-              <video
-                ref={videoRef}
-                autoPlay
-                className="rounded-3xl border-4 border-indigo-600 shadow-lg
-                     w-full max-w-[320px] h-auto"
+        <div>
+          <label className="block text-gray-700 font-medium">
+            Middle Name:
+          </label>
+          <input
+            type="text"
+            name="mName"
+            value={formData.mName}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg"
+          />
+        </div>
+
+        <div>
+          <label className="block text-gray-700 font-medium">Last Name:</label>
+          <input
+            type="text"
+            name="lName"
+            value={formData.lName}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg"
+            required
+          />
+        </div>
+
+        {/* Email */}
+        <div>
+          <label className="block text-gray-700 font-medium">Email:</label>
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg"
+            required
+          />
+        </div>
+
+        {/* Contact */}
+        <div>
+          <label className="block text-gray-700 font-medium">Contact:</label>
+          <input
+            type="tel"
+            name="contact"
+            pattern="[0-9]{10}"
+            value={formData.contact}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded-lg"
+            required
+            title="Enter 10 digit mobile number"
+          />
+        </div>
+
+        {/* Password */}
+        <div className="flex flex-col">
+          <label className="mb-1 font-semibold text-gray-700">
+            Password <span className="text-red-600">*</span>
+          </label>
+          <input
+            name="password"
+            type="password"
+            placeholder="At least 8 characters"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            minLength={8}
+            className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+          />
+        </div>
+
+        {/* Camera */}
+        <div className="text-center mt-6">
+          <video
+            ref={videoRef}
+            width="420"
+            height="340"
+            autoPlay
+            playsInline
+            muted
+            className="rounded-lg border-2 border-gray-300 shadow-md"
+          />
+          <div className="flex justify-center gap-3 mt-3">
+            <button
+              type="button"
+              onClick={startCamera}
+              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+            >
+              Start Camera
+            </button>
+            <button
+              type="button"
+              onClick={stopCamera}
+              className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            >
+              Stop Camera
+            </button>
+            <button
+              type="button"
+              onClick={captureImage}
+              className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+              disabled={!modelsLoaded}
+              title={!modelsLoaded ? "Models are loading…" : "Capture Image"}
+            >
+              Capture Image
+            </button>
+            <button
+              type="button"
+              onClick={captureMultipleAngles}
+              className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+              disabled={!modelsLoaded}
+              title={
+                !modelsLoaded ? "Models are loading…" : "Capture All Angles"
+              }
+            >
+              Capture All Angles
+            </button>
+          </div>
+
+          {/* Hidden canvas for grabbing frames */}
+          <canvas ref={canvasRef} width="320" height="240" className="hidden" />
+        </div>
+
+        {/* Gallery + delete */}
+        <div className="flex flex-wrap justify-center gap-3 mt-4">
+          {capturedImages.map((img, idx) => (
+            <div key={idx} className="relative">
+              <img
+                src={img}
+                alt={`capture-${idx}`}
+                className="w-20 h-20 rounded-xl border-2 border-indigo-400 shadow-md object-cover"
               />
-
               <button
                 type="button"
-                onClick={captureMultipleAngles}
-                className="mt-3 px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+                onClick={() => handleDeleteImage(idx)}
+                className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full shadow-md hover:bg-red-700"
+                aria-label={`Delete image ${idx + 1}`}
               >
-                Capture All Angles
+                ✕
               </button>
-
-              <div className="flex flex-wrap justify-center gap-4 mt-4">
-                {capturedImages.map((img, idx) => (
-                  <img
-                    key={idx}
-                    src={img}
-                    alt={`capture-${idx}`}
-                    className="w-20 h-20 rounded-2xl border-2 border-indigo-400 shadow-md"
-                  />
-                ))}
-              </div>
-
-              <canvas
-                ref={canvasRef}
-                width="320"
-                height="240"
-                style={{ display: "none" }}
-              />
             </div>
-
-            {/* Submit */}
-            <button
-              type="submit"
-              className="w-full py-4 bg-indigo-700 hover:bg-indigo-900
-                   text-white font-extrabold rounded-3xl shadow-xl
-                   transition duration-300 transform hover:scale-105 mt-10"
-            >
-              📝 Register Student
-            </button>
-          </form>
+          ))}
         </div>
-      </div>
+
+        {/* Submit */}
+        <button
+          type="submit"
+          className="w-full py-4 bg-indigo-700 hover:bg-indigo-900 text-white font-extrabold rounded-3xl shadow-xl transition duration-300 transform hover:scale-105 mt-6"
+        >
+          📝 Register Student
+        </button>
+      </form>
     </div>
   );
-}
+};
+
+export default EditProfile;
