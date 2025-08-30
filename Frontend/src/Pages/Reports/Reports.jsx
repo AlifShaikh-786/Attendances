@@ -1443,7 +1443,25 @@ export default function AttendanceForm() {
   const [studentPercentages, setStudentPercentages] = useState([]);
   const [activeFilter, setActiveFilter] = useState("");
   const [error, setError] = useState("");
+  const [subjectWiseStats, setSubjectWiseStats] = useState([]);
+  const [facultyStats, setFacultyStats] = useState([]);
 
+  // const calculateFacultyStats = (records) => {
+  //   const map = {};
+  //   records.forEach((rec) => {
+  //     const fId = rec.facultyId_id || "Unknown";
+  //     if (!map[fId]) {
+  //       map[fId] = { faculty: fId, total: 0, present: 0, absent: 0 };
+  //     }
+  //     map[fId].total += 1;
+  //     if (rec.status === "Present") map[fId].present++;
+  //     else map[fId].absent++;
+  //   });
+  //   return Object.values(map).map((s) => ({
+  //     ...s,
+  //     percentage: ((s.present / s.total) * 100).toFixed(2),
+  //   }));
+  // };
   // Handle generic input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -1489,6 +1507,43 @@ export default function AttendanceForm() {
 
     setFormData((prev) => ({ ...prev, startDate: start, endDate: end }));
     setActiveFilter(type);
+  };
+  // --- NEW FUNCTION: Subject-wise statistics ---
+  const calculateSubjectWiseStats = (attendanceRecords) => {
+    const subjectStats = {};
+
+    attendanceRecords.forEach((rec) => {
+      const subject = rec.Subject || "Unknown";
+
+      if (!subjectStats[subject]) {
+        subjectStats[subject] = {
+          subject,
+          totalLectures: 0,
+          present: 0,
+          absent: 0,
+          students: new Set(), // To track unique students per subject
+        };
+      }
+
+      subjectStats[subject].totalLectures += 1;
+      subjectStats[subject].students.add(rec.rollNo_id);
+
+      if (rec.status === "Present") {
+        subjectStats[subject].present += 1;
+      } else {
+        subjectStats[subject].absent += 1;
+      }
+    });
+
+    // Convert to array & calculate %
+    return Object.values(subjectStats).map((s) => ({
+      subject: s.subject,
+      totalLectures: s.totalLectures,
+      totalStudents: s.students.size,
+      present: s.present,
+      absent: s.absent,
+      percentage: ((s.present / s.totalLectures) * 100).toFixed(2),
+    }));
   };
 
   // Fetch & Filter
@@ -1536,6 +1591,8 @@ export default function AttendanceForm() {
 
         setStudents(filtered);
         setStudentPercentages(calculatePercentages(filtered));
+        setSubjectWiseStats(calculateSubjectWiseStats(filtered));
+        // setFacultyStats(calculateFacultyStats(filtered));
       } else {
         setStudents([]);
         setError("No records found");
@@ -1796,7 +1853,80 @@ export default function AttendanceForm() {
           </div>
         </>
       )}
-
+      {/* Subject-wise Stats */}
+      {subjectWiseStats.length > 0 && (
+        <div className="overflow-x-auto mt-6 shadow-lg rounded-xl bg-white">
+          <h2 className="text-xl font-bold p-4 text-blue-700">
+            📘 Subject-wise Attendance Report
+          </h2>
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                <th className="border px-4 py-2">Subject</th>
+                <th className="border px-4 py-2">Total Students</th>
+                <th className="border px-4 py-2">Total Lectures</th>
+                <th className="border px-4 py-2">Present Count</th>
+                <th className="border px-4 py-2">Absent Count</th>
+                <th className="border px-4 py-2">Attendance %</th>
+              </tr>
+            </thead>
+            <tbody>
+              {subjectWiseStats.map((s) => (
+                <tr key={s.subject} className="hover:bg-blue-50">
+                  <td className="border px-4 py-2 font-semibold">
+                    {s.subject}
+                  </td>
+                  <td className="border px-4 py-2">{s.totalStudents}</td>
+                  <td className="border px-4 py-2">{s.totalLectures}</td>
+                  <td className="border px-4 py-2 text-green-600">
+                    {s.present}
+                  </td>
+                  <td className="border px-4 py-2 text-red-600">{s.absent}</td>
+                  <td className="border px-4 py-2 font-bold">
+                    {s.percentage}%
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {/* 👨‍🏫 Faculty-wise Summary */}
+      {/* {facultyStats.length > 0 && (
+        <div className="mt-8 p-4 bg-white rounded-xl shadow-lg">
+          <h2 className="text-xl font-bold mb-4 text-purple-700">
+            👨‍🏫 Faculty-wise Attendance
+          </h2>
+          <table className="w-full border border-gray-300">
+            <thead className="bg-purple-100">
+              <tr>
+                <th className="border px-4 py-2">Faculty ID</th>
+                <th className="border px-4 py-2">Total Lectures</th>
+                <th className="border px-4 py-2">Present</th>
+                <th className="border px-4 py-2">Absent</th>
+                <th className="border px-4 py-2">Attendance %</th>
+              </tr>
+            </thead>
+            <tbody>
+              {facultyStats.map((f) => (
+                <tr key={f.faculty} className="hover:bg-gray-50">
+                  <td className="border px-4 py-2 font-semibold">
+                    {f.faculty}
+                  </td>
+                  <td className="border px-4 py-2">{f.total}</td>
+                  <td className="border px-4 py-2 text-green-600">
+                    {f.present}
+                  </td>
+                  <td className="border px-4 py-2 text-red-600">{f.absent}</td>
+                  <td className="border px-4 py-2 font-bold">
+                    {f.percentage}%
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )} */}
       {/* Detailed Records Table */}
       {students.length > 0 && (
         <div className="overflow-x-auto mt-6 shadow-lg rounded-xl bg-white">
