@@ -7,20 +7,19 @@ const DisplyApplicationFaculty = ({ Subjects }) => {
   const [loading, setLoading] = useState(true);
 
   const studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
-  const subjects = studentInfo.subject;
+  const subjects = studentInfo.subject || []; // ✅ assume it's an array
 
   // ✅ Fetch Applications
-
   const fetchApplications = async () => {
     try {
       const response = await axios.get(
         "http://localhost:7070/api/DisplayApplication-s"
       );
-      // setApplications(response.data);
       const allApplications = response.data;
 
-      const filtered = allApplications.filter(
-        (app) => app.Subject === subjects
+      // ✅ Filter applications where the subject is in the teacher's subjects array
+      const filtered = allApplications.filter((app) =>
+        subjects.includes(app.Subject)
       );
 
       setApplications(allApplications);
@@ -31,6 +30,7 @@ const DisplyApplicationFaculty = ({ Subjects }) => {
       setLoading(false);
     }
   };
+
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
@@ -40,7 +40,6 @@ const DisplyApplicationFaculty = ({ Subjects }) => {
     return `${day}-${month}-${year}`;
   };
 
-  // ✅ Approve Application (send full data)
   const handleApprove = async (app) => {
     try {
       const response = await axios.put(
@@ -53,14 +52,13 @@ const DisplyApplicationFaculty = ({ Subjects }) => {
       );
 
       alert(response.data.message || "Application approved successfully!");
-      fetchApplications(); // Refresh after update
+      fetchApplications();
     } catch (error) {
       console.error("Error approving application:", error);
       alert("Failed to approve application. Please try again.");
     }
   };
 
-  // ✅ Reject Application
   const handleReject = async (ApplicationId) => {
     try {
       const response = await axios.put(
@@ -74,12 +72,10 @@ const DisplyApplicationFaculty = ({ Subjects }) => {
     }
   };
 
-  // ✅ Fetch data on component mount or when Subjects changes
   useEffect(() => {
     fetchApplications();
   }, [Subjects]);
 
-  // ✅ Loading State
   if (loading) {
     return <p className="text-center text-lg">Loading applications...</p>;
   }
@@ -90,10 +86,10 @@ const DisplyApplicationFaculty = ({ Subjects }) => {
         Application Information
       </h1>
 
-      {applications.length === 0 ? (
+      {filteredApplications.length === 0 ? (
         <p className="text-center text-gray-500 text-lg">
           No applications found for{" "}
-          <span className="font-semibold">{Subjects}</span>.
+          <span className="font-semibold">{subjects.join(", ")}</span>.
         </p>
       ) : (
         <div className="overflow-x-auto shadow-lg rounded-lg bg-white">
@@ -103,14 +99,10 @@ const DisplyApplicationFaculty = ({ Subjects }) => {
                 <th className="px-2 py-2">ApplicationId</th>
                 <th className="px-2 py-2">Roll No</th>
                 <th className="px-1 py-2">First Name</th>
-                {/* <th className="px-1 py-2">Middle Name</th> */}
                 <th className="px-1 py-2">Last Name</th>
-                {/* <th className="px-2 py-2">Batch</th> */}
                 <th className="px-2 py-2">Class</th>
                 <th className="px-2 py-2">Semester</th>
                 <th className="px-2 py-2">Division</th>
-                {/* <th className="px-2 py-2">Email</th>
-                <th className="px-2 py-2">Contact</th> */}
                 <th className="px-2 py-2">Subject</th>
                 <th className="px-2 py-2">Reason</th>
                 <th className="px-2 py-2">Date</th>
@@ -120,7 +112,7 @@ const DisplyApplicationFaculty = ({ Subjects }) => {
               </tr>
             </thead>
             <tbody>
-              {applications.map((app, index) => (
+              {filteredApplications.map((app, index) => (
                 <tr
                   key={index}
                   className="hover:bg-gray-100 text-center border-b border-gray-200"
@@ -128,18 +120,13 @@ const DisplyApplicationFaculty = ({ Subjects }) => {
                   <td className="px-2 py-2">{app.ApplicationId}</td>
                   <td className="px-2 py-2">{app.rollNo_id}</td>
                   <td className="px-1 py-2">{app.fName}</td>
-                  {/* <td className="px-1 py-2">{app.mName}</td> */}
                   <td className="px-1 py-2">{app.lName}</td>
-                  {/* <td className="px-2 py-2">{app.batch}</td> */}
                   <td className="px-2 py-2">{app.Class}</td>
                   <td className="px-2 py-2">{app.semester}</td>
                   <td className="px-2 py-2">{app.div}</td>
-                  {/* <td className="px-2 py-2">{app.email}</td>
-                  <td className="px-2 py-2">{app.contact}</td> */}
                   <td className="px-2 py-2">{app.Subject}</td>
                   <td className="px-2 py-2">{app.reason}</td>
                   <td className="px-2 py-2">{formatDate(app.date)}</td>
-
                   <td className="px-2 py-2">{app.Time}</td>
                   <td className="px-2 py-2">
                     <span
@@ -157,13 +144,12 @@ const DisplyApplicationFaculty = ({ Subjects }) => {
                   <td className="px-2 py-2">
                     <div className="flex justify-center">
                       <button
-                        onClick={() => handleApprove(app)} // ✅ pass full object
+                        onClick={() => handleApprove(app)}
                         className="bg-green-500 hover:bg-green-600 text-white px-1 py-1 rounded mr-1"
                         disabled={app.Status === "Accept"}
                       >
                         Approve
                       </button>
-
                       <button
                         onClick={() => handleReject(app.ApplicationId)}
                         className="bg-red-500 hover:bg-red-600 text-white px-1 py-1 rounded"

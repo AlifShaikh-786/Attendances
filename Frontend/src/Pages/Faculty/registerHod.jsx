@@ -203,7 +203,7 @@ export default function FacultyRegistrationss() {
               type="text"
               placeholder="Add Subject"
               value={subjectInput}
-              required
+              // required
               onChange={(e) => setSubjectInput(e.target.value)}
               className="border border-gray-300 rounded px-3 py-2 flex-1"
             />
