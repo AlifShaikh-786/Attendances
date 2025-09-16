@@ -16,67 +16,84 @@ const PersonalInfoFaculty = () => {
   const lname = studentInfo?.lName || "";
   const department = studentInfo?.department || "N/A";
   const subject = studentInfo?.subject || "N/A";
-  // const div = studentInfo?.div || "N/A";
-  // const batch = studentInfo?.batch || "N/A";
   const email = studentInfo?.email || "Not provided";
   const contact = studentInfo?.contact || "Not provided";
 
-  // Join name parts safely
-  const fullName = [fname, mName, lname].filter(Boolean).join(" ");
+  const fullName = [fname, mName, lname].filter(Boolean).join(" ") || "N/A";
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      {/* Gradient Card */}
-      <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl shadow-xl p-1">
-        <div className="bg-white rounded-2xl p-6">
-          {/* Title */}
-          <h1 className="text-2xl font-bold text-indigo-600 mb-6 text-center">
-            🎓 Student Personal Information
-          </h1>
+    <div className="flex items-center justify-center min-h-screen  p-4">
+      <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl border border-gray-200 p-8 hover:shadow-2xl transition-shadow duration-300">
+        <h2 className="text-3xl font-extrabold text-center text-gradient bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent mb-8 animate-pulse">
+          🎓 Faculty Information
+        </h2>
 
-          {/* Info Grid */}
-          <div className="grid grid-cols-2 gap-4 text-gray-700">
-            <div className="p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">
-              <p className="text-sm text-gray-500">Roll No</p>
-              <p className="font-semibold">{facultyId_id}</p>
+        <div className="space-y-6 text-gray-700">
+          {/* Faculty ID */}
+          <div className="flex flex-col">
+            <span className=" uppercase font-bold tracking-wide">
+              Faculty ID
+            </span>
+            <span className="text-lg text-gray-800">{facultyId_id}</span>
+          </div>
+
+          {/* Name */}
+          <div className="flex flex-col">
+            <span className="text-sm font-bold   uppercase tracking-wide">
+              Name
+            </span>
+            <span className=" text-lg text-gray-800">{fullName}</span>
+          </div>
+
+          {/* Department */}
+          <div className="flex flex-col">
+            <span className="text-sm font-bold  uppercase tracking-wide">
+              Department
+            </span>
+            <span className=" text-lg text-gray-800">{department}</span>
+          </div>
+
+          {/* Subject */}
+          <div className="flex flex-wrap gap-2 flex-col ">
+            <div className="flex flex-col">
+              <span className="text-sm font-bold  uppercase tracking-wide">
+                Subjects
+              </span>
             </div>
-
-            <div className="p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition">
-              <p className="text-sm text-gray-500">Name</p>
-              <p className="font-semibold">{fullName || "N/A"}</p>
-            </div>
-
-            <div className="p-3 bg-green-50 rounded-lg hover:bg-green-100 transition">
-              <p className="text-sm text-gray-500">Class</p>
-              <p className="font-semibold">{department}</p>
-            </div>
-
-            <div className="p-3 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">
-              <p className="text-sm text-gray-500">Semester</p>
-              <p className="font-semibold">{subject}</p>
-            </div>
-
-            {/* <div className="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">
-              <p className="text-sm text-gray-500">Division</p>
-              <p className="font-semibold">{div}</p>
-            </div>
-
-            <div className="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">
-              <p className="text-sm text-gray-500">Batch</p>
-              <p className="font-semibold">{batch}</p>
-            </div> */}
-
-            <div className="p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition col-span-2">
-              <p className="text-sm text-gray-500">Email</p>
-              <p className="font-semibold break-words">{email}</p>
-            </div>
-
-            <div className="p-3 bg-teal-50 rounded-lg hover:bg-teal-100 transition col-span-2">
-              <p className="text-sm text-gray-500">Contact</p>
-              <p className="font-semibold">{contact}</p>
+            <div className="flex flex-wrap gap-2  ">
+              {subject.map((sub, index) => (
+                <span
+                  key={index}
+                  className="px-3 py-1  text-black rounded-full text-sm"
+                >
+                  {sub}
+                </span>
+              ))}
             </div>
           </div>
+
+          {/* Email */}
+          <div className="flex flex-col">
+            <span className="text-sm font-bold  uppercase tracking-wide">
+              Email
+            </span>
+            <span className=" text-lg text-gray-800 break-words">{email}</span>
+          </div>
+
+          {/* Contact */}
+          <div className="flex flex-col">
+            <span className="text-sm font-bold  uppercase tracking-wide">
+              Contact
+            </span>
+            <span className=" text-lg text-gray-800">{contact}</span>
+          </div>
         </div>
+
+        {/* <div className="mt-8  flex justify-center">
+          <button className="px-6 py-2 font-bold bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full hover:from-indigo-600 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg">
+            Contact Faculty
+          </button>
+        </div> */}
       </div>
     </div>
   );

@@ -52,12 +52,12 @@ const Application = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex justify-center items-start py-10 px-4">
+    <div className="min-h-screen flex justify-center items-start py-10 px-4 ">
       <form
         className="w-full max-w-xl bg-white p-8 rounded-2xl shadow-xl space-y-6"
         onSubmit={handleSubmit}
       >
-        <h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
+        <h1 className="text-3xl font-bold text-purple-950 text-center mb-6">
           College Attendance Letter Form
         </h1>
 
@@ -71,7 +71,7 @@ const Application = () => {
               placeholder="First Name"
               value={formData.fName}
               onChange={handleChange}
-              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
               required
             />
           </div>
@@ -86,7 +86,7 @@ const Application = () => {
               placeholder="Middle Name"
               value={formData.mName}
               onChange={handleChange}
-              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
             />
           </div>
 
@@ -98,14 +98,13 @@ const Application = () => {
               placeholder="Last Name"
               value={formData.lName}
               onChange={handleChange}
-              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
               required
             />
           </div>
         </div>
 
-        {/* Roll No  and Batch*/}
-
+        {/* Roll No and Batch */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex flex-col">
             <label className="mb-1 text-gray-600 font-medium">
@@ -117,7 +116,7 @@ const Application = () => {
               placeholder="Roll Number"
               value={formData.rollNo_id}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
               required
             />
           </div>
@@ -130,11 +129,12 @@ const Application = () => {
               placeholder="Batch"
               value={formData.batch}
               onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
               required
             />
           </div>
         </div>
+
         {/* Class, Semester, Division */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex flex-col">
@@ -145,7 +145,7 @@ const Application = () => {
               placeholder="Class"
               value={formData.Class}
               onChange={handleChange}
-              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
               required
             />
           </div>
@@ -158,7 +158,7 @@ const Application = () => {
               placeholder="Semester"
               value={formData.semester}
               onChange={handleChange}
-              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
               required
             />
           </div>
@@ -171,7 +171,7 @@ const Application = () => {
               placeholder="Division"
               value={formData.div}
               onChange={handleChange}
-              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
               required
             />
           </div>
@@ -187,7 +187,7 @@ const Application = () => {
               placeholder="Email"
               value={formData.email}
               onChange={handleChange}
-              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
               required
             />
           </div>
@@ -200,7 +200,7 @@ const Application = () => {
               placeholder="Contact Number"
               value={formData.contact}
               onChange={handleChange}
-              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
               required
             />
           </div>
@@ -215,7 +215,7 @@ const Application = () => {
             placeholder="Enter Subject"
             value={formData.Subject}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
             required
           />
         </div>
@@ -229,7 +229,7 @@ const Application = () => {
               name="date"
               value={formData.date}
               onChange={handleChange}
-              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
               required
             />
           </div>
@@ -241,7 +241,7 @@ const Application = () => {
               name="Time"
               value={formData.Time}
               onChange={handleChange}
-              className="px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
               required
             />
           </div>
@@ -257,14 +257,14 @@ const Application = () => {
             placeholder="Reason for attendance"
             value={formData.reason}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
             rows="4"
           ></textarea>
         </div>
 
         <button
           type="submit"
-          className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+          className="w-full py-3 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition"
         >
           Submit
         </button>

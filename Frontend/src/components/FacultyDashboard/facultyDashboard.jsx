@@ -101,6 +101,11 @@ import Register from "../../Pages/Student/Register";
 import StudentAttendance from "../../Pages/studentAttendance/StudentAttendance";
 import StdAttendance from "../../Pages/studentAttendance/stdAttendance";
 import Report from "../../Pages/Report/report";
+import AttendanceForm from "../../Pages/Reports/ReportsFaculty";
+import PersonalInfoFaculty from "../../Pages/Faculty/PersonalInfoFaculty";
+import DisplyApplicationFaculty from "../../Pages/Application/DisplyApplicationFaculty";
+// import DisplyApplicationFaculty from "../../Pages/Application/DisplyApplicationStd";
+// import AttendanceForm from "../../Pages/Reports/ReportsHOD";
 
 const FacultyDashboard = () => {
   const [activeSection, setActiveSection] = useState("welcome");
@@ -112,6 +117,10 @@ const FacultyDashboard = () => {
       content:
         "Select an option from the menu to manage attendance, view reports, or update your profile.",
     },
+    PersonalInfoFaculty: {
+      title: "Personal Information",
+      component: <PersonalInfoFaculty />,
+    },
     addStudent: { title: "Add Student", component: <Register /> },
     // addTeacher: { title: "Add Teacher", component: <Register1 /> },
     manualAttendance: {
@@ -122,7 +131,13 @@ const FacultyDashboard = () => {
       title: "Digital Attendance",
       component: <StdAttendance />,
     },
-    Reports: { title: "Reports/Records", component: <Report /> },
+    // Reports: { title: "Reports/Records", component: <Report /> },
+
+    Reportsst: { title: "Reports", component: <AttendanceForm /> },
+    Application: {
+      title: "Application",
+      component: <DisplyApplicationFaculty />,
+    },
   };
 
   const handleLogout = () => {
@@ -220,7 +235,7 @@ const FacultyDashboard = () => {
       </aside>
 
       {/* 📝 Main Content */}
-      <main className="flex-1 p-6 md:p-10 bg-white bg-opacity-80 backdrop-blur-md shadow-2xl flex flex-col overflow-auto mt-[64px] md:mt-0 md:ml-64">
+      <main className="flex-1 p-6 md:p-10 bg-gray-300 shadow-2xl flex flex-col overflow-auto mt-[64px] md:mt-0 md:ml-64">
         <h1 className="text-3xl md:text-4xl font-extrabold mb-6 text-blue-400 drop-shadow-lg">
           {sections[activeSection]?.title}
         </h1>

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Report from "../../Pages/Report/studentAttendanceReport";
 import Application from "../../Pages/Application/application";
 import Navbar from "../Navbar/navbar";
+import DisplyApplicationStd from "../../Pages/Application/DisplyApplicationStd";
+import PersonalInfoStd from "../../Pages/Student/PersonalInfo";
+import EditProfile from "../../Pages/Student/EditProfile";
 
 const StudentDashboard = () => {
   const [activeSection, setActiveSection] = useState("welcome");
@@ -13,6 +16,14 @@ const StudentDashboard = () => {
       content:
         "Select an option from the menu to manage attendance, view reports, or update your profile.",
     },
+    PersonalInfoFaculty: {
+      title: "Personal Information",
+      component: <PersonalInfoStd />,
+    },
+    EditPersonalInfoFaculty: {
+      title: "Edit Information",
+      component: <EditProfile />,
+    },
     Reports: {
       title: "Reports/Records",
       component: <Report />,
@@ -20,6 +31,10 @@ const StudentDashboard = () => {
     application: {
       title: "Application",
       component: <Application />,
+    },
+    DisplyApplication: {
+      title: "Application Status",
+      component: <DisplyApplicationStd />,
     },
   };
 
@@ -31,7 +46,7 @@ const StudentDashboard = () => {
   return (
     <>
       {/* <Navbar /> */}
-      <div className="flex min-h-screen bg-gray-900 text-black">
+      <div className="flex min-h-screen bg-gray-800 text-black">
         {/* 📱 Mobile Top Bar */}
         <div className="md:hidden fixed top-0 left-0 w-full z-50 p-4 bg-gray-800 text-white flex justify-between items-center">
           <h2 className="text-xl font-bold">Dashboard Menu</h2>
@@ -60,7 +75,7 @@ const StudentDashboard = () => {
           </div>
 
           {/* Drawer Menu */}
-          <nav className="flex flex-col gap-3 p-4">
+          <nav className="flex flex-col gap-3 p-4 ">
             {Object.entries(sections).map(([key, section]) => (
               <button
                 key={key}
@@ -120,8 +135,8 @@ const StudentDashboard = () => {
         </aside>
 
         {/* 📝 Main Content */}
-        <main className="flex-1 p-6 md:p-10 bg-white bg-opacity-80 backdrop-blur-md shadow-2xl flex flex-col overflow-auto mt-[64px] md:mt-0 md:ml-64">
-          <h1 className="text-3xl md:text-4xl font-extrabold mb-6 text-blue-400 drop-shadow-lg">
+        <main className="flex-1 p-6 md:p-10 bg-gray-300  shadow-2xl flex flex-col overflow-auto mt-[64px] md:mt-0 md:ml-64">
+          <h1 className="text-3xl md:text-4x  font-extrabold mb-6 text-blue-400 drop-shadow-lg">
             {sections[activeSection]?.title}
           </h1>
           <div className="text-base md:text-lg leading-relaxed">

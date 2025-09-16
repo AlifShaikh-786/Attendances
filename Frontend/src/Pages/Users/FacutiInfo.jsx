@@ -280,19 +280,21 @@ const FacultyInfo = () => {
                         </button>
                       </div>
                     ) : (
-                      <button
-                        onClick={() => handleEdit(member)}
-                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
-                      >
-                        Edit
-                      </button>
+                      <div className="flex ">
+                        <button
+                          onClick={() => handleEdit(member)}
+                          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(member.facultyId_id)}
+                          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 ml-2"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     )}
-                    <button
-                      onClick={() => handleDelete(member.facultyId_id)}
-                      className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 ml-2"
-                    >
-                      Delete
-                    </button>
                   </td>
                 </tr>
               ))

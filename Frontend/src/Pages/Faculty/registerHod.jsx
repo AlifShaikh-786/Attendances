@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
 
-export default function FacultyRegistration() {
+export default function FacultyRegistrationss() {
   const formRef = useRef(null);
 
   const [formData, setFormData] = useState({
@@ -194,7 +194,7 @@ export default function FacultyRegistration() {
               <option value="">Select Role</option>
               {/* <option value="admin">Admin</option> */}
               <option value="faculty">Faculty</option>
-              <option value="hod">HOD</option>
+              {/* <option value="hod">HOD</option> */}
             </select>
           </div>
 
@@ -203,6 +203,7 @@ export default function FacultyRegistration() {
               type="text"
               placeholder="Add Subject"
               value={subjectInput}
+              required
               onChange={(e) => setSubjectInput(e.target.value)}
               className="border border-gray-300 rounded px-3 py-2 flex-1"
             />

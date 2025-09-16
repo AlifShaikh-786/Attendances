@@ -485,9 +485,14 @@ const EditProfile = () => {
 
     alert("✅ All angles captured successfully!");
   };
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    const imageUrls = files.map((file) => URL.createObjectURL(file));
+    setFormData({ ...formData, image: imageUrls });
+  };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
+    <div className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg ">
       <h2 className="text-2xl font-bold text-center mb-6">Edit Profile</h2>
 
       {message && (
@@ -647,7 +652,7 @@ const EditProfile = () => {
         <div className="text-center mt-6">
           <video
             ref={videoRef}
-            width="420"
+            width="525"
             height="440"
             autoPlay
             muted
@@ -740,24 +745,40 @@ const EditProfile = () => {
         {/* ================ */}
         {/* Previously saved images */}
         <div className="mt-4">
-          <h3 className="font-semibold text-gray-700 mb-2">Saved Images</h3>
-          <div className="flex flex-wrap gap-3">
-            {formData.image?.map((img, idx) => (
-              <div key={idx} className="relative">
-                <img
-                  src={img}
-                  alt={`saved-${idx}`}
-                  className="w-20 h-20 rounded-xl border-2 border-gray-400 shadow-md"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleDeleteImage(idx)}
-                  className="absolute top-0 right-0 bg-red-500 text-white px-1 rounded-full text-xs"
-                >
-                  ✕
-                </button>
-              </div>
-            ))}
+          <h3 className="font-semibold text-gray-700 mb-2 text-center text-lg">
+            Saved Images
+          </h3>
+          <div className="flex flex-wrap gap-3 justify-center border border-gray-300 p-3 bg-gray-50 rounded-lg shadow-sm">
+            {formData.image && formData.image.length > 0 ? (
+              formData.image.map((img, idx) => {
+                // Determine image source
+                const src =
+                  img.startsWith("http") || img.startsWith("data:")
+                    ? img
+                    : `http://localhost:7070/uploads/${img}`;
+
+                return (
+                  <div key={idx} className="relative group">
+                    <img
+                      src={src}
+                      alt={`saved-${idx}`}
+                      className="w-24 h-24 rounded-xl border-2 border-indigo-300 shadow-md object-cover hover:scale-105 transition-transform duration-300"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteImage(idx)}
+                      className="absolute top-1 right-1 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                );
+              })
+            ) : (
+              <p className="text-gray-500 text-center w-full">
+                No images to display
+              </p>
+            )}
           </div>
         </div>
 

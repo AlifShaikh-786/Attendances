@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar/navbar";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -68,19 +69,26 @@ const ForgotPassword = () => {
   }, [timer]);
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-purple-400">
+      <Navbar />
       <div className="w-full max-w-md bg-white shadow-xl rounded-xl p-6">
         <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">
           {step === "email" ? "Forgot Password" : "Reset Password"}
         </h2>
 
         {/* Email Input */}
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-1">Email</label>
+        <div className="mb-4 ">
+          <div className="flex flex-row">
+            <label className="block text-gray-700 font-medium mb-1">
+              Email{" "}
+            </label>
+            <span className="text-red-600 pl-1"> *</span>
+          </div>
+
           <input
             type="email"
             name="email"
-            placeholder="Enter your email"
+            placeholder="Enter email"
             value={form.email}
             onChange={handleChange}
             disabled={step === "reset"}
@@ -161,10 +169,10 @@ const ForgotPassword = () => {
 
         {/* Back to Login */}
         <button
-          onClick={() => navigate("/logins")}
+          onClick={() => navigate("/")}
           className="w-full mt-4 text-blue-500 hover:underline text-sm"
         >
-          Back to Login
+          Back
         </button>
       </div>
     </div>

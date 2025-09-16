@@ -40,6 +40,10 @@ const AttendanceSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  Times: {
+    type: String,
+    required: true,
+  },
   Subject: {
     type: String,
     required: true,

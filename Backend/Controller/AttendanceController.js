@@ -108,12 +108,14 @@ export const AttendanceReport = async (req, res) => {
       batch,
       facultyId_id,
       status,
+      department,
     } = req.body;
 
     let query = {};
     if (facultyId_id && facultyId_id.trim() !== "")
       query.facultyId_id = facultyId_id;
     if (batch && batch.trim() !== "") query.batch = batch;
+    if (department && department.trim() !== "") query.department = department;
     if (Class && Class.trim() !== "") query.Class = Class;
     if (semester && semester.trim() !== "") query.semester = semester;
     if (div && div.trim() !== "") query.div = div;
@@ -180,7 +182,6 @@ export const UpdateAttendances = async (req, res) => {
 //       .json({ msg: "Internal server error", error: error.message });
 //   }
 // };
-
 
 export const AttendanceReports = async (req, res) => {
   try {

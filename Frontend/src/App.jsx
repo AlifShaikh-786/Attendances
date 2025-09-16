@@ -28,6 +28,10 @@ import StudentInfo from "./Pages/Users/StudentInfo";
 import FacultyInfo from "./Pages/Users/FacutiInfo";
 import ForgotPassword from "./Pages/Users/ForgotPassword";
 import DisplyApplication from "./Pages/Application/DisplyApplication";
+import HodDashBoard from "./components/HodDashBoard/HodDashBoard";
+import DisplyApplicationStd from "./Pages/Application/DisplyApplicationStd";
+import DisplyApplicationFaculty from "./Pages/Application/DisplyApplicationFaculty";
+import FacultyRegistrationss from "./Pages/Faculty/registerHod";
 
 // import AttendanceForms from "./Pages/Report/report";
 // import StudentAttendance from "./Pages/Report/StudentAttendance";
@@ -54,6 +58,7 @@ function App() {
       <Route path="/studentLogin" element={<StudentLogin />} />
       <Route path="/adminDashboard" element={<AdminDashboard />} />
       <Route path="/facultyDashboard" element={<FacultyDashboard />} />
+      <Route path="/HodDashBoard" element={<HodDashBoard />} />
       <Route path="/studentDashboard" element={<StudentDashboard />} />
       <Route path="/Register-s" element={<Register />} />
       <Route path="/stdAttendance-s" element={<StdAttendance />} />
@@ -72,6 +77,9 @@ function App() {
       <Route path="/FacultyInfo-s" element={<FacultyInfo />} />
       <Route path="/ForgotPassword-s" element={<ForgotPassword />} />
       <Route path="/DisplyApplication-s" element={<DisplyApplication />} />
+      <Route path="/DisplyApplicationStd-s" element={<DisplyApplicationStd />} />
+      <Route path="/DisplyApplicationFaculty-s" element={<DisplyApplicationFaculty />} />
+      <Route path="/FacultyRegistrationss-s" element={<FacultyRegistrationss />} />
 
       {/* Catch-all 404 route */}
       <Route path="*" element={<ErrorPage />} />

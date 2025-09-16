@@ -1,17 +1,30 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const DisplyApplication = ({ Subjects }) => {
+const DisplyApplicationFaculty = ({ Subjects }) => {
   const [applications, setApplications] = useState([]);
+  const [filteredApplications, setFilteredApplications] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
+  const subjects = studentInfo.subject;
+
   // ✅ Fetch Applications
+
   const fetchApplications = async () => {
     try {
       const response = await axios.get(
         "http://localhost:7070/api/DisplayApplication-s"
       );
-      setApplications(response.data);
+      // setApplications(response.data);
+      const allApplications = response.data;
+
+      const filtered = allApplications.filter(
+        (app) => app.Subject === subjects
+      );
+
+      setApplications(allApplications);
+      setFilteredApplications(filtered);
     } catch (error) {
       console.error("Error fetching applications:", error);
     } finally {
@@ -170,4 +183,4 @@ const DisplyApplication = ({ Subjects }) => {
   );
 };
 
-export default DisplyApplication;
+export default DisplyApplicationFaculty;

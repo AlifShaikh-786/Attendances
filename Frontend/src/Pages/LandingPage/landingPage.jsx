@@ -357,6 +357,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import Navbar from "../../components/Navbar/navbar";
 import Footer from "../../components/Footer/footer";
+import StudentLogin from "../Login/studentLogin";
 
 const LandingPage = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -382,6 +383,16 @@ const LandingPage = () => {
     };
   }, []);
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const uploads = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
   // Navigate and close dropdown
   const onNavigate = (path) => {
     setDropdownOpen(false);
@@ -398,11 +409,11 @@ const LandingPage = () => {
   `;
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-purple-900 via-indigo-800 to-blue-900 text-white">
+    <div className="relative min-h-screen overflow-hidden bg-purple-400 text-white">
       {/* Background Floating Circles */}
-      <div className="absolute -z-10 top-10 left-10 w-40 h-40 bg-pink-400 rounded-full opacity-40 blur-2xl animate-floatSlow" />
-      <div className="absolute -z-10 top-1/2 right-20 w-60 h-60 bg-purple-500 rounded-full opacity-30 blur-2xl animate-floatFast" />
-      <div className="absolute -z-10 bottom-10 left-1/3 w-52 h-52 bg-blue-500 rounded-full opacity-30 blur-2xl animate-floatSlow delay-2000" />
+      <div className="absolute -z-10 top-10 left-10 w-40 h-40 bg-purple-400 rounded-full opacity-40 blur-2xl animate-floatSlow" />
+      <div className="absolute -z-10 top-1/2 right-20 w-60 h-60 bg-purple-400 rounded-full opacity-30 blur-2xl animate-floatFast" />
+      <div className="absolute -z-10 bottom-10 left-1/3 w-52 h-52 bg-purple-400 rounded-full opacity-30 blur-2xl animate-floatSlow delay-2000" />
 
       {/* Navbar */}
       <Navbar />
@@ -410,39 +421,56 @@ const LandingPage = () => {
       {/* Hero Section */}
       <div
         className="relative z-10 flex flex-col md:flex-row items-center justify-between px-6 md:px-16 
-                pt-40 md:pt-48 pb-32 gap-10"
+                pt-40 md:pt-48 pb-32 gap-10 bg-purple-400"
       >
         {/* Left Content */}
         <div className="md:w-1/2 w-full text-center md:text-left space-y-8">
-          <h1 className="text-2xl md:text-3xl lg:text-6xl font-extrabold leading-tight drop-shadow-lg break-words">
-            Welcome to{" "}
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              AI Powered
-            </span>
-            <br />
-            Attendance Management System
-          </h1>
-
-          <p className="text-lg md:text-xl text-gray-200 max-w-xl mx-auto md:mx-0">
-            A modern, secure and smart way to manage student attendance with
-            face recognition and automated reports.
-          </p>
+          <div className="text-black pt-7 gap-2">
+            <div className="">
+              <h1 className="flex pb-2 justify-center text-lg md:text-3xl lg:text-5xl font-extrabold pb-1 leading-tight drop-shadow-lg break-words ">
+                Welcome to {"  "}
+                <span className="bg-gradient-to-r pl-2 pr-2  from-blue-600 via-purple-500 to-pink-400 bg-clip-text text-transparent">
+                  {" "}
+                  AI
+                </span>
+                <span className="bg-gradient-to-r from-blue-600 via-purple5400 to-pink-400 bg-clip-text text-transparent">
+                  {" "}
+                  Powered
+                </span>
+                <br />
+              </h1>
+            </div>
+            <div className="flex flex-col justify-center">
+              <h1 className="flex pt-2  justify-center text-lg md:text-3xl lg:text-5xl font-extrabold leading-tight drop-shadow-lg break-words ">
+                Attendance Management
+              </h1>
+              <h1 className="flex justify-center pt-2 text-lg md:text-3xl lg:text-5xl font-extrabold leading-tight drop-shadow-lg break-words ">
+                System
+              </h1>
+            </div>
+          </div>
+          <div className="flex flex-col justify-center pl-16">
+            <p className="flex flex-col justify-center items-center pt-5  text-lg md:text-xl text-gray-200 max-w-xl mx-auto md:mx-0">
+              A modern, secure and smart way to manage student attendance{" "}
+              <span>with face recognition and automated reports.</span>
+            </p>
+          </div>
 
           {/* Buttons Section */}
           <div
-            className="flex flex-col md:flex-row gap-4 md:gap-6 justify-center md:justify-start relative"
+            className="flex flex-col pl-32 pt-5 md:flex-row gap-4 md:gap-6 justify-center md:justify-start relative"
             ref={dropdownRef}
           >
             {/* Get Started Button with Dropdown */}
             <button
-              onClick={() => setDropdownOpen((open) => !open)}
+              onClick={uploads}
               aria-haspopup="true"
               aria-expanded={dropdownOpen}
               aria-controls="signin-menu"
               className={buttonClasses + " flex items-center gap-2"}
             >
               Get Started
-              <svg
+              {/* <svg
                 className={`h-5 w-5 transform transition-transform duration-300 ${
                   dropdownOpen ? "rotate-180" : ""
                 }`}
@@ -457,11 +485,31 @@ const LandingPage = () => {
                   strokeWidth={2}
                   d="M19 9l-7 7-7-7"
                 />
-              </svg>
+              </svg> */}
             </button>
+            {/* Modal for Student Login */}
+            {isOpen && (
+              <div
+                className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 overflow-auto"
+                onClick={closeModal}
+              >
+                <div
+                  className=" rounded-xl max-w-96 h-md w-full p-6 relative "
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    onClick={closeModal}
+                    className="absolute top-3 right-3 mt-52 text-black hover:text-gray-700 text-xl font-bold"
+                  >
+                    ✕
+                  </button>
+                  <StudentLogin />
+                </div>
+              </div>
+            )}
 
             {/* Dropdown Menu */}
-            {dropdownOpen && (
+            {/* {dropdownOpen && (
               <div
                 id="signin-menu"
                 role="menu"
@@ -476,7 +524,7 @@ const LandingPage = () => {
                   Log In
                 </button>
               </div>
-            )}
+            )} */}
 
             {/* Learn More Button */}
             <Link to="/learnMore" className={buttonClasses}>

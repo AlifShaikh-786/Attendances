@@ -23,7 +23,6 @@ export const facultyRagistration = async (req, res) => {
       subject,
       role,
 
-      faceDescriptor,
       email,
       contact,
       password,
@@ -39,7 +38,6 @@ export const facultyRagistration = async (req, res) => {
       subject,
       role,
 
-      faceDescriptor,
       email,
       contact,
       password,
@@ -47,12 +45,12 @@ export const facultyRagistration = async (req, res) => {
 
     await newStudent.save();
 
-    res.json({ message: "✅ Student registered successfully" });
+    res.json({ message: "✅ Faculty registered successfully" });
   } catch (error) {
     console.error("Save error:", error);
     res
       .status(500)
-      .json({ message: "❌ Error saving student", error: error.message });
+      .json({ message: "❌ Error saving Faculty", error: error.message });
   }
 };
 
@@ -285,6 +283,7 @@ export const StdDisplay = async (req, res) => {
         rollNo_id: 1,
         div: 1,
         image: 1,
+        department: 1,
         faceDescriptor: 1,
       }
     ).lean();
@@ -314,6 +313,7 @@ export const StdDisplay = async (req, res) => {
         fName: student.fName,
         mName: student.mName,
         lName: student.lName,
+        department: student.department,
         div: student.div,
         rollNo_id: student.rollNo_id,
         image: student.image || [],

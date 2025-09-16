@@ -940,10 +940,11 @@
 //   );
 // }
 
-
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import * as faceapi from "@vladmandic/face-api";
+import { useNavigate } from "react-router-dom";
+import ExcelUploadPage from "../ExcelUpload/ExcelUploadPage";
 
 const EditProfile = () => {
   const [formData, setFormData] = useState({
@@ -967,6 +968,15 @@ const EditProfile = () => {
   const [capturedImages, setCapturedImages] = useState([]); // mirrors formData.image for preview UX
   const [modelsLoaded, setModelsLoaded] = useState(false);
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const uploads = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const streamRef = useRef(null);
@@ -1219,63 +1229,333 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
-      <h2 className="text-2xl font-bold text-center mb-6">Edit Profile</h2>
+    // <div className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-lg">
+    //   <h2 className="text-2xl font-bold text-center mb-6">Edit Profile</h2>
+
+    //   {message && (
+    //     <p className="text-center text-green-600 font-semibold mb-4">
+    //       {message}
+    //     </p>
+    //   )}
+
+    //   <form onSubmit={handleSubmit} className="space-y-4">
+    //     {/* Roll No */}
+    //     <div>
+    //       <label className="block text-gray-700 font-medium">Roll No:</label>
+    //       <input
+    //         type="text"
+    //         name="rollNo_id"
+    //         value={formData.rollNo_id}
+    //         onChange={handleChange}
+    //         className="w-full px-4 py-2 border rounded-lg"
+    //         required
+    //       />
+    //     </div>
+
+    //     {/* Batch */}
+    //     <div>
+    //       <label className="block text-gray-700 font-medium">Batch:</label>
+    //       <input
+    //         type="text"
+    //         name="batch"
+    //         value={formData.batch}
+    //         onChange={handleChange}
+    //         className="w-full px-4 py-2 border rounded-lg"
+    //         required
+    //       />
+    //     </div>
+
+    //     {/* Department */}
+    //     <div>
+    //       <label className="block text-gray-700 font-medium">Department:</label>
+    //       <input
+    //         type="text"
+    //         name="department"
+    //         value={formData.department}
+    //         onChange={handleChange}
+    //         className="w-full px-4 py-2 border rounded-lg"
+    //         required
+    //       />
+    //     </div>
+
+    //     {/* Class */}
+    //     <div>
+    //       <label className="block text-gray-700 font-medium">Class:</label>
+    //       <select
+    //         name="Class"
+    //         value={formData.Class}
+    //         onChange={handleChange}
+    //         className="w-full px-4 py-2 border rounded-lg"
+    //         required
+    //       >
+    //         <option value="">Select Class</option>
+    //         <option value="MCA-I">MCA-I</option>
+    //         <option value="MCA-II">MCA-II</option>
+    //       </select>
+    //     </div>
+
+    //     {/* Semester */}
+    //     <div>
+    //       <label className="block text-gray-700 font-medium">Semester:</label>
+    //       <select
+    //         name="semester"
+    //         value={formData.semester}
+    //         onChange={handleChange}
+    //         className="w-full px-4 py-2 border rounded-lg"
+    //         required
+    //       >
+    //         <option value="">Select Semester</option>
+    //         <option value="I">I</option>
+    //         <option value="II">II</option>
+    //         <option value="III">III</option>
+    //         <option value="IV">IV</option>
+    //       </select>
+    //     </div>
+
+    //     {/* Division */}
+    //     <div>
+    //       <label className="block text-gray-700 font-medium">Division:</label>
+    //       <select
+    //         name="div"
+    //         value={formData.div}
+    //         onChange={handleChange}
+    //         className="w-full px-4 py-2 border rounded-lg"
+    //         required
+    //       >
+    //         <option value="">Select Division</option>
+    //         <option value="A">A</option>
+    //         <option value="B">B</option>
+    //       </select>
+    //     </div>
+
+    //     {/* Names */}
+    //     <div>
+    //       <label className="block text-gray-700 font-medium">First Name:</label>
+    //       <input
+    //         type="text"
+    //         name="fName"
+    //         value={formData.fName}
+    //         onChange={handleChange}
+    //         className="w-full px-4 py-2 border rounded-lg"
+    //         required
+    //       />
+    //     </div>
+
+    //     <div>
+    //       <label className="block text-gray-700 font-medium">
+    //         Middle Name:
+    //       </label>
+    //       <input
+    //         type="text"
+    //         name="mName"
+    //         value={formData.mName}
+    //         onChange={handleChange}
+    //         className="w-full px-4 py-2 border rounded-lg"
+    //       />
+    //     </div>
+
+    //     <div>
+    //       <label className="block text-gray-700 font-medium">Last Name:</label>
+    //       <input
+    //         type="text"
+    //         name="lName"
+    //         value={formData.lName}
+    //         onChange={handleChange}
+    //         className="w-full px-4 py-2 border rounded-lg"
+    //         required
+    //       />
+    //     </div>
+
+    //     {/* Email */}
+    //     <div>
+    //       <label className="block text-gray-700 font-medium">Email:</label>
+    //       <input
+    //         type="email"
+    //         name="email"
+    //         value={formData.email}
+    //         onChange={handleChange}
+    //         className="w-full px-4 py-2 border rounded-lg"
+    //         required
+    //       />
+    //     </div>
+
+    //     {/* Contact */}
+    //     <div>
+    //       <label className="block text-gray-700 font-medium">Contact:</label>
+    //       <input
+    //         type="tel"
+    //         name="contact"
+    //         pattern="[0-9]{10}"
+    //         value={formData.contact}
+    //         onChange={handleChange}
+    //         className="w-full px-4 py-2 border rounded-lg"
+    //         required
+    //         title="Enter 10 digit mobile number"
+    //       />
+    //     </div>
+
+    //     {/* Password */}
+    //     <div className="flex flex-col">
+    //       <label className="mb-1 font-semibold text-gray-700">
+    //         Password <span className="text-red-600">*</span>
+    //       </label>
+    //       <input
+    //         name="password"
+    //         type="password"
+    //         placeholder="At least 8 characters"
+    //         value={formData.password}
+    //         onChange={handleChange}
+    //         required
+    //         minLength={8}
+    //         className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+    //       />
+    //     </div>
+
+    //     {/* Camera */}
+    //     <div className="text-center mt-6">
+    //       <video
+    //         ref={videoRef}
+    //         width="420"
+    //         height="340"
+    //         autoPlay
+    //         playsInline
+    //         muted
+    //         className="rounded-lg border-2 border-gray-300 shadow-md"
+    //       />
+    //       <div className="flex justify-center gap-3 mt-3">
+    //         <button
+    //           type="button"
+    //           onClick={startCamera}
+    //           className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+    //         >
+    //           Start Camera
+    //         </button>
+    //         <button
+    //           type="button"
+    //           onClick={stopCamera}
+    //           className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+    //         >
+    //           Stop Camera
+    //         </button>
+    //         <button
+    //           type="button"
+    //           onClick={captureImage}
+    //           className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+    //           disabled={!modelsLoaded}
+    //           title={!modelsLoaded ? "Models are loading…" : "Capture Image"}
+    //         >
+    //           Capture Image
+    //         </button>
+    //         <button
+    //           type="button"
+    //           onClick={captureMultipleAngles}
+    //           className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+    //           disabled={!modelsLoaded}
+    //           title={
+    //             !modelsLoaded ? "Models are loading…" : "Capture All Angles"
+    //           }
+    //         >
+    //           Capture All Angles
+    //         </button>
+    //       </div>
+
+    //       {/* Hidden canvas for grabbing frames */}
+    //       <canvas ref={canvasRef} width="320" height="240" className="hidden" />
+    //     </div>
+
+    //     {/* Gallery + delete */}
+    //     <div className="flex flex-wrap justify-center gap-3 mt-4">
+    //       {capturedImages.map((img, idx) => (
+    //         <div key={idx} className="relative">
+    //           <img
+    //             src={img}
+    //             alt={`capture-${idx}`}
+    //             className="w-20 h-20 rounded-xl border-2 border-indigo-400 shadow-md object-cover"
+    //           />
+    //           <button
+    //             type="button"
+    //             onClick={() => handleDeleteImage(idx)}
+    //             className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full shadow-md hover:bg-red-700"
+    //             aria-label={`Delete image ${idx + 1}`}
+    //           >
+    //             ✕
+    //           </button>
+    //         </div>
+    //       ))}
+    //     </div>
+
+    //     {/* Submit */}
+    //     <button
+    //       type="submit"
+    //       className="w-full py-4 bg-indigo-700 hover:bg-indigo-900 text-white font-extrabold rounded-3xl shadow-xl transition duration-300 transform hover:scale-105 mt-6"
+    //     >
+    //       📝 Register Student
+    //     </button>
+    //   </form>
+    // </div>
+    <div className="max-w-xl mx-auto p-6 bg-white rounded-2xl shadow-xl border border-gray-200 ">
+      <h2 className="text-2xl font-bold text-center text-indigo-700 mb-6">
+        📝 Ragister Student
+      </h2>
 
       {message && (
-        <p className="text-center text-green-600 font-semibold mb-4">
+        <p className="text-center text-green-600 font-semibold mb-4 animate-pulse">
           {message}
         </p>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-6">
         {/* Roll No */}
         <div>
-          <label className="block text-gray-700 font-medium">Roll No:</label>
+          <label className="block text-gray-700 font-medium mb-1">
+            Roll No:
+          </label>
           <input
             type="text"
             name="rollNo_id"
             value={formData.rollNo_id}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
             required
           />
         </div>
 
         {/* Batch */}
         <div>
-          <label className="block text-gray-700 font-medium">Batch:</label>
+          <label className="block text-gray-700 font-medium mb-1">Batch:</label>
           <input
             type="text"
             name="batch"
             value={formData.batch}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
             required
           />
         </div>
 
         {/* Department */}
         <div>
-          <label className="block text-gray-700 font-medium">Department:</label>
+          <label className="block text-gray-700 font-medium mb-1">
+            Department:
+          </label>
           <input
             type="text"
             name="department"
             value={formData.department}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
             required
           />
         </div>
 
         {/* Class */}
         <div>
-          <label className="block text-gray-700 font-medium">Class:</label>
+          <label className="block text-gray-700 font-medium mb-1">Class:</label>
           <select
             name="Class"
             value={formData.Class}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
             required
           >
             <option value="">Select Class</option>
@@ -1286,12 +1566,14 @@ const EditProfile = () => {
 
         {/* Semester */}
         <div>
-          <label className="block text-gray-700 font-medium">Semester:</label>
+          <label className="block text-gray-700 font-medium mb-1">
+            Semester:
+          </label>
           <select
             name="semester"
             value={formData.semester}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
             required
           >
             <option value="">Select Semester</option>
@@ -1304,12 +1586,14 @@ const EditProfile = () => {
 
         {/* Division */}
         <div>
-          <label className="block text-gray-700 font-medium">Division:</label>
+          <label className="block text-gray-700 font-medium mb-1">
+            Division:
+          </label>
           <select
             name="div"
             value={formData.div}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
             required
           >
             <option value="">Select Division</option>
@@ -1318,21 +1602,24 @@ const EditProfile = () => {
           </select>
         </div>
 
-        {/* Names */}
+        {/* First Name */}
         <div>
-          <label className="block text-gray-700 font-medium">First Name:</label>
+          <label className="block text-gray-700 font-medium mb-1">
+            First Name:
+          </label>
           <input
             type="text"
             name="fName"
             value={formData.fName}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
             required
           />
         </div>
 
+        {/* Middle Name */}
         <div>
-          <label className="block text-gray-700 font-medium">
+          <label className="block text-gray-700 font-medium mb-1">
             Middle Name:
           </label>
           <input
@@ -1340,53 +1627,58 @@ const EditProfile = () => {
             name="mName"
             value={formData.mName}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
           />
         </div>
 
+        {/* Last Name */}
         <div>
-          <label className="block text-gray-700 font-medium">Last Name:</label>
+          <label className="block text-gray-700 font-medium mb-1">
+            Last Name:
+          </label>
           <input
             type="text"
             name="lName"
             value={formData.lName}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
             required
           />
         </div>
 
         {/* Email */}
         <div>
-          <label className="block text-gray-700 font-medium">Email:</label>
+          <label className="block text-gray-700 font-medium mb-1">Email:</label>
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
             required
           />
         </div>
 
         {/* Contact */}
         <div>
-          <label className="block text-gray-700 font-medium">Contact:</label>
+          <label className="block text-gray-700 font-medium mb-1">
+            Contact:
+          </label>
           <input
             type="tel"
             name="contact"
             pattern="[0-9]{10}"
             value={formData.contact}
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition duration-200"
             required
             title="Enter 10 digit mobile number"
           />
         </div>
 
         {/* Password */}
-        <div className="flex flex-col">
-          <label className="mb-1 font-semibold text-gray-700">
+        <div>
+          <label className="block text-gray-700 font-medium mb-1">
             Password <span className="text-red-600">*</span>
           </label>
           <input
@@ -1395,42 +1687,43 @@ const EditProfile = () => {
             placeholder="At least 8 characters"
             value={formData.password}
             onChange={handleChange}
-            required
             minLength={8}
-            className="w-full px-5 py-3 border border-slate-300 rounded-2xl text-gray-900 placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-400 focus:border-indigo-400 transition duration-300 shadow-sm hover:shadow-md text-lg"
+            required
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 placeholder-gray-400 transition duration-200"
           />
         </div>
 
-        {/* Camera */}
+        {/* Camera Section */}
         <div className="text-center mt-6">
           <video
             ref={videoRef}
-            width="420"
-            height="340"
+            width="100%"
+            max-width="420"
+            height="auto"
             autoPlay
             playsInline
             muted
             className="rounded-lg border-2 border-gray-300 shadow-md"
           />
-          <div className="flex justify-center gap-3 mt-3">
+          <div className="flex flex-wrap justify-center gap-3 mt-4">
             <button
               type="button"
               onClick={startCamera}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+              className="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
             >
               Start Camera
             </button>
             <button
               type="button"
               onClick={stopCamera}
-              className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+              className="px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
             >
               Stop Camera
             </button>
             <button
               type="button"
               onClick={captureImage}
-              className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+              className="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
               disabled={!modelsLoaded}
               title={!modelsLoaded ? "Models are loading…" : "Capture Image"}
             >
@@ -1439,7 +1732,7 @@ const EditProfile = () => {
             <button
               type="button"
               onClick={captureMultipleAngles}
-              className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+              className="px-5 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
               disabled={!modelsLoaded}
               title={
                 !modelsLoaded ? "Models are loading…" : "Capture All Angles"
@@ -1448,24 +1741,22 @@ const EditProfile = () => {
               Capture All Angles
             </button>
           </div>
-
-          {/* Hidden canvas for grabbing frames */}
           <canvas ref={canvasRef} width="320" height="240" className="hidden" />
         </div>
 
-        {/* Gallery + delete */}
-        <div className="flex flex-wrap justify-center gap-3 mt-4">
+        {/* Gallery Section */}
+        <div className="flex flex-wrap justify-center gap-4 mt-6">
           {capturedImages.map((img, idx) => (
-            <div key={idx} className="relative">
+            <div key={idx} className="relative group">
               <img
                 src={img}
                 alt={`capture-${idx}`}
-                className="w-20 h-20 rounded-xl border-2 border-indigo-400 shadow-md object-cover"
+                className="w-20 h-20 rounded-xl border-2 border-indigo-400 shadow-md object-cover transition-transform duration-200 group-hover:scale-110"
               />
               <button
                 type="button"
                 onClick={() => handleDeleteImage(idx)}
-                className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full shadow-md hover:bg-red-700"
+                className="absolute -top-2 -right-2 bg-red-600 text-white text-xs px-1.5 py-0.5 rounded-full shadow-md hover:bg-red-700 transition-opacity opacity-0 group-hover:opacity-100"
                 aria-label={`Delete image ${idx + 1}`}
               >
                 ✕
@@ -1474,14 +1765,44 @@ const EditProfile = () => {
           ))}
         </div>
 
-        {/* Submit */}
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-4 bg-indigo-700 hover:bg-indigo-900 text-white font-extrabold rounded-3xl shadow-xl transition duration-300 transform hover:scale-105 mt-6"
+          className="w-full py-4 bg-indigo-700 hover:bg-indigo-900 text-white font-bold rounded-3xl shadow-lg transition-transform duration-200 transform hover:scale-105"
         >
-          📝 Register Student
+          📝 Ragister Student
         </button>
       </form>
+      <div className="">
+        <div className="mt-4 flex flex-row justify-center items-center">
+          <h1 className="border bottom-1 border-black w-full ml-2 mr-2"></h1>
+          <h2>OR</h2>
+          <h1 className="border bottom-1 border-black w-full ml-2 mr-2"></h1>
+        </div>
+        <div className="flex-row justify-center items-center">
+          <button
+            onClick={uploads}
+            className="px-4 py-2 mt-5 rounded-2xl flex justify-center items-center ml-36 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          >
+            Upload Many Students
+          </button>
+
+          {/* Modal */}
+          {isOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-lg relative">
+                <button
+                  onClick={closeModal}
+                  className="absolute top-2 right-2 text-gray-500 hover:text-gray-800"
+                >
+                  ✕
+                </button>
+                <ExcelUploadPage />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

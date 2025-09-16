@@ -1435,6 +1435,7 @@ export default function AttendanceForm() {
     endDate: "",
     status: "",
     batch: "",
+    department: "",
     facultyId_id: "",
   });
 
@@ -1445,6 +1446,8 @@ export default function AttendanceForm() {
   const [error, setError] = useState("");
   const [subjectWiseStats, setSubjectWiseStats] = useState([]);
   const [facultyStats, setFacultyStats] = useState([]);
+  const [studentSubjectReport, setStudentSubjectReport] = useState({});
+  const [allSubjects, setAllSubjects] = useState([]);
 
   // const calculateFacultyStats = (records) => {
   //   const map = {};
@@ -1579,6 +1582,10 @@ export default function AttendanceForm() {
           filtered = filtered.filter((r) => r.rollNo_id === formdata.rollNo_id);
         if (formdata.status)
           filtered = filtered.filter((r) => r.status === formdata.status);
+        if (formdata.department)
+          filtered = filtered.filter(
+            (r) => r.department === formdata.department
+          );
 
         if (formdata.startDate && formdata.endDate) {
           const start = new Date(formdata.startDate);
@@ -1593,6 +1600,9 @@ export default function AttendanceForm() {
         setStudentPercentages(calculatePercentages(filtered));
         setSubjectWiseStats(calculateSubjectWiseStats(filtered));
         // setFacultyStats(calculateFacultyStats(filtered));
+        const { report, allSubjects } = calculateStudentSubjectReport(filtered);
+        setStudentSubjectReport(report);
+        setAllSubjects(allSubjects);
       } else {
         setStudents([]);
         setError("No records found");
@@ -1647,9 +1657,48 @@ export default function AttendanceForm() {
     () => calculateOverallStats(studentPercentages),
     [studentPercentages]
   );
+  const calculateStudentSubjectReport = (attendanceRecords) => {
+    const report = {};
+    const subjectsSet = new Set();
 
+    attendanceRecords.forEach((rec) => {
+      const roll = rec.rollNo_id || "Unknown";
+      const name = `${rec.fName} ${rec.mName} ${rec.lName}`.trim();
+      const subject = rec.Subject || "Unknown";
+      subjectsSet.add(subject);
+      const key = roll;
+
+      if (!report[key]) {
+        report[key] = {
+          rollNo_id: roll,
+          name: name,
+          subjects: {},
+        };
+      }
+
+      if (!report[key].subjects[subject]) {
+        report[key].subjects[subject] = {
+          total: 0,
+          present: 0,
+          absent: 0,
+        };
+      }
+
+      report[key].subjects[subject].total += 1;
+      if (rec.status === "Present") {
+        report[key].subjects[subject].present += 1;
+      } else {
+        report[key].subjects[subject].absent += 1;
+      }
+    });
+
+    return {
+      report,
+      allSubjects: Array.from(subjectsSet),
+    };
+  };
   return (
-    <div className="p-6 bg-gradient-to-br from-blue-50 to-purple-100 min-h-screen flex flex-col">
+    <div className="p-6  min-h-screen flex flex-col">
       {/* Header */}
       <div className="flex justify-center items-center">
         <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 drop-shadow-lg m-4 mb-6">
@@ -1676,6 +1725,16 @@ export default function AttendanceForm() {
             <option value="MCA-I">MCA-I</option>
           </select>
 
+          <select
+            name="department"
+            value={formdata.department}
+            onChange={handleChange}
+            className="p-2 rounded-lg border focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">-- Select Department --</option>
+            <option value="MBA">MBA</option>
+            <option value="MCA">MCA</option>
+          </select>
           {/* Class */}
           <select
             name="Class"
@@ -1853,7 +1912,72 @@ export default function AttendanceForm() {
           </div>
         </>
       )}
-      {/* Subject-wise Stats */}
+      {Object.keys(studentSubjectReport).length > 0 && (
+        <div className="overflow-x-auto mt-6 shadow-lg rounded-xl bg-white">
+          <h2 className="text-xl font-bold p-4 text-blue-700">
+            📚 Student Attendance Report by Subject
+          </h2>
+          <table className="w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
+                <th className="border px-4 py-2" rowSpan="2">
+                  Roll No
+                </th>
+                <th className="border px-4 py-2" rowSpan="2">
+                  Name
+                </th>
+                {allSubjects.map((sub) => (
+                  <th key={sub} className="border px-4 py-2" colSpan="3">
+                    {sub}
+                  </th>
+                ))}
+              </tr>
+              <tr className="bg-gradient-to-r from-purple-400 to-blue-400 text-white">
+                {allSubjects.map((sub) => (
+                  <React.Fragment key={sub}>
+                    <th className="border px-4 py-2">Total</th>
+                    <th className="border px-4 py-2">Present</th>
+                    <th className="border px-4 py-2">Absent</th>
+                  </React.Fragment>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Object.values(studentSubjectReport).map((student, idx) => (
+                <tr
+                  key={student.rollNo_id}
+                  className={idx % 2 === 0 ? "bg-gray-50" : "bg-white"}
+                >
+                  <td className="border px-4 py-2">{student.rollNo_id}</td>
+                  <td className="border w-28 px-4 py-2">{student.name}</td>
+                  {allSubjects.map((sub) => {
+                    const data = student.subjects[sub] || {
+                      total: 0,
+                      present: 0,
+                      absent: 0,
+                    };
+                    return (
+                      <React.Fragment key={sub}>
+                        <td className="border px-4 py-2 text-center">
+                          {data.total}
+                        </td>
+                        <td className="border px-4 py-2 text-center text-green-600">
+                          {data.present}
+                        </td>
+                        <td className="border px-4 py-2 text-center text-red-600">
+                          {data.absent}
+                        </td>
+                      </React.Fragment>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {/*       
+      {/* Subject-wise Stats *
       {subjectWiseStats.length > 0 && (
         <div className="overflow-x-auto mt-6 shadow-lg rounded-xl bg-white">
           <h2 className="text-xl font-bold p-4 text-blue-700">
@@ -1862,12 +1986,12 @@ export default function AttendanceForm() {
           <table className="w-full border-collapse border border-gray-300">
             <thead>
               <tr className="bg-gradient-to-r from-purple-500 to-blue-500 text-white">
-                <th className="border px-4 py-2">Subject</th>
-                <th className="border px-4 py-2">Total Students</th>
-                <th className="border px-4 py-2">Total Lectures</th>
-                <th className="border px-4 py-2">Present Count</th>
-                <th className="border px-4 py-2">Absent Count</th>
-                <th className="border px-4 py-2">Attendance %</th>
+                <th className="border px-2 py-2">Subject</th>
+                <th className="border px-2 py-2">Total Students</th>
+                <th className="border px-2 py-2">Total Lectures</th>
+                <th className="border px-2 py-2">Present Count</th>
+                <th className="border px-2 py-2">Absent Count</th>
+                <th className="border px-2 py-2">Attendance %</th>
               </tr>
             </thead>
             <tbody>
@@ -1890,7 +2014,7 @@ export default function AttendanceForm() {
             </tbody>
           </table>
         </div>
-      )}
+      )} */}
       {/* 👨‍🏫 Faculty-wise Summary */}
       {/* {facultyStats.length > 0 && (
         <div className="mt-8 p-4 bg-white rounded-xl shadow-lg">

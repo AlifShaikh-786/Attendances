@@ -375,7 +375,7 @@ export default function AttendanceForm() {
   };
 
   return (
-    <div className="p-6 bg-gradient-to-br from-blue-50 to-purple-100 min-h-screen">
+    <div className="p-6  min-h-screen">
       <div className="flex justify-center items-center mb-6">
         <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
           📊 Attendance Reports
@@ -397,9 +397,9 @@ export default function AttendanceForm() {
             <option value="">-- Select Class --</option>
             <option value="MCA-II">MCA-II</option>
             <option value="MCA-I">MCA-I</option>
-          </select>
+          </select> */}
 
-          <select
+          {/* <select
             name="semester"
             value={formData.semester}
             onChange={handleChange}
@@ -410,9 +410,9 @@ export default function AttendanceForm() {
             <option value="II">II</option>
             <option value="III">III</option>
             <option value="IV">IV</option>
-          </select>
+          </select> */}
 
-          <select
+          {/* <select
             name="div"
             value={formData.div}
             onChange={handleChange}

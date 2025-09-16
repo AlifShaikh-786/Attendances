@@ -8,6 +8,7 @@ const StudentAttendance = () => {
     batch: "",
     Subject: "",
     Time: "",
+    Times: "",
     date: "",
   });
 
@@ -20,6 +21,16 @@ const StudentAttendance = () => {
       [e.target.name]: e.target.value,
     });
   };
+  // Safely parse localStorage data
+  let studentInfo = {};
+  try {
+    studentInfo = JSON.parse(localStorage.getItem("studentInfo")) || {};
+  } catch (err) {
+    console.error("Invalid studentInfo in localStorage:", err);
+    studentInfo = {};
+  }
+
+  const facultyId_id = studentInfo?.facultyId_id || "N/A";
 
   const handleCheckboxChange = (id) => {
     setAttendance((prev) => ({
@@ -164,8 +175,11 @@ const StudentAttendance = () => {
       fName: student.fName,
       mName: student.mName,
       lName: student.lName,
+      department: student.department,
       date: formdata.date,
       Time: formdata.Time,
+      Times: formdata.Times,
+      facultyId_id: facultyId_id,
       rollNo_id: student.rollNo_id,
       status: attendance[student._id] ? "Present" : "Absent",
       Subject: formdata.Subject,
@@ -217,7 +231,7 @@ const StudentAttendance = () => {
       </div> */}
 
       {/* Main Attendance Form Container */}
-      <div className="bg-slate-300 p-6 rounded-2xl shadow-lg">
+      <div className="bg-white p-6 rounded-2xl shadow-lg">
         <h1 className="flex items-center justify-center mb-5 font-bold text-2xl">
           Mark Attendance
         </h1>
@@ -229,6 +243,7 @@ const StudentAttendance = () => {
               value={formdata.batch}
               onChange={handleChange}
               required
+              className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
             >
               <option value="">-- Select Batch --</option>
               <option value="2024-2026">2024-2026</option>
@@ -239,6 +254,7 @@ const StudentAttendance = () => {
               value={formdata.Class}
               onChange={handleChange}
               required
+              className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
             >
               <option value="">-- Select Class --</option>
               <option value="MCA-II">MCA-II</option>
@@ -249,6 +265,7 @@ const StudentAttendance = () => {
               value={formdata.semester}
               onChange={handleChange}
               required
+              className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
             >
               <option value="">-- Select Semester --</option>
               <option value="I">I</option>
@@ -261,6 +278,7 @@ const StudentAttendance = () => {
               value={formdata.div}
               onChange={handleChange}
               required
+              className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
             >
               <option value="">-- Select Division --</option>
               <option value="A">A</option>
@@ -274,15 +292,7 @@ const StudentAttendance = () => {
               value={formdata.Subject}
               onChange={handleChange}
               required
-              className="input-field"
-            />
-            <input
-              type="time"
-              name="Time"
-              value={formdata.Time}
-              onChange={handleChange}
-              required
-              className="input-field"
+              className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
             />
             <input
               type="date"
@@ -291,8 +301,27 @@ const StudentAttendance = () => {
               onChange={handleChange}
               max={new Date().toISOString().split("T")[0]}
               required
-              className="input-field"
+              className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
             />
+            <input
+              type="time"
+              name="Time"
+              value={formdata.Time}
+              onChange={handleChange}
+              required
+              className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
+            />
+            <h2 className="pl-24">to</h2>
+            <input
+              type="time"
+              name="Times"
+              value={formdata.Times}
+              onChange={handleChange}
+              required
+              className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
+            />
+            {/* Hidden field for facultyId_id */}
+            <input type="hidden" name="facultyId_id" value={facultyId_id} />
           </div>
 
           <button
@@ -328,7 +357,7 @@ const StudentAttendance = () => {
                       {[student.fName, student.mName, student.lName]
                         .filter(Boolean)
                         .join(" ")}{" "}
-                      ({student.rollNo_id})({student.div})
+                      ({student.rollNo_id})({student.div})({student.department})
                     </span>
                   </label>
                 </li>

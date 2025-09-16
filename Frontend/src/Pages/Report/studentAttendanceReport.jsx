@@ -113,9 +113,9 @@ export default function StudentAttendanceReport() {
   };
 
   return (
-    <div className="p-6 bg-gradient-to-br from-blue-50 to-purple-100 min-h-screen flex-col">
+    <div className="p-6  min-h-screen flex-col">
       {/* Header */}
-      <div className="flex gap-3 justify-center mt-6">
+      {/* <div className="flex gap-3 justify-center mt-6">
         <img
           src="/Assets/DYPIMED-Logo.png"
           alt="DYPIMED Logo"
@@ -126,7 +126,7 @@ export default function StudentAttendanceReport() {
         <h3 className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-600 to-blue-600 font-extrabold text-2xl md:text-3xl">
           DYPIMED
         </h3>
-      </div>
+      </div> */}
 
       <div className="flex justify-center items-center">
         <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 drop-shadow-lg m-4">
@@ -204,7 +204,7 @@ export default function StudentAttendanceReport() {
 
       {/* Table */}
       {students.length > 0 && (
-        <div className="overflow-x-auto mt-6 shadow-lg rounded-xl max-w-5xl mx-auto">
+        <div className="overflow-x-auto mt-6 shadow-lg rounded-xl max-w-5xl mx-auto bg-gray-300">
           <table className="w-full border-collapse bg-white">
             <thead>
               <tr className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">

@@ -436,6 +436,7 @@ const StdAttendance = () => {
     batch: "",
     Subject: "",
     Time: "",
+    Times: "",
     date: "",
   });
 
@@ -445,6 +446,17 @@ const StdAttendance = () => {
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
+
+  // Safely parse localStorage data
+  let studentInfo = {};
+  try {
+    studentInfo = JSON.parse(localStorage.getItem("studentInfo")) || {};
+  } catch (err) {
+    console.error("Invalid studentInfo in localStorage:", err);
+    studentInfo = {};
+  }
+
+  const facultyId_id = studentInfo?.facultyId_id || "N/A";
 
   const MODEL_URL = "https://justadudewhohacks.github.io/face-api.js/models/";
 
@@ -669,6 +681,8 @@ const StdAttendance = () => {
       lName: student.lName,
       date: formdata.date,
       Time: formdata.Time,
+      Times: formdata.Times,
+      facultyId_id: facultyId_id,
       rollNo_id: student.rollNo_id,
       status: attendance[student._id] ? "Present" : "Absent",
       Subject: formdata.Subject,
@@ -700,7 +714,7 @@ const StdAttendance = () => {
   return (
     <div className="p-6 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="flex gap-3 justify-center mt-6">
+      {/* <div className="flex gap-3 justify-center mt-6">
         <img
           src="/Assets/DYPIMED-Logo.png"
           alt="DYPIMED Logo"
@@ -709,7 +723,7 @@ const StdAttendance = () => {
         <h3 className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-600 to-blue-600 font-extrabold text-2xl md:text-3xl select-none drop-shadow-[0_0_6px_rgba(236,72,153,0.8)]">
           DYPIMED
         </h3>
-      </div>
+      </div> */}
 
       {/* Attendance Form */}
       <form
@@ -776,14 +790,6 @@ const StdAttendance = () => {
             className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
           />
           <input
-            type="time"
-            name="Time"
-            value={formdata.Time}
-            onChange={handleChange}
-            required
-            className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
-          />
-          <input
             type="date"
             name="date"
             value={formdata.date}
@@ -792,6 +798,25 @@ const StdAttendance = () => {
             required
             className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
           />
+          <input
+            type="time"
+            name="Time"
+            value={formdata.Time}
+            onChange={handleChange}
+            required
+            className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
+          />
+          <h2 className="pl-24">to</h2>
+          <input
+            type="time"
+            name="Times"
+            value={formdata.Times}
+            onChange={handleChange}
+            required
+            className="border rounded-lg p-2 focus:ring-2 focus:ring-indigo-400"
+          />
+
+          <input type="hidden" name="facultyId_id" value={facultyId_id} />
         </div>
         <div className="flex justify-center">
           <button
@@ -857,7 +882,7 @@ const StdAttendance = () => {
                       {[student.fName, student.mName, student.lName]
                         .filter(Boolean)
                         .join(" ")}{" "}
-                      ({student.rollNo_id})({student.div})
+                      ({student.rollNo_id})({student.div})({student.department})
                     </span>
                   </label>
                 </li>

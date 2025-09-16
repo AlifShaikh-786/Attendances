@@ -1,131 +1,3 @@
-// import React, { useState } from "react";
-// import Register from "../../Pages/Student/Register";
-// import Register1 from "../../Pages/Faculty/register";
-// import StudentAttendance from "../../Pages/studentAttendance/StudentAttendance";
-// import StdAttendance from "../../Pages/studentAttendance/stdAttendance";
-
-// const AdminDashboard = () => {
-//   const [activeSection, setActiveSection] = useState("welcome");
-//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-//   const sections = {
-//     welcome: {
-//       title: "Welcome to Admin Dashboard",
-//       content:
-//         "Select an option from the menu to manage attendance, view reports, or update your profile.",
-//     },
-//     addStudent: { title: "Add Student", component: <Register /> },
-//     addTeacher: {
-//       title: "Add Teacher",
-//       component: <Register1 />,
-//     },
-//     manualAttendance: {
-//       title: "Manual Attendance",
-//       component: <StudentAttendance />,
-//     },
-//     digitalAttendance: {
-//       title: "Digital Attendance",
-//       component: <StdAttendance />,
-//     },
-//   };
-
-//   const handleLogout = () => {
-//     localStorage.clear();
-//     window.location.href = "/";
-//   };
-
-//   return (
-//     <div className="flex flex-col md:flex-row min-h-screen bg-gray-900 text-black">
-//       {/* Sidebar for desktop */}
-//       <aside className="hidden md:flex w-[25%] bg-gray-800 p-8 flex-col">
-//         <h2 className="text-3xl font-bold mb-10 text-blue-400 tracking-wide">
-//           Dashboard Menu
-//         </h2>
-//         <nav className="flex flex-col gap-4">
-//           {Object.entries(sections).map(([key, section]) => (
-//             <button
-//               key={key}
-//               onClick={() => setActiveSection(key)}
-//               className={`relative text-left px-5 py-3 rounded-lg font-medium transition
-//                 ${
-//                   activeSection === key
-//                     ? "bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg"
-//                     : "text-gray-300 hover:bg-gray-700 hover:text-white"
-//                 } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-//             >
-//               {section.title}
-//               {activeSection === key && (
-//                 <span className="absolute left-0 top-0 bottom-0 w-1 bg-pink-500 rounded-l-lg animate-pulse"></span>
-//               )}
-//             </button>
-//           ))}
-//           <button
-//             onClick={handleLogout}
-//             className="mt-auto px-5 py-3 rounded-lg font-medium text-white bg-red-700 hover:bg-red-500 transition"
-//           >
-//             Logout
-//           </button>
-//         </nav>
-//       </aside>
-
-//       {/* Mobile Dropdown */}
-//       <div className="md:hidden w-full flex flex-col">
-//         <div className="p-4 bg-gray-800 flex justify-between items-center w-full">
-//           <h2 className="text-2xl font-bold text-blue-400">Dashboard Menu</h2>
-//           <button
-//             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-//             className="text-white text-xl"
-//           >
-//             {mobileMenuOpen ? "✖" : "☰"}
-//           </button>
-//         </div>
-
-//         {mobileMenuOpen && (
-//           <nav className="p-4 bg-gray-800 flex flex-col gap-3 w-full">
-//             {Object.entries(sections).map(([key, section]) => (
-//               <button
-//                 key={key}
-//                 onClick={() => {
-//                   setActiveSection(key);
-//                   setMobileMenuOpen(false);
-//                 }}
-//                 className={`px-4 py-3 rounded-lg font-medium transition w-full text-left
-//                   ${
-//                     activeSection === key
-//                       ? "bg-gradient-to-r from-blue-600 to-purple-700 text-white shadow-lg"
-//                       : "text-gray-300 hover:bg-gray-700 hover:text-white"
-//                   }`}
-//               >
-//                 {section.title}
-//               </button>
-//             ))}
-//             <button
-//               onClick={handleLogout}
-//               className="px-4 py-3 rounded-lg font-medium text-white bg-red-700 hover:bg-red-500 transition w-full"
-//             >
-//               Logout
-//             </button>
-//           </nav>
-//         )}
-//       </div>
-
-//       {/* Main Content */}
-//       <main className="flex-1 w-full p-6 md:p-10 bg-white bg-opacity-80 backdrop-blur-md shadow-2xl flex flex-col overflow-auto min-h-screen">
-//         <h1 className="text-3xl md:text-4xl font-extrabold mb-4 md:mb-6 text-blue-400 drop-shadow-lg">
-//           {sections[activeSection]?.title}
-//         </h1>
-//         <div className="text-base md:text-lg leading-relaxed flex-1">
-//           {sections[activeSection]?.component
-//             ? sections[activeSection].component
-//             : sections[activeSection]?.content}
-//         </div>
-//       </main>
-//     </div>
-//   );
-// };
-
-// export default AdminDashboard;
-
 import React, { useState } from "react";
 import Register from "../../Pages/Student/Register";
 import Register1 from "../../Pages/Faculty/register";
@@ -135,35 +7,37 @@ import { Menu, X } from "lucide-react";
 import Report from "../../Pages/Report/report";
 import FacultyInfo from "../../Pages/Users/FacutiInfo";
 import StudentInfo from "../../Pages/Users/StudentInfo";
-import AttendanceForm from "../../Pages/Reports/Reports";
+// import AttendanceForm from "../../Pages/Reports/Reports";
 import DisplyApplication from "../../Pages/Application/DisplyApplication";
 import PersonalInfoFaculty from "../../Pages/Faculty/PersonalInfoFaculty";
+import AttendanceForm from "../../Pages/Reports/ReportsHOD";
+import FacultyRegistrationss from "../../Pages/Faculty/registerHod";
 
-const AdminDashboard = () => {
+const HodDashBoard = () => {
   const [activeSection, setActiveSection] = useState("welcome");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const sections = {
     welcome: {
-      title: "Welcome to Admin Dashboard",
+      title: "Welcome to Hod Dashboard",
       content:
         "Select an option from the menu to manage attendance, view reports, or update your profile.",
     },
-    // PersonalInfoFaculty: {
-    //   title: "Personal Information",
-    //   component: <PersonalInfoFaculty />,
-    // },
+    PersonalInfoFaculty: {
+      title: "Personal Information",
+      component: <PersonalInfoFaculty />,
+    },
     addStudent: { title: "Add Student", component: <Register /> },
-    addTeacher: { title: "Add Teacher", component: <Register1 /> },
+    addTeacher: { title: "Add Teacher", component: <FacultyRegistrationss /> },
 
-    // manualAttendance: {
-    //   title: "Manual Attendance",
-    //   component: <StudentAttendance />,
-    // },
-    // digitalAttendance: {
-    //   title: "Digital Attendance",
-    //   component: <StdAttendance />,
-    // },
+    manualAttendance: {
+      title: "Manual Attendance",
+      component: <StudentAttendance />,
+    },
+    digitalAttendance: {
+      title: "Digital Attendance",
+      component: <StdAttendance />,
+    },
     Reports: { title: "Reports", component: <AttendanceForm /> },
     DisplyApplication: {
       title: "Application",
@@ -278,7 +152,7 @@ const AdminDashboard = () => {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 w-full p-6 md:p-10 bg-gray-300  overflow-y-auto mt-14 md:mt-0 md:ml-[20%]">
+      <main className="flex-1 w-full p-6 md:p-10 bg-gray-300  shadow-2xl overflow-y-auto mt-14 md:mt-0 md:ml-[20%]">
         <h1 className="text-3xl md:text-4xl font-extrabold mb-4 text-blue-400 drop-shadow-lg">
           {sections[activeSection]?.title}
         </h1>
@@ -292,7 +166,7 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default HodDashBoard;
 
 // src/components/Dashboard/Dashboard.jsx
 // import React, { useEffect, useState } from "react";
